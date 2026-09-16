@@ -17,10 +17,10 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
 
 - [x] Write Prisma schema: `User`, `Event`, `GalleryItem`, `ContactMessage`
 - [x] Run initial Prisma migration against Supabase
-- [ ] Write seed script to create the first admin `User` (hashed password)
-- [ ] Configure Auth.js: Credentials provider + Prisma adapter
-- [ ] Implement password hashing/verification (bcrypt) in the credentials `authorize` callback
-- [ ] Configure session strategy (JWT) and expose user id in session
+- [x] Write seed script to create the first admin `User` (hashed password)
+- [x] Configure Auth.js: Credentials provider (no Prisma adapter needed — Credentials + JWT sessions read/write `User` directly via Prisma, an Adapter is only for DB sessions/OAuth)
+- [x] Implement password hashing/verification (bcrypt) in the credentials `authorize` callback
+- [x] Configure session strategy (JWT) and expose user id in session
 - [ ] Verify login works against the seeded admin account
 
 ## Phase 3 — BFF/GraphQL layer

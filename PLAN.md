@@ -15,7 +15,7 @@ single permission level: any logged-in user is an admin with full access.
 | BFF / API | GraphQL Yoga (or Apollo Server) mounted at `/app/api/graphql` | Single GraphQL endpoint; all DB access happens only here, server-side |
 | Database | PostgreSQL via Supabase (free tier) | Persistent, free, direct SQL access (dashboard + connection string) |
 | ORM | Prisma | Type-safe schema/migrations, used only inside GraphQL resolvers |
-| Auth | Auth.js (NextAuth) + Credentials provider + Prisma adapter | Session handling for the admin login |
+| Auth | Auth.js (`next-auth@5`) + Credentials provider, JWT sessions | App Router-native (route handlers + `auth()` helper); no Prisma Adapter needed since Credentials + JWT reads/writes `User` directly via Prisma |
 | File storage | Supabase Storage (free tier bucket) | Free image hosting for gallery photos |
 | Video hosting | YouTube/Vimeo (unlisted), embed link stored in DB | Avoids Supabase's free-tier storage/bandwidth limits, which video files would blow through |
 | Hosting | Vercel (free tier) for the Next.js app | Deploys cleanly; DB/storage stay on Supabase regardless of where the app runs |
