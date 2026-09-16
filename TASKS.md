@@ -80,6 +80,10 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
 - [ ] Basic loading/error states for GraphQL queries and mutations
 - [ ] Deploy Next.js app to Vercel
 - [ ] Configure production env vars on Vercel (Supabase URL/keys, Auth.js secret)
+- [ ] Add custom domain `associacaogarcea.pt` (and `www.associacaogarcea.pt`) in Vercel project settings
+- [ ] Update DNS at the domain registrar to point to Vercel (A/CNAME records Vercel provides)
+- [ ] Set production `NEXTAUTH_URL=https://associacaogarcea.pt`
+- [ ] Verify HTTPS/SSL is issued and working on the custom domain
 - [ ] Verify production build against Supabase (DB + Storage) end to end
 - [ ] Final smoke test: view all public pages, log in, add/edit/delete content, log out
 

@@ -2,10 +2,10 @@
 
 ## Overview
 
-Public website for Associação GARCEA. All content (Home, Gallery, Events, Contacts) is
-viewable by anyone without logging in. Login is only required to add/manage content and
-to manage admin accounts. There is a single permission level: any logged-in user is an
-admin with full access.
+Public website for Associação GARCEA, to be hosted at **associacaogarcea.pt**. All
+content (Home, Gallery, Events, Contacts) is viewable by anyone without logging in.
+Login is only required to add/manage content and to manage admin accounts. There is a
+single permission level: any logged-in user is an admin with full access.
 
 ## Tech Stack
 
@@ -19,6 +19,7 @@ admin with full access.
 | File storage | Supabase Storage (free tier bucket) | Free image hosting for gallery photos |
 | Video hosting | YouTube/Vimeo (unlisted), embed link stored in DB | Avoids Supabase's free-tier storage/bandwidth limits, which video files would blow through |
 | Hosting | Vercel (free tier) for the Next.js app | Deploys cleanly; DB/storage stay on Supabase regardless of where the app runs |
+| Domain | `associacaogarcea.pt` pointed at Vercel via DNS | Custom domain for the public site, configured once deployed |
 
 ## Architecture (BFF pattern)
 
