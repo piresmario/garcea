@@ -5,13 +5,13 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
 ## Phase 1 — Setup
 
 - [x] Scaffold Next.js app (TypeScript, App Router)
-- [ ] Init git repository, initial commit
-- [ ] Create GitHub repo under github.com/mariopires9 (e.g. `garcea`), add as `origin`, push initial commit
+- [x] Init git repository, initial commit
+- [x] Create GitHub repo under github.com/piresmario (e.g. `garcea`), add as `origin`, push initial commit
 - [ ] Create Supabase project
 - [ ] Create Supabase Storage bucket for gallery photos
 - [ ] Add `.env.local` with Supabase DB connection string, Supabase keys, Auth.js secret
-- [ ] Add `.gitignore` (node_modules, .env*, .next)
-- [ ] Install core dependencies (prisma, @prisma/client, next-auth, graphql, graphql-yoga)
+- [x] Add `.gitignore` (node_modules, .env*, .next)
+- [x] Install core dependencies (prisma, @prisma/client, next-auth, graphql, graphql-yoga)
 
 ## Phase 2 — Database & Auth
 
