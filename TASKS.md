@@ -25,16 +25,16 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
 
 ## Phase 3 — BFF/GraphQL layer
 
-- [ ] Create `/app/api/graphql/route.ts` GraphQL server (Yoga or Apollo)
-- [ ] Define GraphQL schema (typeDefs) for User, Event, GalleryItem, ContactMessage
-- [ ] Build GraphQL context that reads the Auth.js session server-side
-- [ ] Write query resolvers (public): events, gallery items (by event), contact form is write-only
-- [ ] Write mutation resolvers (session-gated): createEvent, updateEvent, deleteEvent
-- [ ] Write mutation resolvers (session-gated): createGalleryItem, updateGalleryItem, deleteGalleryItem
-- [ ] Write mutation resolver (public): submitContactMessage
-- [ ] Write query resolver (session-gated): list contact messages
-- [ ] Add a small `requireSession(context)` helper used by all gated resolvers
-- [ ] Set up Apollo Client / urql on the frontend pointing at `/api/graphql`
+- [x] Create `/app/api/graphql/route.ts` GraphQL server (graphql-yoga)
+- [x] Define GraphQL schema (typeDefs) for User, Event, GalleryItem, ContactMessage
+- [x] Build GraphQL context that reads the Auth.js session server-side
+- [x] Write query resolvers (public): events, gallery items (by event), contact form is write-only
+- [x] Write mutation resolvers (session-gated): createEvent, updateEvent, deleteEvent
+- [x] Write mutation resolvers (session-gated): createGalleryItem, updateGalleryItem, deleteGalleryItem
+- [x] Write mutation resolver (public): submitContactMessage
+- [x] Write query resolver (session-gated): list contact messages
+- [x] Add a small `requireUserId(context)` helper used by all gated resolvers
+- [x] Frontend GraphQL clients pointing at `/api/graphql`: `executeGraphQL` (in-process, for Server Components) and `gqlFetch` (HTTP, for Client Component mutations) — skipped Apollo Client/urql as unnecessary weight for a ~5-page site; easy to swap in later if needed
 
 ## Phase 4 — Core layout & pages
 

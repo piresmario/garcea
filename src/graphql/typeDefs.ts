@@ -1,0 +1,87 @@
+export const typeDefs = /* GraphQL */ `
+  enum GalleryItemType {
+    PHOTO
+    VIDEO
+  }
+
+  type User {
+    id: ID!
+    name: String!
+    email: String!
+  }
+
+  type Event {
+    id: ID!
+    title: String!
+    description: String!
+    date: String!
+    location: String!
+    createdAt: String!
+    createdBy: User!
+    galleryItems: [GalleryItem!]!
+  }
+
+  type GalleryItem {
+    id: ID!
+    type: GalleryItemType!
+    url: String!
+    thumbnailUrl: String
+    caption: String
+    createdAt: String!
+    event: Event
+    uploadedBy: User!
+  }
+
+  type ContactMessage {
+    id: ID!
+    name: String!
+    email: String!
+    message: String!
+    submittedAt: String!
+  }
+
+  input EventInput {
+    title: String!
+    description: String!
+    date: String!
+    location: String!
+  }
+
+  input GalleryItemInput {
+    type: GalleryItemType!
+    url: String!
+    thumbnailUrl: String
+    caption: String
+    eventId: ID
+  }
+
+  input GalleryItemUpdateInput {
+    caption: String
+    thumbnailUrl: String
+  }
+
+  input ContactMessageInput {
+    name: String!
+    email: String!
+    message: String!
+  }
+
+  type Query {
+    events: [Event!]!
+    event(id: ID!): Event
+    galleryItems(eventId: ID): [GalleryItem!]!
+    contactMessages: [ContactMessage!]!
+  }
+
+  type Mutation {
+    createEvent(input: EventInput!): Event!
+    updateEvent(id: ID!, input: EventInput!): Event!
+    deleteEvent(id: ID!): Boolean!
+
+    createGalleryItem(input: GalleryItemInput!): GalleryItem!
+    updateGalleryItem(id: ID!, input: GalleryItemUpdateInput!): GalleryItem!
+    deleteGalleryItem(id: ID!): Boolean!
+
+    submitContactMessage(input: ContactMessageInput!): ContactMessage!
+  }
+`;
