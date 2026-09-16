@@ -7,16 +7,16 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
 - [x] Scaffold Next.js app (TypeScript, App Router)
 - [x] Init git repository, initial commit
 - [x] Create GitHub repo under github.com/piresmario (e.g. `garcea`), add as `origin`, push initial commit
-- [ ] Create Supabase project
+- [x] Create Supabase project
 - [ ] Create Supabase Storage bucket for gallery photos
-- [ ] Add `.env.local` with Supabase DB connection string, Supabase keys, Auth.js secret
+- [x] Add `.env.local` with Supabase DB connection string, Supabase keys, Auth.js secret
 - [x] Add `.gitignore` (node_modules, .env*, .next)
 - [x] Install core dependencies (prisma, @prisma/client, next-auth, graphql, graphql-yoga)
 
 ## Phase 2 — Database & Auth
 
-- [ ] Write Prisma schema: `User`, `Event`, `GalleryItem`, `ContactMessage`
-- [ ] Run initial Prisma migration against Supabase
+- [x] Write Prisma schema: `User`, `Event`, `GalleryItem`, `ContactMessage`
+- [x] Run initial Prisma migration against Supabase
 - [ ] Write seed script to create the first admin `User` (hashed password)
 - [ ] Configure Auth.js: Credentials provider + Prisma adapter
 - [ ] Implement password hashing/verification (bcrypt) in the credentials `authorize` callback

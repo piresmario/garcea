@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+
+  events       Event[]
+  galleryItems GalleryItem[]
+}
+
+model Event {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  date        DateTime
+  location    String
+  createdAt   DateTime @default(now())
+
+  createdById String
+  createdBy   User   @relation(fields: [createdById], references: [id])
+
+  galleryItems GalleryItem[]
+}
+
+enum GalleryItemType {
+  PHOTO
+  VIDEO
+}
+
+model GalleryItem {
+  id           String          @id @default(cuid())
+  type         GalleryItemType
+  url          String
+  thumbnailUrl String?
+  caption      String?
+  createdAt    DateTime        @default(now())
+
+  eventId   String?
+  event     Event?  @relation(fields: [eventId], references: [id])
+
+  uploadedById String
+  uploadedBy   User   @relation(fields: [uploadedById], references: [id])
+}
+
+model ContactMessage {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  message     String
+  submittedAt DateTime @default(now())
+}
