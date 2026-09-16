@@ -21,7 +21,7 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
 - [x] Configure Auth.js: Credentials provider (no Prisma adapter needed — Credentials + JWT sessions read/write `User` directly via Prisma, an Adapter is only for DB sessions/OAuth)
 - [x] Implement password hashing/verification (bcrypt) in the credentials `authorize` callback
 - [x] Configure session strategy (JWT) and expose user id in session
-- [ ] Verify login works against the seeded admin account
+- [x] Verify login works against the seeded admin account
 
 ## Phase 3 — BFF/GraphQL layer
 
