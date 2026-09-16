@@ -1,0 +1,85 @@
+# Associação GARCEA — Website Project Plan
+
+## Overview
+
+Public website for Associação GARCEA. All content (Home, Gallery, Events, Contacts) is
+viewable by anyone without logging in. Login is only required to add/manage content and
+to manage admin accounts. There is a single permission level: any logged-in user is an
+admin with full access.
+
+## Tech Stack
+
+| Layer | Choice | Why |
+|---|---|---|
+| Framework | Next.js (App Router, TypeScript) | Handles both frontend pages and the BFF API routes |
+| BFF / API | GraphQL Yoga (or Apollo Server) mounted at `/app/api/graphql` | Single GraphQL endpoint; all DB access happens only here, server-side |
+| Database | PostgreSQL via Supabase (free tier) | Persistent, free, direct SQL access (dashboard + connection string) |
+| ORM | Prisma | Type-safe schema/migrations, used only inside GraphQL resolvers |
+| Auth | Auth.js (NextAuth) + Credentials provider + Prisma adapter | Session handling for the admin login |
+| File storage | Supabase Storage (free tier bucket) | Free image hosting for gallery photos |
+| Video hosting | YouTube/Vimeo (unlisted), embed link stored in DB | Avoids Supabase's free-tier storage/bandwidth limits, which video files would blow through |
+| Hosting | Vercel (free tier) for the Next.js app | Deploys cleanly; DB/storage stay on Supabase regardless of where the app runs |
+
+## Architecture (BFF pattern)
+
+```
+Browser -> Next.js pages/components -> Apollo/urql client
+              | (only via GraphQL)
+       /app/api/graphql (BFF: Yoga/Apollo Server)
+              |
+        GraphQL resolvers -> Prisma Client -> Supabase Postgres
+                                            -> Supabase Storage (photos)
+```
+
+Prisma is never imported into client components — resolvers are the only code touching
+the database. Auth.js session is read server-side and passed into the GraphQL context so
+resolvers can check whether a mutation is allowed (read = public, write = requires a
+session).
+
+## Data Model (Prisma sketch)
+
+- **User** — id, name, email, passwordHash, createdAt
+  (no role/permission fields — any authenticated user has full admin rights)
+- **Event** — id, title, description, date, location, createdById, createdAt
+- **GalleryItem** — id, eventId (FK -> Event), type (`photo` | `video`), url,
+  thumbnailUrl (nullable), caption, uploadedById, createdAt
+  - `photo`: `url` points to a file in Supabase Storage
+  - `video`: `url` is a YouTube/Vimeo embed link (unlisted), no file stored
+- **ContactMessage** — id, name, email, message, submittedAt
+
+## Menu Behavior
+
+| Menu | View | Manage (requires login) |
+|---|---|---|
+| Home | Public | — |
+| Gallery | Public, browsable by event | Upload photo (Supabase Storage) or add video embed link; edit/delete |
+| Events | Public | Create/edit/delete |
+| Contacts | Public submission form | View submitted messages |
+| Login | Public (the login form itself) | Access to all "manage" actions above, plus account management |
+
+**Account management**: a logged-in user can edit any user's name/email/password, or
+add/remove an admin account. No role assignment needed since all accounts have equal
+permissions.
+
+## Roadmap
+
+1. **Setup** — scaffold Next.js + TypeScript, git init, create Supabase project (DB +
+   Storage bucket), configure env vars
+2. **Database & Auth** — Prisma schema (User/Event/GalleryItem/ContactMessage),
+   migrations, seed script (initial admin account), Auth.js credentials login
+3. **BFF/GraphQL layer** — GraphQL endpoint, resolvers, session-aware context
+   (mutations require a session, queries are open)
+4. **Core layout & pages** — public nav (Home/Gallery/Events/Contacts/Login), GARCEA
+   home content, login page
+5. **Events feature** — public list/detail, gated create/edit/delete
+6. **Gallery feature** — public gallery grouped by event, gated photo upload + video
+   embed link input, gated edit/delete
+7. **Contacts feature** — public submission form, gated inbox view
+8. **Account management** — edit own/other admin profile, add/remove admin accounts
+9. **Polish & deploy** — styling/responsiveness, deploy app to Vercel, verify Supabase
+   connection in production
+
+## Open Questions
+
+- Is there a distinction wanted between the two admin-type accounts (e.g., a "primary"
+  owner who can remove the other), or are all admin accounts fully equal?
