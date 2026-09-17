@@ -30,6 +30,7 @@ export const typeDefs = /* GraphQL */ `
     createdAt: String!
     event: Event
     uploadedBy: User!
+    isFeaturedInRancho: Boolean!
   }
 
   type ContactMessage {
@@ -38,6 +39,11 @@ export const typeDefs = /* GraphQL */ `
     email: String!
     message: String!
     submittedAt: String!
+  }
+
+  type RanchoSection {
+    description: String!
+    updatedAt: String!
   }
 
   input EventInput {
@@ -72,6 +78,8 @@ export const typeDefs = /* GraphQL */ `
     galleryItems(eventId: ID): [GalleryItem!]!
     galleryItem(id: ID!): GalleryItem
     contactMessages: [ContactMessage!]!
+    ranchoSection: RanchoSection
+    ranchoPhotos: [GalleryItem!]!
   }
 
   type Mutation {
@@ -84,5 +92,9 @@ export const typeDefs = /* GraphQL */ `
     deleteGalleryItem(id: ID!): Boolean!
 
     submitContactMessage(input: ContactMessageInput!): ContactMessage!
+
+    updateRanchoSection(description: String!): RanchoSection!
+    featureRanchoPhoto(galleryItemId: ID!): GalleryItem!
+    unfeatureRanchoPhoto(galleryItemId: ID!): Boolean!
   }
 `;

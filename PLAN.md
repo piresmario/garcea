@@ -48,12 +48,17 @@ session).
   - `photo`: `url` points to a file in Supabase Storage
   - `video`: `url` is a YouTube/Vimeo embed link (unlisted), no file stored
 - **ContactMessage** — id, name, email, message, submittedAt
+- **RanchoSection** — singleton row (fixed id `"rancho"`), description, updatedAt;
+  backs the Home page's "Rancho Folclórico das Lavradeiras de Gondar" section
+- **RanchoFeaturedPhoto** — id, galleryItemId (FK -> GalleryItem, unique), createdAt;
+  a join table marking which existing GalleryItem rows are featured on the Home
+  page, rather than a separate photo upload/storage path
 
 ## Menu Behavior
 
 | Menu | View | Manage (requires login) |
 |---|---|---|
-| Home | Public | — |
+| Home | Public — includes the Rancho Folclórico section (description + featured photos) | Edit description, feature/unfeature existing gallery photos, at `/manage/rancho` |
 | Gallery | Public, browsable by event | Upload photo (Supabase Storage) or add video embed link; edit/delete |
 | Events | Public | Create/edit/delete |
 | Contacts | Public submission form | View submitted messages |

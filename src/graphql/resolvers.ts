@@ -28,6 +28,8 @@ type ContactMessageInput = {
   message: string;
 };
 
+const RANCHO_SECTION_ID = "rancho";
+
 function toISOString(value: Date): string {
   return value.toISOString();
 }
@@ -47,6 +49,15 @@ export const resolvers = {
     contactMessages: (_: unknown, __: unknown, context: GraphQLContext) => {
       requireUserId(context);
       return prisma.contactMessage.findMany({ orderBy: { submittedAt: "desc" } });
+    },
+    ranchoSection: () =>
+      prisma.ranchoSection.findUnique({ where: { id: RANCHO_SECTION_ID } }),
+    ranchoPhotos: async () => {
+      const featured = await prisma.ranchoFeaturedPhoto.findMany({
+        orderBy: { createdAt: "asc" },
+        include: { galleryItem: true },
+      });
+      return featured.map((f) => f.galleryItem);
     },
   },
 
@@ -124,6 +135,43 @@ export const resolvers = {
 
     submitContactMessage: (_: unknown, args: { input: ContactMessageInput }) =>
       prisma.contactMessage.create({ data: args.input }),
+
+    updateRanchoSection: (
+      _: unknown,
+      args: { description: string },
+      context: GraphQLContext,
+    ) => {
+      requireUserId(context);
+      return prisma.ranchoSection.upsert({
+        where: { id: RANCHO_SECTION_ID },
+        update: { description: args.description },
+        create: { id: RANCHO_SECTION_ID, description: args.description },
+      });
+    },
+    featureRanchoPhoto: (
+      _: unknown,
+      args: { galleryItemId: string },
+      context: GraphQLContext,
+    ) => {
+      requireUserId(context);
+      return prisma.ranchoFeaturedPhoto
+        .create({
+          data: { galleryItemId: args.galleryItemId },
+          include: { galleryItem: true },
+        })
+        .then((f) => f.galleryItem);
+    },
+    unfeatureRanchoPhoto: async (
+      _: unknown,
+      args: { galleryItemId: string },
+      context: GraphQLContext,
+    ) => {
+      requireUserId(context);
+      await prisma.ranchoFeaturedPhoto.delete({
+        where: { galleryItemId: args.galleryItemId },
+      });
+      return true;
+    },
   },
 
   Event: {
@@ -144,9 +192,19 @@ export const resolvers = {
       parent.eventId ? prisma.event.findUnique({ where: { id: parent.eventId } }) : null,
     uploadedBy: (parent: { uploadedById: string }) =>
       prisma.user.findUniqueOrThrow({ where: { id: parent.uploadedById } }),
+    isFeaturedInRancho: async (parent: { id: string }) => {
+      const featured = await prisma.ranchoFeaturedPhoto.findUnique({
+        where: { galleryItemId: parent.id },
+      });
+      return featured !== null;
+    },
   },
 
   ContactMessage: {
     submittedAt: (parent: { submittedAt: Date }) => toISOString(parent.submittedAt),
+  },
+
+  RanchoSection: {
+    updatedAt: (parent: { updatedAt: Date }) => toISOString(parent.updatedAt),
   },
 };

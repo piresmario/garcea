@@ -136,6 +136,30 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
   flows most likely to break (login, event creation, the Select-based
   gallery item form, and the contact form) all submit correctly
 
+## Home page: Rancho Folclórico das Lavradeiras de Gondar section
+
+- [x] `RanchoSection` model (singleton row, id fixed as `"rancho"`) for the
+      editable description text, and `RanchoFeaturedPhoto` — a join table
+      referencing existing `GalleryItem` rows, rather than a separate photo
+      upload pipeline (per user's explicit design direction: reuse the
+      Gallery table, reference photos from it instead of duplicating storage)
+- [x] `GalleryItem.isFeaturedInRancho` computed field so the manage picker
+      can show which photos are already featured
+- [x] Home page renders the description (when set) and a photo grid (when
+      any photos are featured) reusing the existing `GalleryItemCard`
+- [x] `/manage/rancho`: edit description, list featured photos with a
+      "Remove from Home page" action per photo
+- [x] `/manage/rancho/add-photo`: picker over all gallery items not yet
+      featured, each with a "Feature on Home page" action
+- Verified end-to-end against a live dev server: set description -> shows
+  on home page; upload a gallery photo -> feature it -> appears in the
+  home page "Fotos" section and the manage list; unfeature -> disappears
+  from both; test data cleaned up afterward (home page confirmed back to
+  its empty state, matching what real visitors see before content exists)
+- Still waiting on the user to provide the real description text and
+  photos (they said they'd add both themselves via `/manage/rancho`,
+  or send them here to add on their behalf)
+
 ## Open Question (blocking Phase 8 decision)
 
 - [ ] Confirm: are all admin accounts fully equal, or should one be a "primary" owner

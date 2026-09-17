@@ -55,6 +55,21 @@ model GalleryItem {
 
   uploadedById String
   uploadedBy   User   @relation(fields: [uploadedById], references: [id])
+
+  ranchoFeature RanchoFeaturedPhoto?
+}
+
+model RanchoSection {
+  id          String   @id
+  description String
+  updatedAt   DateTime @updatedAt
+}
+
+model RanchoFeaturedPhoto {
+  id            String      @id @default(cuid())
+  galleryItemId String      @unique
+  galleryItem   GalleryItem @relation(fields: [galleryItemId], references: [id], onDelete: Cascade)
+  createdAt     DateTime    @default(now())
 }
 
 model ContactMessage {
