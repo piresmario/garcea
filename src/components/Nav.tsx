@@ -1,3 +1,4 @@
+import Image from "next/image";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import MuiLink from "@mui/material/Link";
@@ -20,12 +21,14 @@ export async function Nav() {
       <Toolbar sx={{ maxWidth: "lg", width: "100%", mx: "auto" }}>
         <MuiLink
           href="/"
-          variant="h6"
           underline="none"
           color="inherit"
-          sx={{ flexGrow: 1 }}
+          sx={{ flexGrow: 1, display: "flex", alignItems: "center", gap: 1.5 }}
         >
-          Associação GARCEA
+          <Image src="/logo.png" alt="" width={40} height={40} />
+          <span style={{ fontSize: "1.25rem", fontWeight: 500 }}>
+            Associação GARCEA
+          </span>
         </MuiLink>
         <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
           {links.map((link) => (
