@@ -38,11 +38,15 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
 
 ## Phase 4 — Core layout & pages
 
-- [ ] Build root layout with nav: Home, Gallery, Events, Contacts, Login
-- [ ] Build Home page with GARCEA intro content
-- [ ] Build Login page (form -> Auth.js `signIn`)
-- [ ] Add logged-in state to nav (show "Manage" / "Logout" when authenticated)
-- [ ] Add middleware or layout check to protect `/manage/*` routes (redirect to login if no session)
+- [x] Build root layout with nav: Home, Gallery, Events, Contacts, Login
+- [x] Build Home page with GARCEA intro content
+- [x] Build Login page (Server Action -> Auth.js `signIn`)
+- [x] Add logged-in state to nav (show "Manage" / "Logout" when authenticated)
+- [x] Add `src/proxy.ts` (Next.js 16 renamed `middleware.ts` -> `proxy.ts`, now
+      Node.js runtime by default) to protect `/manage/*` via `callbacks.authorized`
+      in `src/auth.ts`; unauthenticated requests redirect to `/login`
+- [x] Added minimal stub pages for `/gallery`, `/events`, `/contacts`, and a
+      `/manage` landing page so all nav links resolve (Phases 5-8 replace these)
 
 ## Phase 5 — Events feature
 

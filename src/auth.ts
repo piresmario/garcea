@@ -38,5 +38,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (session.user) session.user.id = token.id as string;
       return session;
     },
+    authorized({ request, auth: session }) {
+      const isManageRoute = request.nextUrl.pathname.startsWith("/manage");
+      if (isManageRoute) return !!session?.user;
+      return true;
+    },
   },
 });
