@@ -12,7 +12,7 @@ import {
 function readEventInput(formData: FormData) {
   const date = formData.get("date");
   if (typeof date !== "string" || !date) {
-    throw new Error("Date & time is required.");
+    throw new Error("Date is required.");
   }
   return {
     title: String(formData.get("title") ?? ""),

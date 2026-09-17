@@ -5,13 +5,11 @@ type EventFormValues = {
   location: string;
 };
 
-function toDateTimeLocal(iso?: string) {
+function toDateInputValue(iso?: string) {
   if (!iso) return "";
   const date = new Date(iso);
   const pad = (n: number) => String(n).padStart(2, "0");
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(
-    date.getHours(),
-  )}:${pad(date.getMinutes())}`;
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 }
 
 export function EventForm({
@@ -46,12 +44,12 @@ export function EventForm({
         />
       </label>
       <label className="flex flex-col gap-1 text-sm">
-        Date &amp; time
+        Date
         <input
-          type="datetime-local"
+          type="date"
           name="date"
           required
-          defaultValue={toDateTimeLocal(defaultValues?.date)}
+          defaultValue={toDateInputValue(defaultValues?.date)}
           className="rounded border border-black/20 px-3 py-2 dark:border-white/20"
         />
       </label>

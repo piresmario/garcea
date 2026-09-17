@@ -30,7 +30,7 @@ export default async function EventsPage() {
                 {event.title}
               </Link>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                {new Date(event.date).toLocaleString("pt-PT")} · {event.location}
+                {new Date(event.date).toLocaleDateString("pt-PT")} · {event.location}
               </p>
             </li>
           ))}

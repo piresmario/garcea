@@ -37,7 +37,7 @@ export default async function ManageEventsPage() {
               <div>
                 <p className="font-medium">{event.title}</p>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  {new Date(event.date).toLocaleString("pt-PT")} · {event.location}
+                  {new Date(event.date).toLocaleDateString("pt-PT")} · {event.location}
                 </p>
               </div>
               <div className="flex gap-4 text-sm">
