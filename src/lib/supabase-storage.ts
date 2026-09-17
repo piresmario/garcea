@@ -37,7 +37,12 @@ export async function uploadPhoto(file: File): Promise<string> {
 export async function deletePhoto(url: string): Promise<void> {
   const marker = `/storage/v1/object/public/${BUCKET}/`;
   const index = url.indexOf(marker);
-  if (index === -1) return; // not a file we manage in this bucket, nothing to clean up
+  if (index === -1) {
+    console.warn(
+      `deletePhoto: URL doesn't match current bucket "${BUCKET}", skipping cleanup: ${url}`,
+    );
+    return;
+  }
 
   const path = url.slice(index + marker.length);
   const res = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${path}`, {

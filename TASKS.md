@@ -97,6 +97,24 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
 - [ ] Verify production build against Supabase (DB + Storage) end to end
 - [ ] Final smoke test: view all public pages, log in, add/edit/delete content, log out
 
+## Post-Phase-7 code review fixes
+
+- [x] Raised Server Action body size limit to 10mb (Next.js defaults to 1MB,
+      which would have silently broken most real phone-photo uploads against
+      our 8MB app-level limit)
+- [x] Clean up orphaned Storage file if `createGalleryItem` fails after upload
+- [x] Redirect to `/login` instead of crashing if a session expires mid-form
+      on a `/manage/*` page (new `runGatedMutation` helper in graphql-server.ts)
+- [x] Fail loudly instead of silently defaulting to "now" when an event's date
+      is missing
+- [x] Normalize blank captions to `null` consistently on both create and edit
+- [x] Removed unused `gqlFetch` client helper (dead code, nothing ever called it)
+- Accepted as out-of-scope for this site's size: honeypot doesn't block a
+  hand-crafted GraphQL request (would need rate-limiting/CAPTCHA to fully
+  close), storage-delete failures on item deletion are logged not surfaced,
+  and gallery/event relations do a Prisma query per row rather than batching
+  (N+1) — all real but not worth the complexity at ~5 admins/small galleries
+
 ## Open Question (blocking Phase 8 decision)
 
 - [ ] Confirm: are all admin accounts fully equal, or should one be a "primary" owner

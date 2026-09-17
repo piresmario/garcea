@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { executeGraphQL } from "@/lib/graphql-server";
+import { executeGraphQL, runGatedMutation } from "@/lib/graphql-server";
 import {
   CREATE_EVENT_MUTATION,
   UPDATE_EVENT_MUTATION,
@@ -11,26 +11,32 @@ import {
 
 function readEventInput(formData: FormData) {
   const date = formData.get("date");
+  if (typeof date !== "string" || !date) {
+    throw new Error("Date & time is required.");
+  }
   return {
     title: String(formData.get("title") ?? ""),
     description: String(formData.get("description") ?? ""),
-    date: date ? new Date(String(date)).toISOString() : new Date().toISOString(),
+    date: new Date(date).toISOString(),
     location: String(formData.get("location") ?? ""),
   };
 }
 
 export async function createEventAction(formData: FormData) {
-  await executeGraphQL(CREATE_EVENT_MUTATION, { input: readEventInput(formData) });
+  const input = readEventInput(formData);
+  await runGatedMutation(() =>
+    executeGraphQL(CREATE_EVENT_MUTATION, { input }),
+  );
   revalidatePath("/events");
   revalidatePath("/manage/events");
   redirect("/manage/events");
 }
 
 export async function updateEventAction(id: string, formData: FormData) {
-  await executeGraphQL(UPDATE_EVENT_MUTATION, {
-    id,
-    input: readEventInput(formData),
-  });
+  const input = readEventInput(formData);
+  await runGatedMutation(() =>
+    executeGraphQL(UPDATE_EVENT_MUTATION, { id, input }),
+  );
   revalidatePath("/events");
   revalidatePath(`/events/${id}`);
   revalidatePath("/manage/events");
@@ -38,7 +44,7 @@ export async function updateEventAction(id: string, formData: FormData) {
 }
 
 export async function deleteEventAction(id: string) {
-  await executeGraphQL(DELETE_EVENT_MUTATION, { id });
+  await runGatedMutation(() => executeGraphQL(DELETE_EVENT_MUTATION, { id }));
   revalidatePath("/events");
   revalidatePath("/manage/events");
   redirect("/manage/events");

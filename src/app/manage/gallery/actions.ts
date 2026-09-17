@@ -2,20 +2,24 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { executeGraphQL } from "@/lib/graphql-server";
-import { uploadPhoto } from "@/lib/supabase-storage";
+import { executeGraphQL, runGatedMutation } from "@/lib/graphql-server";
+import { uploadPhoto, deletePhoto } from "@/lib/supabase-storage";
 import {
   CREATE_GALLERY_ITEM_MUTATION,
   UPDATE_GALLERY_ITEM_MUTATION,
   DELETE_GALLERY_ITEM_MUTATION,
 } from "@/lib/queries/gallery";
 
+function readCaption(formData: FormData) {
+  const captionRaw = formData.get("caption");
+  return typeof captionRaw === "string" && captionRaw ? captionRaw : null;
+}
+
 export async function createGalleryItemAction(formData: FormData) {
   const type = formData.get("type") === "VIDEO" ? "VIDEO" : "PHOTO";
   const eventIdRaw = formData.get("eventId");
   const eventId = typeof eventIdRaw === "string" && eventIdRaw ? eventIdRaw : null;
-  const captionRaw = formData.get("caption");
-  const caption = typeof captionRaw === "string" && captionRaw ? captionRaw : null;
+  const caption = readCaption(formData);
 
   let url: string;
   if (type === "PHOTO") {
@@ -32,9 +36,19 @@ export async function createGalleryItemAction(formData: FormData) {
     url = videoUrl;
   }
 
-  await executeGraphQL(CREATE_GALLERY_ITEM_MUTATION, {
-    input: { type, url, caption, eventId },
-  });
+  try {
+    await runGatedMutation(() =>
+      executeGraphQL(CREATE_GALLERY_ITEM_MUTATION, {
+        input: { type, url, caption, eventId },
+      }),
+    );
+  } catch (error) {
+    // Don't leave an unreferenced file behind if the DB write failed.
+    if (type === "PHOTO") {
+      await deletePhoto(url).catch(() => {});
+    }
+    throw error;
+  }
 
   revalidatePath("/gallery");
   if (eventId) revalidatePath(`/events/${eventId}`);
@@ -43,10 +57,11 @@ export async function createGalleryItemAction(formData: FormData) {
 }
 
 export async function updateGalleryItemAction(id: string, formData: FormData) {
-  const captionRaw = formData.get("caption");
-  const caption = typeof captionRaw === "string" ? captionRaw : null;
+  const caption = readCaption(formData);
 
-  await executeGraphQL(UPDATE_GALLERY_ITEM_MUTATION, { id, input: { caption } });
+  await runGatedMutation(() =>
+    executeGraphQL(UPDATE_GALLERY_ITEM_MUTATION, { id, input: { caption } }),
+  );
 
   revalidatePath("/gallery");
   revalidatePath("/manage/gallery");
@@ -54,7 +69,9 @@ export async function updateGalleryItemAction(id: string, formData: FormData) {
 }
 
 export async function deleteGalleryItemAction(id: string) {
-  await executeGraphQL(DELETE_GALLERY_ITEM_MUTATION, { id });
+  await runGatedMutation(() =>
+    executeGraphQL(DELETE_GALLERY_ITEM_MUTATION, { id }),
+  );
 
   revalidatePath("/gallery");
   revalidatePath("/manage/gallery");
