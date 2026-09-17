@@ -1,5 +1,10 @@
+import Typography from "@mui/material/Typography";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Stack from "@mui/material/Stack";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { CONTACT_MESSAGES_QUERY } from "@/lib/queries/contacts";
+import { PageContainer } from "@/components/PageContainer";
 
 type ContactMessagesData = {
   contactMessages: {
@@ -15,28 +20,31 @@ export default async function ManageContactsPage() {
   const data = await executeGraphQL<ContactMessagesData>(CONTACT_MESSAGES_QUERY);
 
   return (
-    <main className="mx-auto flex max-w-3xl flex-1 flex-col gap-6 px-6 py-16">
-      <h1 className="text-2xl font-semibold">Contact Messages</h1>
+    <PageContainer maxWidth="md">
+      <Typography variant="h4" component="h1">
+        Contact Messages
+      </Typography>
       {data.contactMessages.length === 0 ? (
-        <p>No messages yet.</p>
+        <Typography>No messages yet.</Typography>
       ) : (
-        <ul className="flex flex-col gap-4">
+        <Stack spacing={2}>
           {data.contactMessages.map((msg) => (
-            <li
-              key={msg.id}
-              className="rounded border border-black/10 p-4 dark:border-white/10"
-            >
-              <p className="font-medium">
-                {msg.name} &lt;{msg.email}&gt;
-              </p>
-              <p className="text-xs text-zinc-500">
-                {new Date(msg.submittedAt).toLocaleString("pt-PT")}
-              </p>
-              <p className="mt-2 whitespace-pre-wrap">{msg.message}</p>
-            </li>
+            <Card key={msg.id} variant="outlined">
+              <CardContent>
+                <Typography sx={{ fontWeight: 500 }}>
+                  {msg.name} &lt;{msg.email}&gt;
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {new Date(msg.submittedAt).toLocaleString("pt-PT")}
+                </Typography>
+                <Typography sx={{ mt: 1, whiteSpace: "pre-wrap" }}>
+                  {msg.message}
+                </Typography>
+              </CardContent>
+            </Card>
           ))}
-        </ul>
+        </Stack>
       )}
-    </main>
+    </PageContainer>
   );
 }

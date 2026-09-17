@@ -1,17 +1,25 @@
+import Typography from "@mui/material/Typography";
 import { executeGraphQL } from "@/lib/graphql-server";
-import { EVENTS_QUERY } from "@/lib/queries/events";
+import { EVENT_OPTIONS_QUERY } from "@/lib/queries/events";
 import { GalleryItemForm } from "@/components/GalleryItemForm";
+import { PageContainer } from "@/components/PageContainer";
 import { createGalleryItemAction } from "../actions";
 
 type EventsData = { events: { id: string; title: string }[] };
 
 export default async function NewGalleryItemPage() {
-  const data = await executeGraphQL<EventsData>(EVENTS_QUERY);
+  const data = await executeGraphQL<EventsData>(EVENT_OPTIONS_QUERY);
+  // Rebuild as plain object literals: GraphQL execution results aren't
+  // guaranteed to be plain objects (Next.js rejects non-plain-object/
+  // null-prototype values passed as props into a Client Component).
+  const events = data.events.map((event) => ({ id: event.id, title: event.title }));
 
   return (
-    <main className="mx-auto flex max-w-xl flex-1 flex-col gap-6 px-6 py-16">
-      <h1 className="text-2xl font-semibold">Add Gallery Item</h1>
-      <GalleryItemForm action={createGalleryItemAction} events={data.events} />
-    </main>
+    <PageContainer maxWidth="sm">
+      <Typography variant="h4" component="h1">
+        Add Gallery Item
+      </Typography>
+      <GalleryItemForm action={createGalleryItemAction} events={events} />
+    </PageContainer>
   );
 }

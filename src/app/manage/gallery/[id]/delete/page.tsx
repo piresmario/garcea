@@ -1,6 +1,10 @@
 import { notFound } from "next/navigation";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { GALLERY_ITEM_QUERY } from "@/lib/queries/gallery";
+import { PageContainer } from "@/components/PageContainer";
 import { deleteGalleryItemAction } from "../../actions";
 
 type GalleryItemData = { galleryItem: { id: string } | null };
@@ -18,20 +22,21 @@ export default async function DeleteGalleryItemPage({
   const deleteWithId = deleteGalleryItemAction.bind(null, id);
 
   return (
-    <main className="mx-auto flex max-w-xl flex-1 flex-col gap-6 px-6 py-16">
-      <h1 className="text-2xl font-semibold">Delete Gallery Item</h1>
-      <p>Are you sure you want to delete this item? This cannot be undone.</p>
-      <form action={deleteWithId} className="flex gap-4">
-        <button type="submit" className="rounded bg-red-600 px-4 py-2 text-white">
+    <PageContainer maxWidth="sm">
+      <Typography variant="h4" component="h1">
+        Delete Gallery Item
+      </Typography>
+      <Typography>
+        Are you sure you want to delete this item? This cannot be undone.
+      </Typography>
+      <Stack component="form" action={deleteWithId} direction="row" spacing={2}>
+        <Button type="submit" variant="contained" color="error">
           Delete
-        </button>
-        <a
-          href="/manage/gallery"
-          className="rounded border border-black/20 px-4 py-2 dark:border-white/20"
-        >
+        </Button>
+        <Button href="/manage/gallery" variant="outlined">
           Cancel
-        </a>
-      </form>
-    </main>
+        </Button>
+      </Stack>
+    </PageContainer>
   );
 }

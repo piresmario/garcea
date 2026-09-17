@@ -1,6 +1,10 @@
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { GALLERY_ITEMS_QUERY } from "@/lib/queries/gallery";
 import { GalleryItemCard } from "@/components/GalleryItemCard";
+import { PageContainer } from "@/components/PageContainer";
 
 type GalleryData = {
   galleryItems: {
@@ -18,10 +22,12 @@ export default async function GalleryPage() {
 
   if (data.galleryItems.length === 0) {
     return (
-      <main className="mx-auto flex max-w-3xl flex-1 flex-col gap-4 px-6 py-16">
-        <h1 className="text-2xl font-semibold">Gallery</h1>
-        <p>No photos or videos yet.</p>
-      </main>
+      <PageContainer maxWidth="md">
+        <Typography variant="h4" component="h1">
+          Gallery
+        </Typography>
+        <Typography>No photos or videos yet.</Typography>
+      </PageContainer>
     );
   }
 
@@ -37,18 +43,28 @@ export default async function GalleryPage() {
   }
 
   return (
-    <main className="mx-auto flex max-w-3xl flex-1 flex-col gap-10 px-6 py-16">
-      <h1 className="text-2xl font-semibold">Gallery</h1>
+    <PageContainer maxWidth="md">
+      <Typography variant="h4" component="h1">
+        Gallery
+      </Typography>
       {Array.from(groups.values()).map((group) => (
-        <section key={group.title} className="flex flex-col gap-4">
-          <h2 className="text-xl font-semibold">{group.title}</h2>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+        <Stack key={group.title} spacing={2}>
+          <Typography variant="h5" component="h2">
+            {group.title}
+          </Typography>
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: { xs: "repeat(2, 1fr)", sm: "repeat(3, 1fr)" },
+              gap: 2,
+            }}
+          >
             {group.items.map((item) => (
               <GalleryItemCard key={item.id} item={item} />
             ))}
-          </div>
-        </section>
+          </Box>
+        </Stack>
       ))}
-    </main>
+    </PageContainer>
   );
 }

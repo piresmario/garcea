@@ -1,7 +1,11 @@
 import { notFound } from "next/navigation";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { EVENT_QUERY } from "@/lib/queries/events";
 import { GalleryItemCard } from "@/components/GalleryItemCard";
+import { PageContainer } from "@/components/PageContainer";
 
 type EventData = {
   event: {
@@ -34,23 +38,33 @@ export default async function EventDetailPage({
   const event = data.event;
 
   return (
-    <main className="mx-auto flex max-w-3xl flex-1 flex-col gap-6 px-6 py-16">
-      <h1 className="text-2xl font-semibold">{event.title}</h1>
-      <p className="text-sm text-zinc-600 dark:text-zinc-400">
+    <PageContainer maxWidth="md">
+      <Typography variant="h4" component="h1">
+        {event.title}
+      </Typography>
+      <Typography variant="body2" color="text.secondary">
         {new Date(event.date).toLocaleDateString("pt-PT")} · {event.location}
-      </p>
-      <p>{event.description}</p>
+      </Typography>
+      <Typography>{event.description}</Typography>
 
       {event.galleryItems.length > 0 && (
-        <section className="flex flex-col gap-4">
-          <h2 className="text-xl font-semibold">Gallery</h2>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+        <Stack spacing={2}>
+          <Typography variant="h5" component="h2">
+            Gallery
+          </Typography>
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: { xs: "repeat(2, 1fr)", sm: "repeat(3, 1fr)" },
+              gap: 2,
+            }}
+          >
             {event.galleryItems.map((item) => (
               <GalleryItemCard key={item.id} item={item} />
             ))}
-          </div>
-        </section>
+          </Box>
+        </Stack>
       )}
-    </main>
+    </PageContainer>
   );
 }

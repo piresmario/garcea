@@ -1,3 +1,8 @@
+import Card from "@mui/material/Card";
+import CardMedia from "@mui/material/CardMedia";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+
 type GalleryItem = {
   id: string;
   type: "PHOTO" | "VIDEO";
@@ -8,25 +13,32 @@ type GalleryItem = {
 
 export function GalleryItemCard({ item }: { item: GalleryItem }) {
   return (
-    <figure className="flex flex-col gap-1">
+    <Card variant="outlined">
       {item.type === "PHOTO" ? (
-        // eslint-disable-next-line @next/next/no-img-element -- external Supabase Storage URLs, no next/image domain config needed for this scale
-        <img
-          src={item.thumbnailUrl ?? item.url}
+        <CardMedia
+          component="img"
+          image={item.thumbnailUrl ?? item.url}
           alt={item.caption ?? ""}
-          className="aspect-square w-full rounded object-cover"
+          sx={{ aspectRatio: "1 / 1", objectFit: "cover" }}
         />
       ) : (
-        <iframe
+        <Box
+          component="iframe"
           src={item.url}
           title={item.caption ?? "Video"}
-          className="aspect-video w-full rounded"
           allowFullScreen
+          sx={{ aspectRatio: "16 / 9", width: "100%", border: 0, display: "block" }}
         />
       )}
       {item.caption && (
-        <figcaption className="text-xs text-zinc-500">{item.caption}</figcaption>
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{ px: 1, py: 0.5, display: "block" }}
+        >
+          {item.caption}
+        </Typography>
       )}
-    </figure>
+    </Card>
   );
 }

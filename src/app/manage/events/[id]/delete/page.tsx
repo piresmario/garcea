@@ -1,6 +1,10 @@
 import { notFound } from "next/navigation";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { EVENT_QUERY } from "@/lib/queries/events";
+import { PageContainer } from "@/components/PageContainer";
 import { deleteEventAction } from "../../actions";
 
 type EventData = { event: { title: string } | null };
@@ -18,23 +22,22 @@ export default async function DeleteEventPage({
   const deleteWithId = deleteEventAction.bind(null, id);
 
   return (
-    <main className="mx-auto flex max-w-xl flex-1 flex-col gap-6 px-6 py-16">
-      <h1 className="text-2xl font-semibold">Delete Event</h1>
-      <p>
+    <PageContainer maxWidth="sm">
+      <Typography variant="h4" component="h1">
+        Delete Event
+      </Typography>
+      <Typography>
         Are you sure you want to delete &ldquo;{data.event.title}&rdquo;? This
         cannot be undone.
-      </p>
-      <form action={deleteWithId} className="flex gap-4">
-        <button type="submit" className="rounded bg-red-600 px-4 py-2 text-white">
+      </Typography>
+      <Stack component="form" action={deleteWithId} direction="row" spacing={2}>
+        <Button type="submit" variant="contained" color="error">
           Delete
-        </button>
-        <a
-          href="/manage/events"
-          className="rounded border border-black/20 px-4 py-2 dark:border-white/20"
-        >
+        </Button>
+        <Button href="/manage/events" variant="outlined">
           Cancel
-        </a>
-      </form>
-    </main>
+        </Button>
+      </Stack>
+    </PageContainer>
   );
 }

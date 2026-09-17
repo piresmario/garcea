@@ -12,6 +12,7 @@ single permission level: any logged-in user is an admin with full access.
 | Layer | Choice | Why |
 |---|---|---|
 | Framework | Next.js (App Router, TypeScript) | Handles both frontend pages and the BFF API routes |
+| UI | Material UI (MUI) v9 | Replaced the default Tailwind scaffold; theme-level `LinkComponent`/`MuiLink` wired to Next.js `Link` (see `src/theme.ts`, `src/components/LinkBehavior.tsx`) so pages can pass a plain `href` string without crossing the Server/Client Component boundary with a function reference |
 | BFF / API | GraphQL Yoga (or Apollo Server) mounted at `/app/api/graphql` | Single GraphQL endpoint; all DB access happens only here, server-side |
 | Database | PostgreSQL via Supabase (free tier) | Persistent, free, direct SQL access (dashboard + connection string) |
 | ORM | Prisma | Type-safe schema/migrations, used only inside GraphQL resolvers |

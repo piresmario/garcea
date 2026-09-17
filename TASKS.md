@@ -115,6 +115,27 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
   and gallery/event relations do a Prisma query per row rather than batching
   (N+1) — all real but not worth the complexity at ~5 admins/small galleries
 
+## UI: migrated to Material UI
+
+- [x] Replaced Tailwind CSS with Material UI (MUI) v9 across every page and
+      component, per user request
+- [x] `src/theme.ts` + `src/components/ThemeRegistry.tsx` (theme must be
+      created inside a Client Component — passing a `createTheme()` object as
+      a prop from a Server Component fails, since it contains functions)
+- [x] `src/components/LinkBehavior.tsx` wired as the theme's default
+      `LinkComponent`/`MuiLink` component, so pages just pass a plain `href`
+      string to `Button`/`CardActionArea`/`ListItemButton`/`Link` instead of
+      `component={Link}` (passing the Next.js `Link` component reference
+      itself across the Server/Client boundary also fails, same root cause)
+- [x] Found and fixed: GraphQL execution results aren't guaranteed to be
+      plain objects (graphql-js 17), which breaks passing them as props into
+      a Client Component (`GalleryItemForm`'s event dropdown) - fixed by
+      explicitly rebuilding plain object literals before passing down
+- Verified end-to-end against a live dev server: every public/manage page
+  renders (200, real MUI markup), and the three "use client"/form-heavy
+  flows most likely to break (login, event creation, the Select-based
+  gallery item form, and the contact form) all submit correctly
+
 ## Open Question (blocking Phase 8 decision)
 
 - [ ] Confirm: are all admin accounts fully equal, or should one be a "primary" owner

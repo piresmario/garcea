@@ -1,6 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Select, { type SelectChangeEvent } from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 
 type EventOption = { id: string; title: string };
 
@@ -14,69 +22,62 @@ export function GalleryItemForm({
   const [type, setType] = useState<"PHOTO" | "VIDEO">("PHOTO");
 
   return (
-    <form action={action} className="flex flex-col gap-4">
-      <label className="flex flex-col gap-1 text-sm">
-        Type
-        <select
+    <Stack component="form" action={action} spacing={2}>
+      <FormControl fullWidth>
+        <InputLabel id="type-label">Type</InputLabel>
+        <Select
+          labelId="type-label"
+          label="Type"
           name="type"
           value={type}
-          onChange={(event) => setType(event.target.value as "PHOTO" | "VIDEO")}
-          className="rounded border border-black/20 px-3 py-2 dark:border-white/20"
+          onChange={(event: SelectChangeEvent) =>
+            setType(event.target.value as "PHOTO" | "VIDEO")
+          }
         >
-          <option value="PHOTO">Photo</option>
-          <option value="VIDEO">Video</option>
-        </select>
-      </label>
+          <MenuItem value="PHOTO">Photo</MenuItem>
+          <MenuItem value="VIDEO">Video</MenuItem>
+        </Select>
+      </FormControl>
 
-      <label className="flex flex-col gap-1 text-sm">
-        Event (optional)
-        <select
+      <FormControl fullWidth>
+        <InputLabel id="event-label">Event (optional)</InputLabel>
+        <Select
+          labelId="event-label"
+          label="Event (optional)"
           name="eventId"
           defaultValue=""
-          className="rounded border border-black/20 px-3 py-2 dark:border-white/20"
         >
-          <option value="">None</option>
+          <MenuItem value="">None</MenuItem>
           {events.map((event) => (
-            <option key={event.id} value={event.id}>
+            <MenuItem key={event.id} value={event.id}>
               {event.title}
-            </option>
+            </MenuItem>
           ))}
-        </select>
-      </label>
+        </Select>
+      </FormControl>
 
       {type === "PHOTO" ? (
-        <label className="flex flex-col gap-1 text-sm">
-          Photo file
-          <input type="file" name="photo" accept="image/*" required className="text-sm" />
-        </label>
+        <Stack spacing={0.5}>
+          <Typography variant="body2" color="text.secondary">
+            Photo file
+          </Typography>
+          <input type="file" name="photo" accept="image/*" required />
+        </Stack>
       ) : (
-        <label className="flex flex-col gap-1 text-sm">
-          Video embed URL
-          <input
-            type="url"
-            name="videoUrl"
-            required
-            placeholder="https://www.youtube.com/embed/VIDEO_ID"
-            className="rounded border border-black/20 px-3 py-2 dark:border-white/20"
-          />
-        </label>
+        <TextField
+          label="Video embed URL"
+          name="videoUrl"
+          type="url"
+          required
+          placeholder="https://www.youtube.com/embed/VIDEO_ID"
+        />
       )}
 
-      <label className="flex flex-col gap-1 text-sm">
-        Caption (optional)
-        <input
-          type="text"
-          name="caption"
-          className="rounded border border-black/20 px-3 py-2 dark:border-white/20"
-        />
-      </label>
+      <TextField label="Caption (optional)" name="caption" />
 
-      <button
-        type="submit"
-        className="mt-2 rounded bg-foreground px-4 py-2 text-background"
-      >
+      <Button type="submit" variant="contained" sx={{ alignSelf: "flex-start" }}>
         Upload
-      </button>
-    </form>
+      </Button>
+    </Stack>
   );
 }

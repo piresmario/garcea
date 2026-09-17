@@ -1,40 +1,45 @@
-import Link from "next/link";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import { PageContainer } from "@/components/PageContainer";
 import { auth, signOut } from "@/auth";
+
+const links = [
+  { href: "/manage/events", label: "Manage Events" },
+  { href: "/manage/gallery", label: "Manage Gallery" },
+  { href: "/manage/contacts", label: "Contact Messages" },
+];
 
 export default async function ManagePage() {
   const session = await auth();
 
   return (
-    <main className="mx-auto flex max-w-3xl flex-1 flex-col gap-4 px-6 py-16">
-      <h1 className="text-2xl font-semibold">Manage Associação GARCEA</h1>
-      <p>Signed in as {session?.user?.email}.</p>
-      <ul className="flex flex-col gap-2">
-        <li>
-          <Link href="/manage/events" className="underline">
-            Manage Events
-          </Link>
-        </li>
-        <li>
-          <Link href="/manage/gallery" className="underline">
-            Manage Gallery
-          </Link>
-        </li>
-        <li>
-          <Link href="/manage/contacts" className="underline">
-            Contact Messages
-          </Link>
-        </li>
-      </ul>
+    <PageContainer maxWidth="sm">
+      <Typography variant="h4" component="h1">
+        Manage Associação GARCEA
+      </Typography>
+      <Typography color="text.secondary">
+        Signed in as {session?.user?.email}.
+      </Typography>
+      <List disablePadding>
+        {links.map((link) => (
+          <ListItemButton key={link.href} href={link.href}>
+            <ListItemText primary={link.label} />
+          </ListItemButton>
+        ))}
+      </List>
       <form
         action={async () => {
           "use server";
           await signOut({ redirectTo: "/" });
         }}
       >
-        <button type="submit" className="underline">
+        <Button type="submit" variant="outlined">
           Logout
-        </button>
+        </Button>
       </form>
-    </main>
+    </PageContainer>
   );
 }

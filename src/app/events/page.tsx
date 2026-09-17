@@ -1,6 +1,11 @@
-import Link from "next/link";
+import Typography from "@mui/material/Typography";
+import Card from "@mui/material/Card";
+import CardActionArea from "@mui/material/CardActionArea";
+import CardContent from "@mui/material/CardContent";
+import Stack from "@mui/material/Stack";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { EVENTS_QUERY } from "@/lib/queries/events";
+import { PageContainer } from "@/components/PageContainer";
 
 type EventsData = {
   events: {
@@ -15,27 +20,29 @@ export default async function EventsPage() {
   const data = await executeGraphQL<EventsData>(EVENTS_QUERY);
 
   return (
-    <main className="mx-auto flex max-w-3xl flex-1 flex-col gap-6 px-6 py-16">
-      <h1 className="text-2xl font-semibold">Events</h1>
+    <PageContainer maxWidth="md">
+      <Typography variant="h4" component="h1">
+        Events
+      </Typography>
       {data.events.length === 0 ? (
-        <p>No events yet.</p>
+        <Typography>No events yet.</Typography>
       ) : (
-        <ul className="flex flex-col gap-4">
+        <Stack spacing={2}>
           {data.events.map((event) => (
-            <li
-              key={event.id}
-              className="rounded border border-black/10 p-4 dark:border-white/10"
-            >
-              <Link href={`/events/${event.id}`} className="text-lg font-medium">
-                {event.title}
-              </Link>
-              <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                {new Date(event.date).toLocaleDateString("pt-PT")} · {event.location}
-              </p>
-            </li>
+            <Card key={event.id} variant="outlined">
+              <CardActionArea href={`/events/${event.id}`}>
+                <CardContent>
+                  <Typography variant="h6">{event.title}</Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {new Date(event.date).toLocaleDateString("pt-PT")} ·{" "}
+                    {event.location}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
           ))}
-        </ul>
+        </Stack>
       )}
-    </main>
+    </PageContainer>
   );
 }

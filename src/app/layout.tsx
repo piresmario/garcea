@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
+import Box from "@mui/material/Box";
+import { ThemeRegistry } from "@/components/ThemeRegistry";
 import { Nav } from "@/components/Nav";
 import "./globals.css";
 
@@ -22,11 +25,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="pt"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable}`}
+      style={{ height: "100%" }}
     >
-      <body className="min-h-full flex flex-col">
-        <Nav />
-        {children}
+      <body style={{ height: "100%" }}>
+        <AppRouterCacheProvider options={{ key: "mui" }}>
+          <ThemeRegistry>
+            <Box sx={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
+              <Nav />
+              {children}
+            </Box>
+          </ThemeRegistry>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );

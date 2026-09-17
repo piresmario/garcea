@@ -1,4 +1,8 @@
-import Link from "next/link";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import MuiLink from "@mui/material/Link";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
 import { auth, signOut } from "@/auth";
 
 const links = [
@@ -12,36 +16,46 @@ export async function Nav() {
   const session = await auth();
 
   return (
-    <header className="border-b border-black/10 dark:border-white/10">
-      <nav className="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
-        <Link href="/" className="font-semibold">
+    <AppBar position="static" color="default" elevation={1}>
+      <Toolbar sx={{ maxWidth: "lg", width: "100%", mx: "auto" }}>
+        <MuiLink
+          href="/"
+          variant="h6"
+          underline="none"
+          color="inherit"
+          sx={{ flexGrow: 1 }}
+        >
           Associação GARCEA
-        </Link>
-        <ul className="flex items-center gap-6 text-sm">
+        </MuiLink>
+        <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
           {links.map((link) => (
-            <li key={link.href}>
-              <Link href={link.href}>{link.label}</Link>
-            </li>
+            <Button key={link.href} href={link.href} color="inherit">
+              {link.label}
+            </Button>
           ))}
-          <li>
-            {session?.user ? (
-              <div className="flex items-center gap-4">
-                <Link href="/manage">Manage</Link>
-                <form
-                  action={async () => {
-                    "use server";
-                    await signOut({ redirectTo: "/" });
-                  }}
-                >
-                  <button type="submit">Logout</button>
-                </form>
-              </div>
-            ) : (
-              <Link href="/login">Login</Link>
-            )}
-          </li>
-        </ul>
-      </nav>
-    </header>
+          {session?.user ? (
+            <>
+              <Button href="/manage" color="inherit">
+                Manage
+              </Button>
+              <form
+                action={async () => {
+                  "use server";
+                  await signOut({ redirectTo: "/" });
+                }}
+              >
+                <Button type="submit" color="inherit">
+                  Logout
+                </Button>
+              </form>
+            </>
+          ) : (
+            <Button href="/login" color="inherit">
+              Login
+            </Button>
+          )}
+        </Stack>
+      </Toolbar>
+    </AppBar>
   );
 }

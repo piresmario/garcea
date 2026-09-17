@@ -1,6 +1,10 @@
-import Link from "next/link";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { EVENTS_QUERY } from "@/lib/queries/events";
+import { PageContainer } from "@/components/PageContainer";
 
 type EventsData = {
   events: {
@@ -15,44 +19,58 @@ export default async function ManageEventsPage() {
   const data = await executeGraphQL<EventsData>(EVENTS_QUERY);
 
   return (
-    <main className="mx-auto flex max-w-3xl flex-1 flex-col gap-6 px-6 py-16">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Manage Events</h1>
-        <Link
-          href="/manage/events/new"
-          className="rounded bg-foreground px-4 py-2 text-background"
-        >
+    <PageContainer maxWidth="md">
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Typography variant="h4" component="h1">
+          Manage Events
+        </Typography>
+        <Button href="/manage/events/new" variant="contained">
           New Event
-        </Link>
-      </div>
+        </Button>
+      </Box>
       {data.events.length === 0 ? (
-        <p>No events yet.</p>
+        <Typography>No events yet.</Typography>
       ) : (
-        <ul className="flex flex-col gap-4">
+        <Stack spacing={2}>
           {data.events.map((event) => (
-            <li
+            <Box
               key={event.id}
-              className="flex items-center justify-between rounded border border-black/10 p-4 dark:border-white/10"
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                border: 1,
+                borderColor: "divider",
+                borderRadius: 1,
+                p: 2,
+              }}
             >
-              <div>
-                <p className="font-medium">{event.title}</p>
-                <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  {new Date(event.date).toLocaleDateString("pt-PT")} · {event.location}
-                </p>
-              </div>
-              <div className="flex gap-4 text-sm">
-                <Link href={`/manage/events/${event.id}/edit`}>Edit</Link>
-                <Link
+              <Box>
+                <Typography sx={{ fontWeight: 500 }}>{event.title}</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {new Date(event.date).toLocaleDateString("pt-PT")} ·{" "}
+                  {event.location}
+                </Typography>
+              </Box>
+              <Stack direction="row" spacing={2}>
+                <Button href={`/manage/events/${event.id}/edit`}>Edit</Button>
+                <Button
                   href={`/manage/events/${event.id}/delete`}
-                  className="text-red-600"
+                  color="error"
                 >
                   Delete
-                </Link>
-              </div>
-            </li>
+                </Button>
+              </Stack>
+            </Box>
           ))}
-        </ul>
+        </Stack>
       )}
-    </main>
+    </PageContainer>
   );
 }

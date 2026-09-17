@@ -1,7 +1,11 @@
-import Link from "next/link";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { GALLERY_ITEMS_QUERY } from "@/lib/queries/gallery";
 import { GalleryItemCard } from "@/components/GalleryItemCard";
+import { PageContainer } from "@/components/PageContainer";
 
 type GalleryData = {
   galleryItems: {
@@ -18,39 +22,53 @@ export default async function ManageGalleryPage() {
   const data = await executeGraphQL<GalleryData>(GALLERY_ITEMS_QUERY);
 
   return (
-    <main className="mx-auto flex max-w-3xl flex-1 flex-col gap-6 px-6 py-16">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Manage Gallery</h1>
-        <Link
-          href="/manage/gallery/new"
-          className="rounded bg-foreground px-4 py-2 text-background"
-        >
+    <PageContainer maxWidth="md">
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Typography variant="h4" component="h1">
+          Manage Gallery
+        </Typography>
+        <Button href="/manage/gallery/new" variant="contained">
           Add Item
-        </Link>
-      </div>
+        </Button>
+      </Box>
       {data.galleryItems.length === 0 ? (
-        <p>No gallery items yet.</p>
+        <Typography>No gallery items yet.</Typography>
       ) : (
-        <div className="grid grid-cols-2 gap-6 sm:grid-cols-3">
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: { xs: "repeat(2, 1fr)", sm: "repeat(3, 1fr)" },
+            gap: 3,
+          }}
+        >
           {data.galleryItems.map((item) => (
-            <div key={item.id} className="flex flex-col gap-2">
+            <Stack key={item.id} spacing={1}>
               <GalleryItemCard item={item} />
-              <p className="text-xs text-zinc-500">
+              <Typography variant="caption" color="text.secondary">
                 {item.event?.title ?? "No event"}
-              </p>
-              <div className="flex gap-4 text-sm">
-                <Link href={`/manage/gallery/${item.id}/edit`}>Edit caption</Link>
-                <Link
+              </Typography>
+              <Stack direction="row" spacing={2}>
+                <Button href={`/manage/gallery/${item.id}/edit`} size="small">
+                  Edit caption
+                </Button>
+                <Button
                   href={`/manage/gallery/${item.id}/delete`}
-                  className="text-red-600"
+                  size="small"
+                  color="error"
                 >
                   Delete
-                </Link>
-              </div>
-            </div>
+                </Button>
+              </Stack>
+            </Stack>
           ))}
-        </div>
+        </Box>
       )}
-    </main>
+    </PageContainer>
   );
 }

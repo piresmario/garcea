@@ -10,6 +10,15 @@ export const EVENTS_QUERY = /* GraphQL */ `
   }
 `;
 
+export const EVENT_OPTIONS_QUERY = /* GraphQL */ `
+  query EventOptions {
+    events {
+      id
+      title
+    }
+  }
+`;
+
 export const EVENT_QUERY = /* GraphQL */ `
   query Event($id: ID!) {
     event(id: $id) {

@@ -1,7 +1,9 @@
 import { notFound } from "next/navigation";
+import Typography from "@mui/material/Typography";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { EVENT_QUERY } from "@/lib/queries/events";
 import { EventForm } from "@/components/EventForm";
+import { PageContainer } from "@/components/PageContainer";
 import { updateEventAction } from "../../actions";
 
 type EventData = {
@@ -26,9 +28,11 @@ export default async function EditEventPage({
   const updateWithId = updateEventAction.bind(null, id);
 
   return (
-    <main className="mx-auto flex max-w-xl flex-1 flex-col gap-6 px-6 py-16">
-      <h1 className="text-2xl font-semibold">Edit Event</h1>
+    <PageContainer maxWidth="sm">
+      <Typography variant="h4" component="h1">
+        Edit Event
+      </Typography>
       <EventForm action={updateWithId} defaultValues={data.event} submitLabel="Save" />
-    </main>
+    </PageContainer>
   );
 }
