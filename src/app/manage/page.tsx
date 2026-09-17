@@ -14,6 +14,11 @@ export default async function ManagePage() {
             Manage Events
           </Link>
         </li>
+        <li>
+          <Link href="/manage/gallery" className="underline">
+            Manage Gallery
+          </Link>
+        </li>
       </ul>
       <form
         action={async () => {

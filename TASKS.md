@@ -8,7 +8,7 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
 - [x] Init git repository, initial commit
 - [x] Create GitHub repo under github.com/piresmario (e.g. `garcea`), add as `origin`, push initial commit
 - [x] Create Supabase project
-- [ ] Create Supabase Storage bucket for gallery photos
+- [x] Create Supabase Storage bucket for gallery photos (`gallery-photos`, public)
 - [x] Add `.env.local` with Supabase DB connection string, Supabase keys, Auth.js secret
 - [x] Add `.gitignore` (node_modules, .env*, .next)
 - [x] Install core dependencies (prisma, @prisma/client, next-auth, graphql, graphql-yoga)
@@ -58,11 +58,16 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
 
 ## Phase 6 — Gallery feature
 
-- [ ] Public gallery page (`/gallery`), grouped/filterable by event
-- [ ] Photo upload: frontend upload flow to Supabase Storage, save resulting URL via mutation
-- [ ] Video: form field to paste YouTube/Vimeo embed link, save via mutation
-- [ ] Render photos as images, videos as embedded iframe/player
-- [ ] Manage: edit caption / delete gallery item
+- [x] Public gallery page (`/gallery`), grouped by event
+- [x] Photo upload: Server Action reads the file from FormData and uploads
+      directly to Supabase Storage (`gallery-photos` bucket) via its REST API,
+      then saves the public URL via `createGalleryItem`
+- [x] Video: form field to paste a YouTube/Vimeo embed link, saved via
+      `createGalleryItem` (no file upload)
+- [x] Render photos as images, videos as embedded iframe/player
+      (`GalleryItemCard`, shared with the Events feature)
+- [x] Manage: edit caption / delete gallery item (delete also removes the
+      underlying file from Storage for photos, not just the DB row)
 
 ## Phase 7 — Contacts feature
 

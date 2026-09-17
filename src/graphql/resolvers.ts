@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { deletePhoto } from "@/lib/supabase-storage";
 import { requireUserId, type GraphQLContext } from "./context";
 
 type EventInput = {
@@ -41,6 +42,8 @@ export const resolvers = {
         where: args.eventId ? { eventId: args.eventId } : undefined,
         orderBy: { createdAt: "desc" },
       }),
+    galleryItem: (_: unknown, args: { id: string }) =>
+      prisma.galleryItem.findUnique({ where: { id: args.id } }),
     contactMessages: (_: unknown, __: unknown, context: GraphQLContext) => {
       requireUserId(context);
       return prisma.contactMessage.findMany({ orderBy: { submittedAt: "desc" } });
@@ -110,7 +113,12 @@ export const resolvers = {
       context: GraphQLContext,
     ) => {
       requireUserId(context);
-      await prisma.galleryItem.delete({ where: { id: args.id } });
+      const item = await prisma.galleryItem.delete({ where: { id: args.id } });
+      if (item.type === "PHOTO") {
+        await deletePhoto(item.url).catch((error) => {
+          console.error("Failed to delete photo from storage:", error);
+        });
+      }
       return true;
     },
 

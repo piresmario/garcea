@@ -70,6 +70,7 @@ export const typeDefs = /* GraphQL */ `
     events: [Event!]!
     event(id: ID!): Event
     galleryItems(eventId: ID): [GalleryItem!]!
+    galleryItem(id: ID!): GalleryItem
     contactMessages: [ContactMessage!]!
   }
 
