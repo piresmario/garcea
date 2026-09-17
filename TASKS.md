@@ -71,10 +71,11 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
 
 ## Phase 7 — Contacts feature
 
-- [ ] Public contact page with form (name, email, message)
-- [ ] Wire form to `submitContactMessage` mutation
-- [ ] Manage: inbox page listing submitted messages (`/manage/contacts`)
-- [ ] Basic spam mitigation (honeypot field or rate limit) on the public form
+- [x] Public contact page with form (name, email, message)
+- [x] Wire form to `submitContactMessage` mutation (Server Action)
+- [x] Manage: inbox page listing submitted messages (`/manage/contacts`)
+- [x] Honeypot field for spam mitigation — filled submissions get the same
+      success redirect but are never persisted, so bots aren't tipped off
 
 ## Phase 8 — Account management
 
