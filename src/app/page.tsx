@@ -34,35 +34,38 @@ export default async function Home() {
         formas de entrar em contacto connosco.
       </Typography>
 
-      {sectionData.ranchoSection && (
-        <Stack component="section" spacing={2}>
-          <Typography variant="h4" component="h2">
-            Rancho Folclórico das Lavradeiras de Gondar
-          </Typography>
+      <Stack component="section" spacing={3}>
+        <Typography variant="h4" component="h2">
+          Rancho Folclórico das Lavradeiras de Gondar
+        </Typography>
+
+        {sectionData.ranchoSection && (
           <Typography sx={{ whiteSpace: "pre-wrap" }}>
             {sectionData.ranchoSection.description}
           </Typography>
-        </Stack>
-      )}
+        )}
 
-      {photosData.ranchoPhotos.length > 0 && (
-        <Stack component="section" spacing={2}>
+        <Stack spacing={2}>
           <Typography variant="h5" component="h3">
-            Fotos
+            Galeria de Fotos
           </Typography>
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: { xs: "repeat(2, 1fr)", sm: "repeat(3, 1fr)" },
-              gap: 2,
-            }}
-          >
-            {photosData.ranchoPhotos.map((photo) => (
-              <GalleryItemCard key={photo.id} item={photo} />
-            ))}
-          </Box>
+          {photosData.ranchoPhotos.length > 0 ? (
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: { xs: "repeat(2, 1fr)", sm: "repeat(3, 1fr)" },
+                gap: 2,
+              }}
+            >
+              {photosData.ranchoPhotos.map((photo) => (
+                <GalleryItemCard key={photo.id} item={photo} />
+              ))}
+            </Box>
+          ) : (
+            <Typography color="text.secondary">Sem fotos por enquanto.</Typography>
+          )}
         </Stack>
-      )}
+      </Stack>
     </PageContainer>
   );
 }
