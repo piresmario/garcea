@@ -50,11 +50,11 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
 
 ## Phase 5 — Events feature
 
-- [ ] Public events list page (`/events`)
-- [ ] Public event detail page (`/events/[id]`), shows related gallery items
-- [ ] Manage: create event form (`/manage/events/new`)
-- [ ] Manage: edit event form (`/manage/events/[id]/edit`)
-- [ ] Manage: delete event action (with confirmation)
+- [x] Public events list page (`/events`)
+- [x] Public event detail page (`/events/[id]`), shows related gallery items
+- [x] Manage: events list (`/manage/events`) + create event form (`/manage/events/new`)
+- [x] Manage: edit event form (`/manage/events/[id]/edit`)
+- [x] Manage: delete event action with confirmation page (`/manage/events/[id]/delete`)
 
 ## Phase 6 — Gallery feature
 

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { auth, signOut } from "@/auth";
 
 export default async function ManagePage() {
@@ -7,6 +8,13 @@ export default async function ManagePage() {
     <main className="mx-auto flex max-w-3xl flex-1 flex-col gap-4 px-6 py-16">
       <h1 className="text-2xl font-semibold">Manage Associação GARCEA</h1>
       <p>Signed in as {session?.user?.email}.</p>
+      <ul className="flex flex-col gap-2">
+        <li>
+          <Link href="/manage/events" className="underline">
+            Manage Events
+          </Link>
+        </li>
+      </ul>
       <form
         action={async () => {
           "use server";
