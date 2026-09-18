@@ -1,7 +1,7 @@
-import { createTheme } from "@mui/material/styles";
+import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 import { LinkBehavior } from "@/components/LinkBehavior";
 
-export const theme = createTheme({
+const baseTheme = createTheme({
   palette: {
     primary: { main: "#0340d8" },
     secondary: { main: "#e0a52c" },
@@ -44,3 +44,5 @@ export const theme = createTheme({
     },
   },
 });
+
+export const theme = responsiveFontSizes(baseTheme);

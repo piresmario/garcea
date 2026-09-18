@@ -661,6 +661,36 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
   the generated CSS media queries instead (confirmed the desktop link
   `Stack` and the mobile text label both flip at the right breakpoint).
 
+## Fix: text too big on mobile
+
+- Reported: heading/body text felt oversized on a phone screen.
+- Root cause: MUI's `Typography` variants (`h1`-`h6`, etc.) render at a
+  single fixed size by default regardless of viewport - `theme.ts` only
+  overrode `fontWeight` for the headings, never their size, so every
+  page title (via `PageTitle`) and section heading rendered at full
+  desktop size (e.g. `h4` at `2.125rem`) even on a narrow phone.
+- [x] Wrapped the theme in MUI's `responsiveFontSizes()` helper
+      (`src/theme.ts`: `createTheme` result renamed to `baseTheme`,
+      `export const theme = responsiveFontSizes(baseTheme)`), which
+      auto-interpolates every heading variant's size across breakpoints
+      instead of needing a manual `sx` override on every single heading.
+      Confirmed via the generated CSS that `h4` now steps
+      `1.5625rem -> 1.82rem -> 2.02rem -> 2.125rem` across the four
+      breakpoints instead of being `2.125rem` everywhere.
+- [x] `PageTitle`'s icon badge (fixed at `2.75rem` regardless of screen
+      size) now shrinks to `2.25rem` below the `sm` breakpoint too, so it
+      stays proportional to the now-smaller mobile heading next to it.
+- Hit a stale-Turbopack-cache issue while restarting the dev server after
+  this change (`Export theme doesn't exist in target module` despite the
+  file being correct and `tsc`/`eslint`/`next build` all passing) -
+  resolved by deleting `.next` and restarting, matching the same class of
+  issue documented earlier in this file for the Prisma client singleton.
+- Verified: `tsc --noEmit`, `eslint`, `next build` all clean; every
+  touched page still returns 200; inspected the actual generated CSS
+  (not just the component code) to confirm both the responsive `h4`
+  breakpoint steps and the icon badge's smaller mobile size are really
+  present in the rendered output.
+
 ## Open Question (blocking Phase 8 decision)
 
 - [ ] Confirm: are all admin accounts fully equal, or should one be a "primary" owner
