@@ -59,9 +59,13 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
 ## Phase 6 — Gallery feature
 
 - [x] Public gallery page (`/gallery`), grouped by event
-- [x] Photo upload: Server Action reads the file from FormData and uploads
+- [x] Photo upload: Server Action reads the file(s) from FormData and uploads
       directly to Supabase Storage (`gallery-photos` bucket) via its REST API,
       then saves the public URL via `createGalleryItem`
+- [x] Multi-photo upload: the file input accepts multiple files at once;
+      each is uploaded and saved as its own gallery item sequentially
+      (fail-fast on the first error, sharing the same caption/event), so
+      you don't have to repeat the whole form per photo
 - [x] Video: form field to paste a YouTube/Vimeo embed link, saved via
       `createGalleryItem` (no file upload)
 - [x] Render photos as images, videos as embedded iframe/player

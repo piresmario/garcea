@@ -15,39 +15,51 @@ function readCaption(formData: FormData) {
   return typeof captionRaw === "string" && captionRaw ? captionRaw : null;
 }
 
+async function createOneGalleryItem(input: {
+  type: "PHOTO" | "VIDEO";
+  url: string;
+  caption: string | null;
+  eventId: string | null;
+}) {
+  try {
+    await runGatedMutation(() =>
+      executeGraphQL(CREATE_GALLERY_ITEM_MUTATION, { input }),
+    );
+  } catch (error) {
+    // Don't leave an unreferenced file behind if the DB write failed.
+    if (input.type === "PHOTO") {
+      await deletePhoto(input.url).catch(() => {});
+    }
+    throw error;
+  }
+}
+
 export async function createGalleryItemAction(formData: FormData) {
   const type = formData.get("type") === "VIDEO" ? "VIDEO" : "PHOTO";
   const eventIdRaw = formData.get("eventId");
   const eventId = typeof eventIdRaw === "string" && eventIdRaw ? eventIdRaw : null;
   const caption = readCaption(formData);
 
-  let url: string;
   if (type === "PHOTO") {
-    const file = formData.get("photo");
-    if (!(file instanceof File) || file.size === 0) {
-      throw new Error("Please choose a photo to upload.");
+    const files = formData
+      .getAll("photo")
+      .filter((entry): entry is File => entry instanceof File && entry.size > 0);
+    if (files.length === 0) {
+      throw new Error("Please choose at least one photo to upload.");
     }
-    url = await uploadPhoto(file);
+
+    // Sequential on purpose: fail fast and stop, rather than uploading many
+    // files in parallel and having to reconcile a partial-failure state.
+    for (const file of files) {
+      const url = await uploadPhoto(file);
+      await createOneGalleryItem({ type, url, caption, eventId });
+    }
   } else {
     const videoUrl = formData.get("videoUrl");
     if (typeof videoUrl !== "string" || !videoUrl) {
       throw new Error("Please provide a video embed URL.");
     }
-    url = videoUrl;
-  }
-
-  try {
-    await runGatedMutation(() =>
-      executeGraphQL(CREATE_GALLERY_ITEM_MUTATION, {
-        input: { type, url, caption, eventId },
-      }),
-    );
-  } catch (error) {
-    // Don't leave an unreferenced file behind if the DB write failed.
-    if (type === "PHOTO") {
-      await deletePhoto(url).catch(() => {});
-    }
-    throw error;
+    await createOneGalleryItem({ type, url: videoUrl, caption, eventId });
   }
 
   revalidatePath("/gallery");

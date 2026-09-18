@@ -59,9 +59,9 @@ export function GalleryItemForm({
       {type === "PHOTO" ? (
         <Stack spacing={0.5}>
           <Typography variant="body2" color="text.secondary">
-            Photo file
+            Photo files (select multiple to upload them all at once)
           </Typography>
-          <input type="file" name="photo" accept="image/*" required />
+          <input type="file" name="photo" accept="image/*" multiple required />
         </Stack>
       ) : (
         <TextField
@@ -73,7 +73,11 @@ export function GalleryItemForm({
         />
       )}
 
-      <TextField label="Caption (optional)" name="caption" />
+      <TextField
+        label="Caption (optional)"
+        name="caption"
+        helperText={type === "PHOTO" ? "Applied to every photo uploaded here" : undefined}
+      />
 
       <Button type="submit" variant="contained" sx={{ alignSelf: "flex-start" }}>
         Upload
