@@ -2,10 +2,12 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
+import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { GALLERY_ITEMS_QUERY } from "@/lib/queries/gallery";
 import { GalleryItemCard } from "@/components/GalleryItemCard";
 import { PageContainer } from "@/components/PageContainer";
+import { PageTitle } from "@/components/PageTitle";
 
 type GalleryData = {
   galleryItems: {
@@ -30,9 +32,7 @@ export default async function ManageGalleryPage() {
           justifyContent: "space-between",
         }}
       >
-        <Typography variant="h4" component="h1">
-          Gerir Galeria
-        </Typography>
+        <PageTitle icon={<PhotoLibraryIcon />}>Gerir Galeria</PageTitle>
         <Button href="/manage/gallery/new" variant="contained">
           Adicionar Item
         </Button>

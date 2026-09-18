@@ -517,6 +517,42 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
   the row's fixed height rule is present, and the `Card` has
   `height: 100%` as a flex column - all three pieces the fix depends on.
 
+## Add restrained color across the rest of the site
+
+- Home already had the gradient hero from an earlier pass; asked for the
+  same "modern but not exaggerated" color treatment on every other page.
+- [x] New `src/components/PageTitle.tsx`: a small colored circular icon
+      badge next to the page's `<h1>`, alternating `primary` (blue, sampled
+      from the logo) and `secondary` (amber) per page for variety without
+      it being loud. Applied to every public and manage page's title:
+      Events (list + detail, `EventIcon`), Gallery (`PhotoLibraryIcon`),
+      Historial (`AutoStoriesIcon`, secondary), Contacts (`EmailIcon`,
+      secondary), the Manage dashboard (`AdminPanelSettingsIcon`), and
+      each Manage sub-page ((Events/Gallery primary, Rancho/Historial
+      secondary, Official Contacts primary) - matching the icon each gets
+      on the dashboard's own link tile for consistency.
+      Login gets its own centered variant (same badge, centered layout)
+      since its narrow card doesn't fit the row-based `PageTitle`.
+- [x] `FormCard` gets a thin `primary`-colored top border - one small
+      unifying touch that now colors every form site-wide (login, event/
+      gallery item forms, Rancho/Historial description forms, Official
+      Contacts) without repeating it by hand in six places.
+- [x] Event dates (list, detail, and the manage events list) changed from
+      plain grey text to a small `secondary`-colored `Chip`.
+- [x] Gallery page: each event group's heading gets a small `primary`
+      count `Chip` (how many items in that group).
+- [x] Manage dashboard tiles: each link now has the same colored icon as
+      its destination page, in a small circular badge, instead of plain
+      text-only cards.
+- Verified: `tsc --noEmit`, `eslint`, `next build` all clean (had to drop
+  an import that became unused after replacing a page's title with
+  `PageTitle`). Confirmed live against the dev server: every touched
+  public and authenticated manage page returns 200, and inspected the
+  actual generated CSS (not just the component code) to confirm the icon
+  badge's blue background, the secondary-colored chip class, and the
+  form card's colored top border are all really present in the rendered
+  page, not just written in the source.
+
 ## Open Question (blocking Phase 8 decision)
 
 - [ ] Confirm: are all admin accounts fully equal, or should one be a "primary" owner

@@ -1,10 +1,11 @@
-import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
+import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { HISTORIAL_SECTION_QUERY } from "@/lib/queries/historial";
 import { PageContainer } from "@/components/PageContainer";
+import { PageTitle } from "@/components/PageTitle";
 import { FormCard } from "@/components/FormCard";
 import { updateHistorialSectionAction } from "./actions";
 
@@ -15,9 +16,9 @@ export default async function ManageHistorialPage() {
 
   return (
     <PageContainer maxWidth="md">
-      <Typography variant="h4" component="h1">
+      <PageTitle icon={<AutoStoriesIcon />} color="secondary">
         Gerir Historial
-      </Typography>
+      </PageTitle>
 
       <FormCard>
         <Stack component="form" action={updateHistorialSectionAction} spacing={2}>

@@ -4,6 +4,7 @@ import Paper from "@mui/material/Paper";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
 import { PageContainer } from "@/components/PageContainer";
+import { PageTitle } from "@/components/PageTitle";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { OFFICIAL_CONTACTS_QUERY } from "@/lib/queries/officialContacts";
 
@@ -19,15 +20,18 @@ export default async function ContactsPage() {
 
   return (
     <PageContainer maxWidth="sm">
-      <Typography variant="h4" component="h1">
+      <PageTitle icon={<EmailIcon />} color="secondary">
         Contactos
-      </Typography>
+      </PageTitle>
       <Typography color="text.secondary">
         Gostaria de ver o Rancho Folclórico das Lavradeiras de Gondar no seu evento? Pode contactar-nos
       </Typography>
 
       {emails.length > 0 || phones.length > 0 ? (
-        <Paper variant="outlined" sx={{ p: { xs: 3, sm: 4 } }}>
+        <Paper
+          variant="outlined"
+          sx={{ p: { xs: 3, sm: 4 }, borderTop: 3, borderTopColor: "secondary.main" }}
+        >
           <Stack spacing={1.5}>
             {emails.map((email) => (
               <Stack

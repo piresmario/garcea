@@ -5,9 +5,12 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
+import EventIcon from "@mui/icons-material/Event";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { EVENTS_QUERY } from "@/lib/queries/events";
 import { PageContainer } from "@/components/PageContainer";
+import { PageTitle } from "@/components/PageTitle";
 import { EventYearFilter } from "@/components/EventYearFilter";
 import { isPdfUrl } from "@/lib/supabase-storage";
 
@@ -56,9 +59,7 @@ export default async function EventsPage({
           gap: 2,
         }}
       >
-        <Typography variant="h4" component="h1">
-          Eventos
-        </Typography>
+        <PageTitle icon={<EventIcon />}>Eventos</PageTitle>
         <EventYearFilter years={availableYears} selectedYear={selectedYear} />
       </Box>
       {events.length === 0 ? (
@@ -88,10 +89,16 @@ export default async function EventsPage({
                 )}
                 <CardContent>
                   <Typography variant="h6">{event.title}</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {new Date(event.date).toLocaleDateString("pt-PT")} ·{" "}
-                    {event.location}
-                  </Typography>
+                  <Stack direction="row" spacing={1} sx={{ alignItems: "center", mt: 0.5 }}>
+                    <Chip
+                      size="small"
+                      color="secondary"
+                      label={new Date(event.date).toLocaleDateString("pt-PT")}
+                    />
+                    <Typography variant="body2" color="text.secondary">
+                      {event.location}
+                    </Typography>
+                  </Stack>
                 </CardContent>
               </CardActionArea>
             </Card>

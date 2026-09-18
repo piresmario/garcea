@@ -2,9 +2,11 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
+import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { OFFICIAL_CONTACTS_QUERY } from "@/lib/queries/officialContacts";
 import { PageContainer } from "@/components/PageContainer";
+import { PageTitle } from "@/components/PageTitle";
 import { OfficialContactForm } from "@/components/OfficialContactForm";
 import { createOfficialContactAction, deleteOfficialContactAction } from "./actions";
 
@@ -17,9 +19,7 @@ export default async function ManageOfficialContactsPage() {
 
   return (
     <PageContainer maxWidth="sm">
-      <Typography variant="h4" component="h1">
-        Gerir Contactos Oficiais
-      </Typography>
+      <PageTitle icon={<ContactPhoneIcon />}>Gerir Contactos Oficiais</PageTitle>
       <Typography color="text.secondary">
         Estes emails e números de telefone são mostrados na página pública de
         Contactos.

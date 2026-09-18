@@ -1,6 +1,8 @@
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
+import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import { PageContainer } from "@/components/PageContainer";
+import { PageTitle } from "@/components/PageTitle";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { HISTORIAL_SECTION_QUERY } from "@/lib/queries/historial";
 
@@ -11,10 +13,14 @@ export default async function HistorialPage() {
 
   return (
     <PageContainer maxWidth="md">
-      <Typography variant="h4" component="h1">
+      <PageTitle icon={<AutoStoriesIcon />} color="secondary">
         Historial
-      </Typography>
-      <Paper variant="outlined" component="section" sx={{ p: { xs: 3, sm: 5 } }}>
+      </PageTitle>
+      <Paper
+        variant="outlined"
+        component="section"
+        sx={{ p: { xs: 3, sm: 5 }, borderTop: 3, borderTopColor: "secondary.main" }}
+      >
         {data.historialSection ? (
           <Typography sx={{ whiteSpace: "pre-wrap" }}>
             {data.historialSection.description}

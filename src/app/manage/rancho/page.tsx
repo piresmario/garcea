@@ -3,9 +3,11 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
+import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { RANCHO_SECTION_QUERY, RANCHO_PHOTOS_QUERY } from "@/lib/queries/rancho";
 import { PageContainer } from "@/components/PageContainer";
+import { PageTitle } from "@/components/PageTitle";
 import { FormCard } from "@/components/FormCard";
 import { GalleryItemCard } from "@/components/GalleryItemCard";
 import { updateRanchoSectionAction, unfeatureRanchoPhotoAction } from "./actions";
@@ -29,9 +31,9 @@ export default async function ManageRanchoPage() {
 
   return (
     <PageContainer maxWidth="md">
-      <Typography variant="h4" component="h1">
+      <PageTitle icon={<MusicNoteIcon />} color="secondary">
         Gerir Secção do Rancho
-      </Typography>
+      </PageTitle>
 
       <FormCard>
         <Stack component="form" action={updateRanchoSectionAction} spacing={2}>

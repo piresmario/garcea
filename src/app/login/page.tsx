@@ -3,6 +3,8 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
+import LoginIcon from "@mui/icons-material/Login";
 import { PageContainer } from "@/components/PageContainer";
 import { FormCard } from "@/components/FormCard";
 import { authenticate } from "./actions";
@@ -16,9 +18,25 @@ export default async function LoginPage({
 
   return (
     <PageContainer maxWidth="xs">
-      <Typography variant="h4" component="h1" sx={{ textAlign: "center" }}>
-        Entrar
-      </Typography>
+      <Stack spacing={1} sx={{ alignItems: "center" }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: 56,
+            height: 56,
+            borderRadius: "50%",
+            bgcolor: "primary.main",
+            color: "primary.contrastText",
+          }}
+        >
+          <LoginIcon fontSize="medium" />
+        </Box>
+        <Typography variant="h4" component="h1">
+          Entrar
+        </Typography>
+      </Stack>
       <FormCard>
         {error && <Alert severity="error">Email ou palavra-passe inválidos.</Alert>}
         <Stack component="form" action={authenticate} spacing={2}>

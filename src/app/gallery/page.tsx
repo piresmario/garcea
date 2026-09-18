@@ -1,10 +1,13 @@
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
+import Chip from "@mui/material/Chip";
+import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { GALLERY_ITEMS_QUERY } from "@/lib/queries/gallery";
 import { GalleryItemCard } from "@/components/GalleryItemCard";
 import { PageContainer } from "@/components/PageContainer";
+import { PageTitle } from "@/components/PageTitle";
 
 type GalleryData = {
   galleryItems: {
@@ -23,9 +26,7 @@ export default async function GalleryPage() {
   if (data.galleryItems.length === 0) {
     return (
       <PageContainer maxWidth="md">
-        <Typography variant="h4" component="h1">
-          Galeria
-        </Typography>
+        <PageTitle icon={<PhotoLibraryIcon />}>Galeria</PageTitle>
         <Typography>Ainda não há fotos ou vídeos.</Typography>
       </PageContainer>
     );
@@ -44,14 +45,15 @@ export default async function GalleryPage() {
 
   return (
     <PageContainer maxWidth="md">
-      <Typography variant="h4" component="h1">
-        Galeria
-      </Typography>
+      <PageTitle icon={<PhotoLibraryIcon />}>Galeria</PageTitle>
       {Array.from(groups.values()).map((group) => (
         <Stack key={group.title} spacing={2}>
-          <Typography variant="h5" component="h2">
-            {group.title}
-          </Typography>
+          <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+            <Typography variant="h5" component="h2">
+              {group.title}
+            </Typography>
+            <Chip size="small" color="primary" label={group.items.length} />
+          </Stack>
           <Box
             sx={{
               display: "grid",

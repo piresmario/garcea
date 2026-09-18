@@ -5,7 +5,14 @@ export function FormCard({ children }: { children: ReactNode }) {
   return (
     <Paper
       variant="outlined"
-      sx={{ p: { xs: 3, sm: 4 }, display: "flex", flexDirection: "column", gap: 2 }}
+      sx={{
+        p: { xs: 3, sm: 4 },
+        display: "flex",
+        flexDirection: "column",
+        gap: 2,
+        borderTop: 3,
+        borderTopColor: "primary.main",
+      }}
     >
       {children}
     </Paper>

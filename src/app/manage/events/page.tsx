@@ -3,9 +3,12 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
+import Chip from "@mui/material/Chip";
+import EventIcon from "@mui/icons-material/Event";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { EVENTS_QUERY } from "@/lib/queries/events";
 import { PageContainer } from "@/components/PageContainer";
+import { PageTitle } from "@/components/PageTitle";
 import { isPdfUrl } from "@/lib/supabase-storage";
 
 type EventsData = {
@@ -30,9 +33,7 @@ export default async function ManageEventsPage() {
           justifyContent: "space-between",
         }}
       >
-        <Typography variant="h4" component="h1">
-          Gerir Eventos
-        </Typography>
+        <PageTitle icon={<EventIcon />}>Gerir Eventos</PageTitle>
         <Button href="/manage/events/new" variant="contained">
           Novo Evento
         </Button>
@@ -65,10 +66,16 @@ export default async function ManageEventsPage() {
                 )}
                 <Box>
                   <Typography sx={{ fontWeight: 500 }}>{event.title}</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {new Date(event.date).toLocaleDateString("pt-PT")} ·{" "}
-                    {event.location}
-                  </Typography>
+                  <Stack direction="row" spacing={1} sx={{ alignItems: "center", mt: 0.5 }}>
+                    <Chip
+                      size="small"
+                      color="secondary"
+                      label={new Date(event.date).toLocaleDateString("pt-PT")}
+                    />
+                    <Typography variant="body2" color="text.secondary">
+                      {event.location}
+                    </Typography>
+                  </Stack>
                 </Box>
               </Box>
               <Stack direction="row" spacing={2}>

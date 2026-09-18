@@ -3,15 +3,49 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
+import Stack from "@mui/material/Stack";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import EventIcon from "@mui/icons-material/Event";
+import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
+import MusicNoteIcon from "@mui/icons-material/MusicNote";
+import AutoStoriesIcon from "@mui/icons-material/AutoStories";
+import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
+import type { ReactNode } from "react";
 import { PageContainer } from "@/components/PageContainer";
+import { PageTitle } from "@/components/PageTitle";
 import { auth, signOut } from "@/auth";
 
-const links = [
-  { href: "/manage/events", label: "Gerir Eventos" },
-  { href: "/manage/gallery", label: "Gerir Galeria" },
-  { href: "/manage/rancho", label: "Gerir Secção do Rancho" },
-  { href: "/manage/historial", label: "Gerir Historial" },
-  { href: "/manage/official-contacts", label: "Gerir Contactos Oficiais" },
+const links: {
+  href: string;
+  label: string;
+  icon: ReactNode;
+  color: "primary" | "secondary";
+}[] = [
+  { href: "/manage/events", label: "Gerir Eventos", icon: <EventIcon />, color: "primary" },
+  {
+    href: "/manage/gallery",
+    label: "Gerir Galeria",
+    icon: <PhotoLibraryIcon />,
+    color: "primary",
+  },
+  {
+    href: "/manage/rancho",
+    label: "Gerir Secção do Rancho",
+    icon: <MusicNoteIcon />,
+    color: "secondary",
+  },
+  {
+    href: "/manage/historial",
+    label: "Gerir Historial",
+    icon: <AutoStoriesIcon />,
+    color: "secondary",
+  },
+  {
+    href: "/manage/official-contacts",
+    label: "Gerir Contactos Oficiais",
+    icon: <ContactPhoneIcon />,
+    color: "primary",
+  },
 ];
 
 export default async function ManagePage() {
@@ -19,9 +53,7 @@ export default async function ManagePage() {
 
   return (
     <PageContainer maxWidth="sm">
-      <Typography variant="h4" component="h1">
-        Gerir Associação GARCEA
-      </Typography>
+      <PageTitle icon={<AdminPanelSettingsIcon />}>Gerir Associação GARCEA</PageTitle>
       <Typography color="text.secondary">
         Sessão iniciada como {session?.user?.email}.
       </Typography>
@@ -42,7 +74,24 @@ export default async function ManagePage() {
             }}
           >
             <CardActionArea href={link.href} sx={{ p: 2.5 }}>
-              <Typography sx={{ fontWeight: 600 }}>{link.label}</Typography>
+              <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: 36,
+                    height: 36,
+                    borderRadius: "50%",
+                    bgcolor: `${link.color}.main`,
+                    color: `${link.color}.contrastText`,
+                    flexShrink: 0,
+                  }}
+                >
+                  {link.icon}
+                </Box>
+                <Typography sx={{ fontWeight: 600 }}>{link.label}</Typography>
+              </Stack>
             </CardActionArea>
           </Card>
         ))}
