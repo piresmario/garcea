@@ -42,9 +42,9 @@ export async function Nav() {
           <Box
             component="span"
             sx={{
-              fontSize: "1.25rem",
+              fontSize: { xs: "0.9375rem", sm: "1.25rem" },
               fontWeight: 500,
-              display: { xs: "none", sm: "inline" },
+              whiteSpace: "nowrap",
             }}
           >
             Associação GARCEA

@@ -716,6 +716,21 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
   reflect the new, smaller values, and that every touched page still
   returns 200.
 
+## Show "Associação GARCEA" text in the header on mobile too
+
+- The mobile nav work earlier hid this text below `sm` (logo only) to
+  make room for the hamburger button. Reverted that per explicit request
+  - now always visible, but at a smaller `0.9375rem` on mobile (`1.25rem`
+    from `sm` up) with `whiteSpace: "nowrap"` so it can't wrap the
+    `Toolbar` onto a second line. Logo (2.5rem) + this text + the
+    hamburger button comfortably fit a 320px-wide phone by rough
+    estimate (no way to confirm at an actual narrow viewport in this
+    sandbox - see the recurring headless-Chromium note elsewhere in this
+    file).
+- Verified: `tsc --noEmit`, `eslint`, `next build` clean; confirmed in
+  the generated CSS that the text no longer has any `display:none` rule
+  and steps from `0.9375rem` to `1.25rem` as designed.
+
 ## Open Question (blocking Phase 8 decision)
 
 - [ ] Confirm: are all admin accounts fully equal, or should one be a "primary" owner
