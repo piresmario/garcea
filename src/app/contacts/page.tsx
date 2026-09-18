@@ -21,7 +21,7 @@ export default async function ContactsPage({
         Contactos
       </Typography>
       <Typography color="text.secondary">
-        Tem alguma questão ou sugestão? Envie-nos uma mensagem.
+        Gostaria de ver o Rancho Folclórico das Lavradeiras de Gondar no seu evento? Pode contactar-nos
       </Typography>
       <FormCard>
         {sent ? (
