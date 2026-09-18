@@ -8,10 +8,10 @@ import { auth, signOut } from "@/auth";
 
 const links = [
   { href: "/", label: "Home" },
-  { href: "/gallery", label: "Gallery" },
-  { href: "/events", label: "Events" },
   { href: "/historial", label: "Historial" },
-  { href: "/contacts", label: "Contacts" },
+  { href: "/events", label: "Eventos" },
+  { href: "/gallery", label: "Galeria" },
+  { href: "/contacts", label: "Contactos" },
 ];
 
 export async function Nav() {
@@ -40,7 +40,7 @@ export async function Nav() {
           {session?.user ? (
             <>
               <Button href="/manage" color="inherit">
-                Manage
+                Gestão
               </Button>
               <form
                 action={async () => {
