@@ -11,7 +11,25 @@ type GalleryItem = {
   caption?: string | null;
 };
 
-export function GalleryItemCard({ item }: { item: GalleryItem }) {
+function withAutoplay(url: string): string {
+  try {
+    const parsed = new URL(url);
+    parsed.searchParams.set("autoplay", "1");
+    parsed.searchParams.set("mute", "1");
+    parsed.searchParams.set("muted", "1");
+    return parsed.toString();
+  } catch {
+    return url;
+  }
+}
+
+export function GalleryItemCard({
+  item,
+  autoPlay = false,
+}: {
+  item: GalleryItem;
+  autoPlay?: boolean;
+}) {
   return (
     <Card
       variant="outlined"
@@ -30,8 +48,9 @@ export function GalleryItemCard({ item }: { item: GalleryItem }) {
       ) : (
         <Box
           component="iframe"
-          src={item.url}
+          src={autoPlay ? withAutoplay(item.url) : item.url}
           title={item.caption ?? "Vídeo"}
+          allow="autoplay; fullscreen; picture-in-picture"
           allowFullScreen
           sx={{ aspectRatio: "16 / 9", width: "100%", border: 0, display: "block" }}
         />

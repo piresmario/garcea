@@ -394,6 +394,33 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
   on the public page - left untouched, since that's real data, not test
   data from this session.
 
+## Autoplay the centered video in the event gallery carousel
+
+- [x] `GalleryItemCard` takes a new optional `autoPlay` prop; when set and
+      the item is a video, appends `autoplay=1&mute=1&muted=1` to the
+      embed URL (muted, since browsers generally block unmuted iframe
+      autoplay regardless of user gesture) and adds the iframe's
+      `allow="autoplay; fullscreen; picture-in-picture"` attribute needed
+      for that to actually be permitted. Non-carousel usages
+      (`/gallery`, the Rancho photo grid, manage pages) don't pass it, so
+      their video behavior is unchanged.
+- [x] `GalleryCarousel` passes `autoPlay={index === selectedIndex}` to
+      each slide - Embla's default `align: "center"` already centers the
+      selected slide, so "selected" and "centered" are the same slide,
+      matching the request as written.
+- Verified end-to-end against the live dev server: added a temporary test
+  video as the event's newest (and therefore first/initially-centered)
+  gallery item, confirmed via the rendered HTML that only its iframe `src`
+  got the autoplay params while the event's other, pre-existing real video
+  did not; deleted the test video afterward and confirmed the real one
+  (now first) correctly picks up the autoplay params in its place, and
+  that no other gallery items were affected.
+- Noted but out of scope: that real pre-existing video's URL is a
+  `youtu.be/...` short link rather than the `youtube.com/embed/...` format
+  YouTube's iframe player actually needs, so it may not display/play at
+  all regardless of this change - separate, pre-existing issue, flagged
+  to the user rather than fixed here.
+
 ## Open Question (blocking Phase 8 decision)
 
 - [ ] Confirm: are all admin accounts fully equal, or should one be a "primary" owner
