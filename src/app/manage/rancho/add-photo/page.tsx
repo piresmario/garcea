@@ -26,12 +26,12 @@ export default async function AddRanchoPhotoPage() {
   return (
     <PageContainer maxWidth="md">
       <Typography variant="h4" component="h1">
-        Add Photo to Rancho Section
+        Adicionar Foto à Secção do Rancho
       </Typography>
       {available.length === 0 ? (
         <Typography>
-          No unfeatured gallery items available. Upload photos via Manage Gallery
-          first.
+          Não há itens da galeria disponíveis. Carregue fotos em Gerir Galeria
+          primeiro.
         </Typography>
       ) : (
         <Box
@@ -48,7 +48,7 @@ export default async function AddRanchoPhotoPage() {
                 <GalleryItemCard item={item} />
                 <form action={feature}>
                   <Button type="submit" size="small" variant="contained">
-                    Feature on Home page
+                    Destacar na Página Inicial
                   </Button>
                 </form>
               </Stack>

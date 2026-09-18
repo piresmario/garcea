@@ -29,12 +29,12 @@ export default async function ManageRanchoPage() {
   return (
     <PageContainer maxWidth="md">
       <Typography variant="h4" component="h1">
-        Manage Rancho Section
+        Gerir Secção do Rancho
       </Typography>
 
       <Stack component="form" action={updateRanchoSectionAction} spacing={2}>
         <TextField
-          label="Description"
+          label="Descrição"
           name="description"
           required
           multiline
@@ -42,7 +42,7 @@ export default async function ManageRanchoPage() {
           defaultValue={sectionData.ranchoSection?.description ?? ""}
         />
         <Button type="submit" variant="contained" sx={{ alignSelf: "flex-start" }}>
-          Save
+          Guardar
         </Button>
       </Stack>
 
@@ -50,15 +50,15 @@ export default async function ManageRanchoPage() {
         sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}
       >
         <Typography variant="h5" component="h2">
-          Featured Photos
+          Fotos em Destaque
         </Typography>
         <Button href="/manage/rancho/add-photo" variant="contained">
-          Add Photo
+          Adicionar Foto
         </Button>
       </Box>
 
       {photosData.ranchoPhotos.length === 0 ? (
-        <Typography>No photos featured yet.</Typography>
+        <Typography>Ainda não há fotos em destaque.</Typography>
       ) : (
         <Box
           sx={{
@@ -74,7 +74,7 @@ export default async function ManageRanchoPage() {
                 <GalleryItemCard item={photo} />
                 <form action={unfeature}>
                   <Button type="submit" size="small" color="error">
-                    Remove from Home page
+                    Remover da Página Inicial
                   </Button>
                 </form>
               </Stack>

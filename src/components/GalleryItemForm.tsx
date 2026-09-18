@@ -24,30 +24,30 @@ export function GalleryItemForm({
   return (
     <Stack component="form" action={action} spacing={2}>
       <FormControl fullWidth>
-        <InputLabel id="type-label">Type</InputLabel>
+        <InputLabel id="type-label">Tipo</InputLabel>
         <Select
           labelId="type-label"
-          label="Type"
+          label="Tipo"
           name="type"
           value={type}
           onChange={(event: SelectChangeEvent) =>
             setType(event.target.value as "PHOTO" | "VIDEO")
           }
         >
-          <MenuItem value="PHOTO">Photo</MenuItem>
-          <MenuItem value="VIDEO">Video</MenuItem>
+          <MenuItem value="PHOTO">Foto</MenuItem>
+          <MenuItem value="VIDEO">Vídeo</MenuItem>
         </Select>
       </FormControl>
 
       <FormControl fullWidth>
-        <InputLabel id="event-label">Event (optional)</InputLabel>
+        <InputLabel id="event-label">Evento (opcional)</InputLabel>
         <Select
           labelId="event-label"
-          label="Event (optional)"
+          label="Evento (opcional)"
           name="eventId"
           defaultValue=""
         >
-          <MenuItem value="">None</MenuItem>
+          <MenuItem value="">Nenhum</MenuItem>
           {events.map((event) => (
             <MenuItem key={event.id} value={event.id}>
               {event.title}
@@ -59,13 +59,13 @@ export function GalleryItemForm({
       {type === "PHOTO" ? (
         <Stack spacing={0.5}>
           <Typography variant="body2" color="text.secondary">
-            Photo files (select multiple to upload them all at once)
+            Ficheiros de foto (selecione vários para enviar todos de uma vez)
           </Typography>
           <input type="file" name="photo" accept="image/*" multiple required />
         </Stack>
       ) : (
         <TextField
-          label="Video embed URL"
+          label="URL de incorporação do vídeo"
           name="videoUrl"
           type="url"
           required
@@ -74,13 +74,15 @@ export function GalleryItemForm({
       )}
 
       <TextField
-        label="Caption (optional)"
+        label="Legenda (opcional)"
         name="caption"
-        helperText={type === "PHOTO" ? "Applied to every photo uploaded here" : undefined}
+        helperText={
+          type === "PHOTO" ? "Aplicada a todas as fotos enviadas aqui" : undefined
+        }
       />
 
       <Button type="submit" variant="contained" sx={{ alignSelf: "flex-start" }}>
-        Upload
+        Enviar
       </Button>
     </Stack>
   );

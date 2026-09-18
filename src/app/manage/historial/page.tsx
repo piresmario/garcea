@@ -15,12 +15,12 @@ export default async function ManageHistorialPage() {
   return (
     <PageContainer maxWidth="md">
       <Typography variant="h4" component="h1">
-        Manage Historial
+        Gerir Historial
       </Typography>
 
       <Stack component="form" action={updateHistorialSectionAction} spacing={2}>
         <TextField
-          label="Description"
+          label="Descrição"
           name="description"
           required
           multiline
@@ -28,7 +28,7 @@ export default async function ManageHistorialPage() {
           defaultValue={data.historialSection?.description ?? ""}
         />
         <Button type="submit" variant="contained" sx={{ alignSelf: "flex-start" }}>
-          Save
+          Guardar
         </Button>
       </Stack>
     </PageContainer>

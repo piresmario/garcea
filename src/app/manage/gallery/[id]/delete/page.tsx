@@ -24,17 +24,18 @@ export default async function DeleteGalleryItemPage({
   return (
     <PageContainer maxWidth="sm">
       <Typography variant="h4" component="h1">
-        Delete Gallery Item
+        Eliminar Item da Galeria
       </Typography>
       <Typography>
-        Are you sure you want to delete this item? This cannot be undone.
+        Tem a certeza que deseja eliminar este item? Esta ação não pode ser
+        desfeita.
       </Typography>
       <Stack component="form" action={deleteWithId} direction="row" spacing={2}>
         <Button type="submit" variant="contained" color="error">
-          Delete
+          Eliminar
         </Button>
         <Button href="/manage/gallery" variant="outlined">
-          Cancel
+          Cancelar
         </Button>
       </Stack>
     </PageContainer>

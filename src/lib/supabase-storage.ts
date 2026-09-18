@@ -6,10 +6,10 @@ const MAX_PHOTO_BYTES = 8 * 1024 * 1024;
 
 export async function uploadPhoto(file: File): Promise<string> {
   if (!file.type.startsWith("image/")) {
-    throw new Error("Only image files can be uploaded as photos.");
+    throw new Error("Só são permitidos ficheiros de imagem como fotos.");
   }
   if (file.size > MAX_PHOTO_BYTES) {
-    throw new Error("Photo is too large (max 8MB).");
+    throw new Error("A foto é demasiado grande (máx. 8MB).");
   }
 
   const arrayBuffer = await file.arrayBuffer();

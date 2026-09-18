@@ -24,9 +24,9 @@ export default async function GalleryPage() {
     return (
       <PageContainer maxWidth="md">
         <Typography variant="h4" component="h1">
-          Gallery
+          Galeria
         </Typography>
-        <Typography>No photos or videos yet.</Typography>
+        <Typography>Ainda não há fotos ou vídeos.</Typography>
       </PageContainer>
     );
   }
@@ -37,7 +37,7 @@ export default async function GalleryPage() {
   >();
   for (const item of data.galleryItems) {
     const key = item.event?.id ?? "none";
-    const title = item.event?.title ?? "Other";
+    const title = item.event?.title ?? "Outros";
     if (!groups.has(key)) groups.set(key, { title, items: [] });
     groups.get(key)!.items.push(item);
   }
@@ -45,7 +45,7 @@ export default async function GalleryPage() {
   return (
     <PageContainer maxWidth="md">
       <Typography variant="h4" component="h1">
-        Gallery
+        Galeria
       </Typography>
       {Array.from(groups.values()).map((group) => (
         <Stack key={group.title} spacing={2}>

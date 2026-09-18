@@ -22,10 +22,10 @@ export default async function ManageContactsPage() {
   return (
     <PageContainer maxWidth="md">
       <Typography variant="h4" component="h1">
-        Contact Messages
+        Mensagens de Contacto
       </Typography>
       {data.contactMessages.length === 0 ? (
-        <Typography>No messages yet.</Typography>
+        <Typography>Ainda não há mensagens.</Typography>
       ) : (
         <Stack spacing={2}>
           {data.contactMessages.map((msg) => (

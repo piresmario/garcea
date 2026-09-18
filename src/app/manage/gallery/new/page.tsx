@@ -17,7 +17,7 @@ export default async function NewGalleryItemPage() {
   return (
     <PageContainer maxWidth="sm">
       <Typography variant="h4" component="h1">
-        Add Gallery Item
+        Adicionar Item à Galeria
       </Typography>
       <GalleryItemForm action={createGalleryItemAction} events={events} />
     </PageContainer>

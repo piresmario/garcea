@@ -7,11 +7,11 @@ import { PageContainer } from "@/components/PageContainer";
 import { auth, signOut } from "@/auth";
 
 const links = [
-  { href: "/manage/events", label: "Manage Events" },
-  { href: "/manage/gallery", label: "Manage Gallery" },
-  { href: "/manage/rancho", label: "Manage Rancho Section" },
-  { href: "/manage/historial", label: "Manage Historial" },
-  { href: "/manage/contacts", label: "Contact Messages" },
+  { href: "/manage/events", label: "Gerir Eventos" },
+  { href: "/manage/gallery", label: "Gerir Galeria" },
+  { href: "/manage/rancho", label: "Gerir Secção do Rancho" },
+  { href: "/manage/historial", label: "Gerir Historial" },
+  { href: "/manage/contacts", label: "Mensagens de Contacto" },
 ];
 
 export default async function ManagePage() {
@@ -20,10 +20,10 @@ export default async function ManagePage() {
   return (
     <PageContainer maxWidth="sm">
       <Typography variant="h4" component="h1">
-        Manage Associação GARCEA
+        Gerir Associação GARCEA
       </Typography>
       <Typography color="text.secondary">
-        Signed in as {session?.user?.email}.
+        Sessão iniciada como {session?.user?.email}.
       </Typography>
       <List disablePadding>
         {links.map((link) => (
@@ -39,7 +39,7 @@ export default async function ManagePage() {
         }}
       >
         <Button type="submit" variant="outlined">
-          Logout
+          Sair
         </Button>
       </form>
     </PageContainer>

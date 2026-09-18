@@ -24,10 +24,10 @@ export default async function EventsPage() {
   return (
     <PageContainer maxWidth="md">
       <Typography variant="h4" component="h1">
-        Events
+        Eventos
       </Typography>
       {data.events.length === 0 ? (
-        <Typography>No events yet.</Typography>
+        <Typography>Ainda não há eventos.</Typography>
       ) : (
         <Stack spacing={2}>
           {data.events.map((event) => (

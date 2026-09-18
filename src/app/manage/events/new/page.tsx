@@ -7,9 +7,9 @@ export default function NewEventPage() {
   return (
     <PageContainer maxWidth="sm">
       <Typography variant="h4" component="h1">
-        New Event
+        Novo Evento
       </Typography>
-      <EventForm action={createEventAction} submitLabel="Create" />
+      <EventForm action={createEventAction} submitLabel="Criar" />
     </PageContainer>
   );
 }

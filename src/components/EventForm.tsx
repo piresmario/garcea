@@ -30,9 +30,9 @@ export function EventForm({
 }) {
   return (
     <Stack component="form" action={action} spacing={2}>
-      <TextField label="Title" name="title" required defaultValue={defaultValues?.title} />
+      <TextField label="Título" name="title" required defaultValue={defaultValues?.title} />
       <TextField
-        label="Description"
+        label="Descrição"
         name="description"
         required
         multiline
@@ -40,7 +40,7 @@ export function EventForm({
         defaultValue={defaultValues?.description}
       />
       <TextField
-        label="Date"
+        label="Data"
         name="date"
         type="date"
         required
@@ -48,7 +48,7 @@ export function EventForm({
         slotProps={{ inputLabel: { shrink: true } }}
       />
       <TextField
-        label="Location"
+        label="Localização"
         name="location"
         required
         defaultValue={defaultValues?.location}
@@ -56,7 +56,7 @@ export function EventForm({
 
       <Stack spacing={0.5}>
         <Typography variant="body2" color="text.secondary">
-          Cartaz (poster image, optional)
+          Cartaz (opcional)
         </Typography>
         {defaultValues?.posterUrl && (
           <Box
@@ -69,7 +69,7 @@ export function EventForm({
         <input type="file" name="cartaz" accept="image/*" />
         {defaultValues?.posterUrl && (
           <label style={{ fontSize: "0.875rem" }}>
-            <input type="checkbox" name="removePoster" /> Remove current poster
+            <input type="checkbox" name="removePoster" /> Remover cartaz atual
           </label>
         )}
       </Stack>

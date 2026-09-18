@@ -59,7 +59,7 @@ export default async function EventDetailPage({
       {event.galleryItems.length > 0 && (
         <Stack spacing={2}>
           <Typography variant="h5" component="h2">
-            Gallery
+            Galeria
           </Typography>
           <Box
             sx={{

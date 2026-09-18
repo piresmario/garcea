@@ -25,7 +25,7 @@ export function GalleryItemCard({ item }: { item: GalleryItem }) {
         <Box
           component="iframe"
           src={item.url}
-          title={item.caption ?? "Video"}
+          title={item.caption ?? "Vídeo"}
           allowFullScreen
           sx={{ aspectRatio: "16 / 9", width: "100%", border: 0, display: "block" }}
         />

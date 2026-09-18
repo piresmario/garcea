@@ -25,16 +25,16 @@ export default async function EditGalleryItemPage({
   return (
     <PageContainer maxWidth="sm">
       <Typography variant="h4" component="h1">
-        Edit Caption
+        Editar Legenda
       </Typography>
       <Stack component="form" action={updateWithId} spacing={2}>
         <TextField
-          label="Caption"
+          label="Legenda"
           name="caption"
           defaultValue={data.galleryItem.caption ?? ""}
         />
         <Button type="submit" variant="contained" sx={{ alignSelf: "flex-start" }}>
-          Save
+          Guardar
         </Button>
       </Stack>
     </PageContainer>

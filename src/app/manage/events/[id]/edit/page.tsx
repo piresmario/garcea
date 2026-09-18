@@ -31,9 +31,9 @@ export default async function EditEventPage({
   return (
     <PageContainer maxWidth="sm">
       <Typography variant="h4" component="h1">
-        Edit Event
+        Editar Evento
       </Typography>
-      <EventForm action={updateWithId} defaultValues={data.event} submitLabel="Save" />
+      <EventForm action={updateWithId} defaultValues={data.event} submitLabel="Guardar" />
     </PageContainer>
   );
 }

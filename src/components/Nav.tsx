@@ -7,7 +7,7 @@ import Stack from "@mui/material/Stack";
 import { auth, signOut } from "@/auth";
 
 const links = [
-  { href: "/", label: "Home" },
+  { href: "/", label: "Início" },
   { href: "/historial", label: "Historial" },
   { href: "/events", label: "Eventos" },
   { href: "/gallery", label: "Galeria" },
@@ -49,13 +49,13 @@ export async function Nav() {
                 }}
               >
                 <Button type="submit" color="inherit">
-                  Logout
+                  Sair
                 </Button>
               </form>
             </>
           ) : (
             <Button href="/login" color="inherit">
-              Login
+              Entrar
             </Button>
           )}
         </Stack>

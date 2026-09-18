@@ -45,7 +45,7 @@ export async function createGalleryItemAction(formData: FormData) {
       .getAll("photo")
       .filter((entry): entry is File => entry instanceof File && entry.size > 0);
     if (files.length === 0) {
-      throw new Error("Please choose at least one photo to upload.");
+      throw new Error("Escolha pelo menos uma foto para enviar.");
     }
 
     // Sequential on purpose: fail fast and stop, rather than uploading many
@@ -57,7 +57,7 @@ export async function createGalleryItemAction(formData: FormData) {
   } else {
     const videoUrl = formData.get("videoUrl");
     if (typeof videoUrl !== "string" || !videoUrl) {
-      throw new Error("Please provide a video embed URL.");
+      throw new Error("Indique um URL de incorporação do vídeo.");
     }
     await createOneGalleryItem({ type, url: videoUrl, caption, eventId });
   }

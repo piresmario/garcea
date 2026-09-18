@@ -24,18 +24,18 @@ export default async function DeleteEventPage({
   return (
     <PageContainer maxWidth="sm">
       <Typography variant="h4" component="h1">
-        Delete Event
+        Eliminar Evento
       </Typography>
       <Typography>
-        Are you sure you want to delete &ldquo;{data.event.title}&rdquo;? This
-        cannot be undone.
+        Tem a certeza que deseja eliminar &ldquo;{data.event.title}&rdquo;? Esta
+        ação não pode ser desfeita.
       </Typography>
       <Stack component="form" action={deleteWithId} direction="row" spacing={2}>
         <Button type="submit" variant="contained" color="error">
-          Delete
+          Eliminar
         </Button>
         <Button href="/manage/events" variant="outlined">
-          Cancel
+          Cancelar
         </Button>
       </Stack>
     </PageContainer>

@@ -29,14 +29,14 @@ export default async function ManageEventsPage() {
         }}
       >
         <Typography variant="h4" component="h1">
-          Manage Events
+          Gerir Eventos
         </Typography>
         <Button href="/manage/events/new" variant="contained">
-          New Event
+          Novo Evento
         </Button>
       </Box>
       {data.events.length === 0 ? (
-        <Typography>No events yet.</Typography>
+        <Typography>Ainda não há eventos.</Typography>
       ) : (
         <Stack spacing={2}>
           {data.events.map((event) => (
@@ -70,12 +70,12 @@ export default async function ManageEventsPage() {
                 </Box>
               </Box>
               <Stack direction="row" spacing={2}>
-                <Button href={`/manage/events/${event.id}/edit`}>Edit</Button>
+                <Button href={`/manage/events/${event.id}/edit`}>Editar</Button>
                 <Button
                   href={`/manage/events/${event.id}/delete`}
                   color="error"
                 >
-                  Delete
+                  Eliminar
                 </Button>
               </Stack>
             </Box>

@@ -16,9 +16,9 @@ export default async function LoginPage({
   return (
     <PageContainer maxWidth="xs">
       <Typography variant="h4" component="h1">
-        Login
+        Entrar
       </Typography>
-      {error && <Alert severity="error">Invalid email or password.</Alert>}
+      {error && <Alert severity="error">Email ou palavra-passe inválidos.</Alert>}
       <Stack component="form" action={authenticate} spacing={2}>
         <TextField
           label="Email"
@@ -28,14 +28,14 @@ export default async function LoginPage({
           autoComplete="email"
         />
         <TextField
-          label="Password"
+          label="Palavra-passe"
           name="password"
           type="password"
           required
           autoComplete="current-password"
         />
         <Button type="submit" variant="contained">
-          Sign in
+          Entrar
         </Button>
       </Stack>
     </PageContainer>

@@ -13,7 +13,7 @@ import {
 function readEventBaseInput(formData: FormData) {
   const date = formData.get("date");
   if (typeof date !== "string" || !date) {
-    throw new Error("Date is required.");
+    throw new Error("A data é obrigatória.");
   }
   return {
     title: String(formData.get("title") ?? ""),

@@ -17,10 +17,10 @@ export default async function ContactsPage({
   return (
     <PageContainer maxWidth="sm">
       <Typography variant="h4" component="h1">
-        Contacts
+        Contactos
       </Typography>
       {sent ? (
-        <Alert severity="success">Thank you, your message has been sent.</Alert>
+        <Alert severity="success">Obrigado, a sua mensagem foi enviada.</Alert>
       ) : (
         <Stack component="form" action={submitContactAction} spacing={2}>
           <Box sx={{ display: "none" }} aria-hidden="true">
@@ -29,11 +29,11 @@ export default async function ContactsPage({
               <input type="text" name="company" tabIndex={-1} autoComplete="off" />
             </label>
           </Box>
-          <TextField label="Name" name="name" required />
+          <TextField label="Nome" name="name" required />
           <TextField label="Email" name="email" type="email" required />
-          <TextField label="Message" name="message" required multiline rows={5} />
+          <TextField label="Mensagem" name="message" required multiline rows={5} />
           <Button type="submit" variant="contained" sx={{ alignSelf: "flex-start" }}>
-            Send
+            Enviar
           </Button>
         </Stack>
       )}

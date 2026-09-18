@@ -31,14 +31,14 @@ export default async function ManageGalleryPage() {
         }}
       >
         <Typography variant="h4" component="h1">
-          Manage Gallery
+          Gerir Galeria
         </Typography>
         <Button href="/manage/gallery/new" variant="contained">
-          Add Item
+          Adicionar Item
         </Button>
       </Box>
       {data.galleryItems.length === 0 ? (
-        <Typography>No gallery items yet.</Typography>
+        <Typography>Ainda não há itens na galeria.</Typography>
       ) : (
         <Box
           sx={{
@@ -51,18 +51,18 @@ export default async function ManageGalleryPage() {
             <Stack key={item.id} spacing={1}>
               <GalleryItemCard item={item} />
               <Typography variant="caption" color="text.secondary">
-                {item.event?.title ?? "No event"}
+                {item.event?.title ?? "Sem evento"}
               </Typography>
               <Stack direction="row" spacing={2}>
                 <Button href={`/manage/gallery/${item.id}/edit`} size="small">
-                  Edit caption
+                  Editar legenda
                 </Button>
                 <Button
                   href={`/manage/gallery/${item.id}/delete`}
                   size="small"
                   color="error"
                 >
-                  Delete
+                  Eliminar
                 </Button>
               </Stack>
             </Stack>
