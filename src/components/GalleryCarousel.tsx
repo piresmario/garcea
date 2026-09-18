@@ -43,7 +43,13 @@ export function GalleryCarousel({ items }: { items: GalleryItem[] }) {
   return (
     <Box sx={{ position: "relative" }}>
       <Box ref={emblaRef} sx={{ overflow: "hidden" }}>
-        <Box sx={{ display: "flex", gap: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 2,
+            height: { xs: 280, sm: 320, md: 360 },
+          }}
+        >
           {items.map((item, index) => (
             <Box
               key={item.id}
@@ -54,7 +60,11 @@ export function GalleryCarousel({ items }: { items: GalleryItem[] }) {
                 "@media (min-width: 900px)": { flex: "0 0 40%" },
               }}
             >
-              <GalleryItemCard item={item} autoPlay={index === selectedIndex} />
+              <GalleryItemCard
+                item={item}
+                autoPlay={index === selectedIndex}
+                fillHeight
+              />
             </Box>
           ))}
         </Box>

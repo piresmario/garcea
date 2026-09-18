@@ -33,9 +33,11 @@ function withAutoplay(url: string): string {
 export function GalleryItemCard({
   item,
   autoPlay = false,
+  fillHeight = false,
 }: {
   item: GalleryItem;
   autoPlay?: boolean;
+  fillHeight?: boolean;
 }) {
   return (
     <Card
@@ -43,6 +45,11 @@ export function GalleryItemCard({
       sx={{
         transition: "transform 0.2s ease, box-shadow 0.2s ease",
         "&:hover": { transform: "translateY(-4px)", boxShadow: 4 },
+        ...(fillHeight && {
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+        }),
       }}
     >
       {item.type === "PHOTO" ? (
@@ -50,7 +57,11 @@ export function GalleryItemCard({
           component="img"
           image={item.thumbnailUrl ?? item.url}
           alt={item.caption ?? ""}
-          sx={{ aspectRatio: "1 / 1", objectFit: "cover" }}
+          sx={
+            fillHeight
+              ? { flex: 1, minHeight: 0, width: "100%", objectFit: "cover" }
+              : { aspectRatio: "1 / 1", objectFit: "cover" }
+          }
         />
       ) : (
         <Box
@@ -60,7 +71,11 @@ export function GalleryItemCard({
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           referrerPolicy="strict-origin-when-cross-origin"
           allowFullScreen
-          sx={{ aspectRatio: "16 / 9", width: "100%", border: 0, display: "block" }}
+          sx={
+            fillHeight
+              ? { flex: 1, minHeight: 0, width: "100%", border: 0, display: "block" }
+              : { aspectRatio: "16 / 9", width: "100%", border: 0, display: "block" }
+          }
         />
       )}
       {item.caption && (

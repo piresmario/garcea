@@ -490,6 +490,33 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
   holding, so production still has the broken (no-`allow`) iframe until
   a future push.
 
+## Fix: video left an empty gap below it in the carousel
+
+- Reported (with screenshot): the video slide in the event carousel was
+  much shorter than the photo slides next to it, leaving a large empty
+  gap below it inside the card.
+- Root cause: `GalleryItemCard` sized photos and videos by a fixed
+  `aspect-ratio` (1:1 / 16:9). The carousel row's height was set by
+  flexbox stretching to whichever slide happened to be tallest (the
+  square photos), but the video's own `Card` only grew to its 16:9
+  content height and never filled that stretched space, leaving the gap.
+- [x] Added a `fillHeight` prop to `GalleryItemCard`: when set, the
+      `Card` becomes a `height: 100%` flex column and the photo `img`/
+      video `iframe` use `flex: 1; min-height: 0` instead of a fixed
+      aspect ratio, so they fill whatever height they're given.
+- [x] `GalleryCarousel` now gives its row an explicit height
+      (`{ xs: 280, sm: 320, md: 360 }`) instead of relying on aspect-ratio
+      to establish it, and passes `fillHeight` for every slide - so this
+      works correctly even for a gallery that's all video with no photo
+      to anchor the row height, not just the common case.
+      Non-carousel usages (`/gallery`, Rancho grid, manage pages) don't
+      pass `fillHeight`, so they keep their original aspect-ratio sizing.
+- Verified: rebuilt, then inspected the actual generated CSS in the
+  rendered HTML (not just the component code) to confirm `flex: 1;
+  min-height: 0` landed on both the photo `<img>` and video `<iframe>`,
+  the row's fixed height rule is present, and the `Card` has
+  `height: 100%` as a flex column - all three pieces the fix depends on.
+
 ## Open Question (blocking Phase 8 decision)
 
 - [ ] Confirm: are all admin accounts fully equal, or should one be a "primary" owner
