@@ -45,4 +45,8 @@ const baseTheme = createTheme({
   },
 });
 
-export const theme = responsiveFontSizes(baseTheme);
+// Higher factor = smaller minimum size at the xs breakpoint: MUI computes it
+// as 1 + (maxFontSize - 1) / factor, so a higher factor divides more off the
+// top before adding the 1rem floor back. Bumped from the default of 2 to
+// shrink headings/titles more aggressively on phones specifically.
+export const theme = responsiveFontSizes(baseTheme, { factor: 6 });

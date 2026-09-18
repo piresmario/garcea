@@ -36,7 +36,7 @@ export default async function Home() {
         }}
       >
         <Container maxWidth="md" sx={{ textAlign: "center" }}>
-          <Typography variant="h2" component="h1" sx={{ fontSize: { xs: "2.25rem", sm: "3rem" } }}>
+          <Typography variant="h2" component="h1" sx={{ fontSize: { xs: "1.75rem", sm: "3rem" } }}>
             Associação GARCEA
           </Typography>
           <Typography

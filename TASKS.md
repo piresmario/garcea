@@ -691,6 +691,31 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
   breakpoint steps and the icon badge's smaller mobile size are really
   present in the rendered output.
 
+## Shrink text/titles further on mobile
+
+- Follow-up to the previous fix: wanted headings/titles even smaller on
+  phone specifically, not just "responsive."
+- [x] MUI's `responsiveFontSizes()` computes the xs-breakpoint minimum
+      as `1 + (maxFontSize - 1) / factor` (read straight from its source
+      rather than guessed, to get the direction right) - a *higher*
+      factor divides more off the top before adding the 1rem floor back,
+      shrinking mobile text more. Bumped `factor` from the default `2`
+      to `6` in `src/theme.ts`. Confirmed the `h4` minimum dropped from
+      `1.5625rem` to `1.1875rem` in the generated CSS.
+  - Only affects variants whose base size is above 1rem (h1-h6 in this
+    app's case) - `body1`/`body2`/`caption`/etc. are already at or below
+    1rem and are left untouched by the helper, so this couldn't have
+    shrunk regular body text further either way.
+- [x] The home page hero title bypasses the theme (`variant="h2"` with an
+      explicit `sx` breakpoint override, since it needed a different
+      curve than the rest of the site) - shrunk its own `xs` value from
+      `2.25rem` to `1.75rem` to match.
+- [x] `PageTitle`'s icon badge shrunk again, `2.25rem -> 2rem` at `xs`.
+- Verified: `tsc --noEmit`, `eslint`, `next build` clean; confirmed in the
+  generated CSS that the `h4` minimum and the icon badge's `xs` size both
+  reflect the new, smaller values, and that every touched page still
+  returns 200.
+
 ## Open Question (blocking Phase 8 decision)
 
 - [ ] Confirm: are all admin accounts fully equal, or should one be a "primary" owner
