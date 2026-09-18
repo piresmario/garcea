@@ -67,11 +67,12 @@ export function GalleryItemForm({
           </Stack>
         ) : (
           <TextField
-            label="URL de incorporação do vídeo"
+            label="Link do Vídeo (YouTube ou Facebook)"
             name="videoUrl"
             type="url"
             required
-            placeholder="https://www.youtube.com/embed/VIDEO_ID"
+            placeholder="https://www.youtube.com/watch?v=... ou https://www.facebook.com/.../videos/..."
+            helperText="Cole o link normal do vídeo, tal como aparece no YouTube ou no Facebook"
           />
         )}
 

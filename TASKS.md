@@ -421,6 +421,49 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
   all regardless of this change - separate, pre-existing issue, flagged
   to the user rather than fixed here.
 
+## Accept plain YouTube/Facebook links for the Gallery video field
+
+- [x] New `src/lib/video.ts`: `normalizeVideoUrl()` converts a normal
+      YouTube link (`youtube.com/watch?v=`, `youtu.be/`,
+      `youtube.com/shorts/`, `m.youtube.com/...`) to the
+      `youtube.com/embed/VIDEO_ID` form the iframe player actually needs,
+      and a normal Facebook link (a video permalink, `fb.watch/...`, or
+      `facebook.com/watch/?v=`) to Facebook's
+      `facebook.com/plugins/video.php?href=...` embed form. Anything else
+      (an already-built embed URL, e.g. Vimeo) passes through unchanged,
+      so existing behavior for other providers isn't affected. This
+      directly fixes the `youtu.be` link problem flagged in the previous
+      entry - admins no longer need to hand-build an embed URL.
+- [x] `createGalleryItemAction` runs the pasted video URL through
+      `normalizeVideoUrl()` before saving, so the stored URL is always the
+      embeddable form. Caption-only editing doesn't touch the URL, so
+      nothing else needed to change.
+- [x] `GalleryItemForm`'s video field relabeled to "Link do Vídeo (YouTube
+      ou Facebook)" with matching placeholder/helper text, since admins
+      now paste the normal link they'd share, not a hand-built embed URL.
+- [x] `GalleryItemCard`'s autoplay-on-select helper (from the previous
+      entry) is now platform-aware: Facebook's video plugin expects
+      `autoplay=true`/`mute=true` (string booleans), not the `1`/`0` style
+      YouTube (and most other embeds) use - added `isFacebookEmbedUrl()`
+      to `video.ts` and branch on it.
+- Verified: unit-style checks of `normalizeVideoUrl()` against 9 real-world
+  URL shapes (youtu.be, watch?v=, watch?v=&list=, m.youtube.com, shorts,
+  already-embed, a Facebook video permalink, fb.watch, facebook.com/watch)
+  all produced the expected embeddable URL, and an invalid string
+  correctly threw. Confirmed the actual Server Action wiring is correct by
+  invoking `createGalleryItemAction` directly (bypassing curl, since the
+  pre-existing unrelated "Connection closed" issue - see above - blocks
+  curl-replicated Server Actions that redirect): normalization ran
+  successfully before failing only on `headers()` needing a real request
+  context, which a standalone script can't provide. Then did a full round
+  trip via GraphQL directly with pre-normalized URLs: confirmed both a
+  YouTube and a Facebook video render correctly on `/gallery`, and that
+  adding the Facebook one to the live event's carousel correctly produces
+  `autoplay=true&mute=true` (not `=1`) when it's the centered slide. All
+  test gallery items deleted afterward; confirmed the real data (including
+  a video the user had, in parallel, fixed themselves with a proper
+  YouTube embed URL) was left untouched throughout.
+
 ## Open Question (blocking Phase 8 decision)
 
 - [ ] Confirm: are all admin accounts fully equal, or should one be a "primary" owner

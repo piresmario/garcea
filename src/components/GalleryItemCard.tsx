@@ -2,6 +2,7 @@ import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import { isFacebookEmbedUrl } from "@/lib/video";
 
 type GalleryItem = {
   id: string;
@@ -14,9 +15,15 @@ type GalleryItem = {
 function withAutoplay(url: string): string {
   try {
     const parsed = new URL(url);
-    parsed.searchParams.set("autoplay", "1");
-    parsed.searchParams.set("mute", "1");
-    parsed.searchParams.set("muted", "1");
+    if (isFacebookEmbedUrl(url)) {
+      // Facebook's video plugin expects string booleans, not 1/0.
+      parsed.searchParams.set("autoplay", "true");
+      parsed.searchParams.set("mute", "true");
+    } else {
+      parsed.searchParams.set("autoplay", "1");
+      parsed.searchParams.set("mute", "1");
+      parsed.searchParams.set("muted", "1");
+    }
     return parsed.toString();
   } catch {
     return url;

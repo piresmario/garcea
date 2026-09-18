@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { executeGraphQL, runGatedMutation } from "@/lib/graphql-server";
 import { uploadPhoto, deletePhoto } from "@/lib/supabase-storage";
+import { normalizeVideoUrl } from "@/lib/video";
 import {
   CREATE_GALLERY_ITEM_MUTATION,
   UPDATE_GALLERY_ITEM_MUTATION,
@@ -57,9 +58,10 @@ export async function createGalleryItemAction(formData: FormData) {
   } else {
     const videoUrl = formData.get("videoUrl");
     if (typeof videoUrl !== "string" || !videoUrl) {
-      throw new Error("Indique um URL de incorporação do vídeo.");
+      throw new Error("Indique o link do vídeo.");
     }
-    await createOneGalleryItem({ type, url: videoUrl, caption, eventId });
+    const url = normalizeVideoUrl(videoUrl);
+    await createOneGalleryItem({ type, url, caption, eventId });
   }
 
   revalidatePath("/gallery");
