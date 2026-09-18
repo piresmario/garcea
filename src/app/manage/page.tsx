@@ -10,6 +10,7 @@ const links = [
   { href: "/manage/events", label: "Manage Events" },
   { href: "/manage/gallery", label: "Manage Gallery" },
   { href: "/manage/rancho", label: "Manage Rancho Section" },
+  { href: "/manage/historial", label: "Manage Historial" },
   { href: "/manage/contacts", label: "Contact Messages" },
 ];
 

@@ -72,6 +72,12 @@ model RanchoFeaturedPhoto {
   createdAt     DateTime    @default(now())
 }
 
+model HistorialSection {
+  id          String   @id
+  description String
+  updatedAt   DateTime @updatedAt
+}
+
 model ContactMessage {
   id          String   @id @default(cuid())
   name        String

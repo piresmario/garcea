@@ -29,6 +29,7 @@ type ContactMessageInput = {
 };
 
 const RANCHO_SECTION_ID = "rancho";
+const HISTORIAL_SECTION_ID = "historial";
 
 function toISOString(value: Date): string {
   return value.toISOString();
@@ -59,6 +60,8 @@ export const resolvers = {
       });
       return featured.map((f) => f.galleryItem);
     },
+    historialSection: () =>
+      prisma.historialSection.findUnique({ where: { id: HISTORIAL_SECTION_ID } }),
   },
 
   Mutation: {
@@ -172,6 +175,19 @@ export const resolvers = {
       });
       return true;
     },
+
+    updateHistorialSection: (
+      _: unknown,
+      args: { description: string },
+      context: GraphQLContext,
+    ) => {
+      requireUserId(context);
+      return prisma.historialSection.upsert({
+        where: { id: HISTORIAL_SECTION_ID },
+        update: { description: args.description },
+        create: { id: HISTORIAL_SECTION_ID, description: args.description },
+      });
+    },
   },
 
   Event: {
@@ -205,6 +221,10 @@ export const resolvers = {
   },
 
   RanchoSection: {
+    updatedAt: (parent: { updatedAt: Date }) => toISOString(parent.updatedAt),
+  },
+
+  HistorialSection: {
     updatedAt: (parent: { updatedAt: Date }) => toISOString(parent.updatedAt),
   },
 };

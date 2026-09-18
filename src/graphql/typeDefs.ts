@@ -46,6 +46,11 @@ export const typeDefs = /* GraphQL */ `
     updatedAt: String!
   }
 
+  type HistorialSection {
+    description: String!
+    updatedAt: String!
+  }
+
   input EventInput {
     title: String!
     description: String!
@@ -80,6 +85,7 @@ export const typeDefs = /* GraphQL */ `
     contactMessages: [ContactMessage!]!
     ranchoSection: RanchoSection
     ranchoPhotos: [GalleryItem!]!
+    historialSection: HistorialSection
   }
 
   type Mutation {
@@ -96,5 +102,7 @@ export const typeDefs = /* GraphQL */ `
     updateRanchoSection(description: String!): RanchoSection!
     featureRanchoPhoto(galleryItemId: ID!): GalleryItem!
     unfeatureRanchoPhoto(galleryItemId: ID!): Boolean!
+
+    updateHistorialSection(description: String!): HistorialSection!
   }
 `;

@@ -160,6 +160,19 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
   photos (they said they'd add both themselves via `/manage/rancho`,
   or send them here to add on their behalf)
 
+## Historial section (new top-level nav item)
+
+- [x] `HistorialSection` model (singleton row, id fixed as `"historial"`),
+      same shape as `RanchoSection` but no photo gallery — just editable text
+- [x] Public `/historial` page — title always shown, description or a
+      "Sem conteúdo por enquanto" empty state
+- [x] `/manage/historial` — single-field edit form (mirrors `/manage/rancho`'s
+      description form)
+- [x] Added to the main nav (`Nav.tsx`) and the Manage landing page's link list
+- Verified end-to-end against a live dev server: page renders with the empty
+  state, login + description update persists and shows on both the public
+  page and the manage form, test data cleaned up afterward
+
 ## Open Question (blocking Phase 8 decision)
 
 - [ ] Confirm: are all admin accounts fully equal, or should one be a "primary" owner
