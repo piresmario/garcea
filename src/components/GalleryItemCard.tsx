@@ -57,7 +57,7 @@ export function GalleryItemCard({
           component="iframe"
           src={autoPlay ? withAutoplay(item.url) : item.url}
           title={item.caption ?? "Vídeo"}
-          allow="autoplay; fullscreen; picture-in-picture"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
           sx={{ aspectRatio: "16 / 9", width: "100%", border: 0, display: "block" }}
         />
