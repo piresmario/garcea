@@ -30,6 +30,8 @@ export default async function ManageGalleryPage() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: 2,
         }}
       >
         <PageTitle icon={<PhotoLibraryIcon />}>Gerir Galeria</PageTitle>

@@ -613,6 +613,54 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
   returns 200 when visited directly, `next build` still lists both
   `/gallery` and `/manage/gallery` as real routes.
 
+## Make the site actually usable on a phone
+
+- Reported: "this website should run on phone also." Audited every page
+  for mobile-breaking layout, since none of this had been tested at a
+  narrow viewport before (no working browser in this sandbox - see the
+  headless Chromium note earlier in this file).
+- [x] **The nav bar was the main problem**: it packed the logo, "Associação
+      GARCEA" text, 4 nav links, and the auth button into one row, which
+      cannot fit a phone screen. New `src/components/NavMobileMenu.tsx`
+      (client component): a hamburger `IconButton` (visible only below
+      the `md` breakpoint) that opens a `Drawer` with all nav links plus
+      Gestão/Sair or Entrar, stacked vertically. `Nav.tsx` now hides the
+      old horizontal link `Stack` below `md` instead, and hides the
+      "Associação GARCEA" text below `sm` (keeping just the logo) so the
+      bar itself doesn't overflow even before the menu button is reached.
+      The sign-out Server Action is passed down as a prop and submitted
+      via a form inside the drawer, same pattern as everywhere else in
+      this app - no new calling convention introduced.
+- [x] Several manage-page rows packed a title/content block and one or
+      two action buttons into a single non-wrapping flex row
+      (`justifyContent: "space-between"` with no `flexWrap`) - fixed by
+      adding `flexWrap: "wrap"` (+ matching `gap`) to: the Events/Gallery/
+      Rancho manage page headers, the Manage Events list `Card`s, the
+      Official Contacts and Social Links list `Card`s, and the date+
+      location `Stack`s on the public/manage Events pages and the event
+      detail page (in case of a long location name).
+- [x] Per a follow-up suggestion, converted every hardcoded pixel
+      dimension in a component/page `sx` prop (icon badges, thumbnails,
+      the nav logo, the carousel's row height and dot indicators, poster
+      preview max-widths) to `rem`, so they scale with the user's
+      font-size preference instead of staying a fixed physical size -
+      MUI's `Typography` variants already default to `rem`, this closes
+      the gap for the custom pixel values added throughout this session.
+      The nav logo keeps a higher native resolution (bumped `next/image`
+      intrinsic size 40->80) while its *displayed* size is now set via
+      `rem` in an inline `style`, since `next/image` needs numeric
+      width/height for its own optimization regardless of display size.
+- Verified: `tsc --noEmit`, `eslint`, `next build` all clean. Confirmed
+  live against the dev server that every touched page still returns 200,
+  and inspected the actual generated CSS/HTML (not just the component
+  code) for both the hamburger's Drawer content and every converted
+  `rem` value, confirming they're really present in the rendered output.
+  Could not visually confirm at an actual narrow viewport - same headless
+  Chromium limitation noted earlier in this file (missing system
+  libraries, no root access to install them) - verified structurally via
+  the generated CSS media queries instead (confirmed the desktop link
+  `Stack` and the mobile text label both flip at the right breakpoint).
+
 ## Open Question (blocking Phase 8 decision)
 
 - [ ] Confirm: are all admin accounts fully equal, or should one be a "primary" owner

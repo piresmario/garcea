@@ -52,7 +52,13 @@ export default async function ManageRanchoPage() {
       </FormCard>
 
       <Box
-        sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: 2,
+        }}
       >
         <Typography variant="h5" component="h2">
           Fotos em Destaque

@@ -4,7 +4,9 @@ import Toolbar from "@mui/material/Toolbar";
 import MuiLink from "@mui/material/Link";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
 import { auth, signOut } from "@/auth";
+import { NavMobileMenu } from "@/components/NavMobileMenu";
 
 const links = [
   { href: "/", label: "Início" },
@@ -16,6 +18,11 @@ const links = [
 export async function Nav() {
   const session = await auth();
 
+  async function signOutAction() {
+    "use server";
+    await signOut({ redirectTo: "/" });
+  }
+
   return (
     <AppBar position="sticky" color="default" elevation={1} sx={{ top: 0 }}>
       <Toolbar sx={{ maxWidth: "lg", width: "100%", mx: "auto" }}>
@@ -25,12 +32,30 @@ export async function Nav() {
           color="inherit"
           sx={{ flexGrow: 1, display: "flex", alignItems: "center", gap: 1.5 }}
         >
-          <Image src="/logo.png" alt="" width={40} height={40} />
-          <span style={{ fontSize: "1.25rem", fontWeight: 500 }}>
+          <Image
+            src="/logo.png"
+            alt=""
+            width={80}
+            height={80}
+            style={{ width: "2.5rem", height: "2.5rem" }}
+          />
+          <Box
+            component="span"
+            sx={{
+              fontSize: "1.25rem",
+              fontWeight: 500,
+              display: { xs: "none", sm: "inline" },
+            }}
+          >
             Associação GARCEA
-          </span>
+          </Box>
         </MuiLink>
-        <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{ alignItems: "center", display: { xs: "none", md: "flex" } }}
+        >
           {links.map((link) => (
             <Button key={link.href} href={link.href} color="inherit">
               {link.label}
@@ -41,12 +66,7 @@ export async function Nav() {
               <Button href="/manage" color="inherit">
                 Gestão
               </Button>
-              <form
-                action={async () => {
-                  "use server";
-                  await signOut({ redirectTo: "/" });
-                }}
-              >
+              <form action={signOutAction}>
                 <Button type="submit" color="inherit">
                   Sair
                 </Button>
@@ -58,6 +78,12 @@ export async function Nav() {
             </Button>
           )}
         </Stack>
+
+        <NavMobileMenu
+          links={links}
+          isLoggedIn={!!session?.user}
+          signOutAction={signOutAction}
+        />
       </Toolbar>
     </AppBar>
   );

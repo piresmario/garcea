@@ -73,7 +73,7 @@ export function EventForm({
                 component="img"
                 src={defaultValues.posterUrl}
                 alt=""
-                sx={{ maxWidth: 200, borderRadius: 1 }}
+                sx={{ maxWidth: "12.5rem", borderRadius: 1 }}
               />
             ))}
           <input type="file" name="cartaz" accept="image/*,application/pdf" />

@@ -84,12 +84,12 @@ export default async function EventsPage({
                     component="img"
                     image={event.posterUrl}
                     alt=""
-                    sx={{ width: 80, height: 80, objectFit: "cover", flexShrink: 0 }}
+                    sx={{ width: "5rem", height: "5rem", objectFit: "cover", flexShrink: 0 }}
                   />
                 )}
                 <CardContent>
                   <Typography variant="h6">{event.title}</Typography>
-                  <Stack direction="row" spacing={1} sx={{ alignItems: "center", mt: 0.5 }}>
+                  <Stack direction="row" spacing={1} sx={{ alignItems: "center", flexWrap: "wrap", mt: 0.5 }}>
                     <Chip
                       size="small"
                       color="secondary"

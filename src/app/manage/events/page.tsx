@@ -31,6 +31,8 @@ export default async function ManageEventsPage() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: 2,
         }}
       >
         <PageTitle icon={<EventIcon />}>Gerir Eventos</PageTitle>
@@ -50,6 +52,8 @@ export default async function ManageEventsPage() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
+                flexWrap: "wrap",
+                gap: 2,
                 p: 2,
                 transition: "box-shadow 0.2s ease",
                 "&:hover": { boxShadow: 3 },
@@ -61,12 +65,12 @@ export default async function ManageEventsPage() {
                     component="img"
                     src={event.posterUrl}
                     alt=""
-                    sx={{ width: 48, height: 48, objectFit: "cover", borderRadius: 1 }}
+                    sx={{ width: "3rem", height: "3rem", objectFit: "cover", borderRadius: 1 }}
                   />
                 )}
                 <Box>
                   <Typography sx={{ fontWeight: 500 }}>{event.title}</Typography>
-                  <Stack direction="row" spacing={1} sx={{ alignItems: "center", mt: 0.5 }}>
+                  <Stack direction="row" spacing={1} sx={{ alignItems: "center", flexWrap: "wrap", mt: 0.5 }}>
                     <Chip
                       size="small"
                       color="secondary"

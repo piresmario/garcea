@@ -47,7 +47,7 @@ export function GalleryCarousel({ items }: { items: GalleryItem[] }) {
           sx={{
             display: "flex",
             gap: 2,
-            height: { xs: 280, sm: 320, md: 360 },
+            height: { xs: "17.5rem", sm: "20rem", md: "22.5rem" },
           }}
         >
           {items.map((item, index) => (
@@ -114,8 +114,8 @@ export function GalleryCarousel({ items }: { items: GalleryItem[] }) {
                 aria-label={`Ir para o item ${index + 1}`}
                 onClick={() => emblaApi?.scrollTo(index)}
                 sx={{
-                  width: 8,
-                  height: 8,
+                  width: "0.5rem",
+                  height: "0.5rem",
                   borderRadius: "50%",
                   border: "none",
                   p: 0,

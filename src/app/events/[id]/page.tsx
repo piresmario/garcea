@@ -46,7 +46,7 @@ export default async function EventDetailPage({
   return (
     <PageContainer maxWidth="md">
       <PageTitle icon={<EventIcon />}>{event.title}</PageTitle>
-      <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+      <Stack direction="row" spacing={1} sx={{ alignItems: "center", flexWrap: "wrap" }}>
         <Chip
           size="small"
           color="secondary"
@@ -72,7 +72,7 @@ export default async function EventDetailPage({
             component="img"
             src={event.posterUrl}
             alt={`Cartaz: ${event.title}`}
-            sx={{ maxWidth: 400, width: "100%", borderRadius: 1 }}
+            sx={{ maxWidth: "25rem", width: "100%", borderRadius: 1 }}
           />
         ))}
       <Typography>{event.description}</Typography>

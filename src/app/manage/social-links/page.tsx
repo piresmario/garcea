@@ -41,6 +41,8 @@ export default async function ManageSocialLinksPage() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
+                  flexWrap: "wrap",
+                  gap: 2,
                   p: 2,
                   transition: "box-shadow 0.2s ease",
                   "&:hover": { boxShadow: 3 },
