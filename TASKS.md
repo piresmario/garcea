@@ -731,6 +731,19 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
   the generated CSS that the text no longer has any `display:none` rule
   and steps from `0.9375rem` to `1.25rem` as designed.
 
+## Remove the "Associação GARCEA" title from the home page hero
+
+- [x] Removed the standalone `h2`/`h1` title from the hero section per
+      explicit request (the user pointed at the exact lines). Since that
+      `Typography` was the page's only `<h1>`, promoted the welcome
+      subtitle below it (`component="p"` -> `component="h1"`, visual
+      `h6` styling unchanged) so the page still has exactly one `<h1>`
+      rather than none - a small accessibility/SEO detail, not a visible
+      layout change.
+- Verified: `tsc --noEmit`, `eslint`, `next build` clean; confirmed live
+  that the standalone title is gone and the page still has exactly one
+  `<h1>` element.
+
 ## Open Question (blocking Phase 8 decision)
 
 - [ ] Confirm: are all admin accounts fully equal, or should one be a "primary" owner
