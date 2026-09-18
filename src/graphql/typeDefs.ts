@@ -39,14 +39,6 @@ export const typeDefs = /* GraphQL */ `
     isFeaturedInRancho: Boolean!
   }
 
-  type ContactMessage {
-    id: ID!
-    name: String!
-    email: String!
-    message: String!
-    submittedAt: String!
-  }
-
   type RanchoSection {
     description: String!
     updatedAt: String!
@@ -85,12 +77,6 @@ export const typeDefs = /* GraphQL */ `
     thumbnailUrl: String
   }
 
-  input ContactMessageInput {
-    name: String!
-    email: String!
-    message: String!
-  }
-
   input OfficialContactInput {
     type: OfficialContactType!
     value: String!
@@ -101,7 +87,6 @@ export const typeDefs = /* GraphQL */ `
     event(id: ID!): Event
     galleryItems(eventId: ID): [GalleryItem!]!
     galleryItem(id: ID!): GalleryItem
-    contactMessages: [ContactMessage!]!
     ranchoSection: RanchoSection
     ranchoPhotos: [GalleryItem!]!
     historialSection: HistorialSection
@@ -116,8 +101,6 @@ export const typeDefs = /* GraphQL */ `
     createGalleryItem(input: GalleryItemInput!): GalleryItem!
     updateGalleryItem(id: ID!, input: GalleryItemUpdateInput!): GalleryItem!
     deleteGalleryItem(id: ID!): Boolean!
-
-    submitContactMessage(input: ContactMessageInput!): ContactMessage!
 
     updateRanchoSection(description: String!): RanchoSection!
     featureRanchoPhoto(galleryItemId: ID!): GalleryItem!

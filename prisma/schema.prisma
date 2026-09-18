@@ -79,14 +79,6 @@ model HistorialSection {
   updatedAt   DateTime @updatedAt
 }
 
-model ContactMessage {
-  id          String   @id @default(cuid())
-  name        String
-  email       String
-  message     String
-  submittedAt DateTime @default(now())
-}
-
 enum OfficialContactType {
   EMAIL
   PHONE

@@ -370,6 +370,30 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
   then deleted the temporary event and confirmed the events list is back
   to just the one real event.
 
+## Removed the Contacts message form
+
+- [x] Per explicit request, removed the contact submission form entirely
+      (name/email/message + honeypot field) - the public `/contacts` page
+      now only shows the Official Contacts (emails/phones) from the
+      previous feature, with a plain "Ainda não há contactos disponíveis."
+      fallback if none are set.
+- [x] Dropped the whole `ContactMessage` model/table (confirmed it held
+      zero real rows first, so no data was lost) and every layer built on
+      it: the `ContactMessage`/`ContactMessageInput` GraphQL types, the
+      `contactMessages` query, the `submitContactMessage` mutation, the
+      `/manage/contacts` inbox page, `src/app/contacts/actions.ts`, and
+      `src/lib/queries/contacts.ts`. Removed the "Mensagens de Contacto"
+      link from the `/manage` dashboard.
+- Verified end-to-end: `tsc --noEmit`, `eslint`, `next build` all clean
+  (had to delete the stale `.next` cache once, since it still referenced
+  the deleted `/manage/contacts` route's generated types). Confirmed live:
+  `/contacts` renders with no form markup, `/manage/contacts` now 404s
+  even when authenticated (not just an auth redirect), the `contactMessages`
+  GraphQL field is rejected by schema validation, and the two real emails
+  the user had already added via Official Contacts still render correctly
+  on the public page - left untouched, since that's real data, not test
+  data from this session.
+
 ## Open Question (blocking Phase 8 decision)
 
 - [ ] Confirm: are all admin accounts fully equal, or should one be a "primary" owner

@@ -11,7 +11,6 @@ const links = [
   { href: "/manage/gallery", label: "Gerir Galeria" },
   { href: "/manage/rancho", label: "Gerir Secção do Rancho" },
   { href: "/manage/historial", label: "Gerir Historial" },
-  { href: "/manage/contacts", label: "Mensagens de Contacto" },
   { href: "/manage/official-contacts", label: "Gerir Contactos Oficiais" },
 ];
 

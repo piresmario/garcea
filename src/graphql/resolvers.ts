@@ -23,12 +23,6 @@ type GalleryItemUpdateInput = {
   thumbnailUrl?: string | null;
 };
 
-type ContactMessageInput = {
-  name: string;
-  email: string;
-  message: string;
-};
-
 type OfficialContactInput = {
   type: "EMAIL" | "PHONE";
   value: string;
@@ -53,10 +47,6 @@ export const resolvers = {
       }),
     galleryItem: (_: unknown, args: { id: string }) =>
       prisma.galleryItem.findUnique({ where: { id: args.id } }),
-    contactMessages: (_: unknown, __: unknown, context: GraphQLContext) => {
-      requireUserId(context);
-      return prisma.contactMessage.findMany({ orderBy: { submittedAt: "desc" } });
-    },
     ranchoSection: () =>
       prisma.ranchoSection.findUnique({ where: { id: RANCHO_SECTION_ID } }),
     ranchoPhotos: async () => {
@@ -162,9 +152,6 @@ export const resolvers = {
       return true;
     },
 
-    submitContactMessage: (_: unknown, args: { input: ContactMessageInput }) =>
-      prisma.contactMessage.create({ data: args.input }),
-
     updateRanchoSection: (
       _: unknown,
       args: { description: string },
@@ -258,10 +245,6 @@ export const resolvers = {
       });
       return featured !== null;
     },
-  },
-
-  ContactMessage: {
-    submittedAt: (parent: { submittedAt: Date }) => toISOString(parent.submittedAt),
   },
 
   RanchoSection: {

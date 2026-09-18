@@ -1,28 +1,17 @@
 import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
 import { PageContainer } from "@/components/PageContainer";
-import { FormCard } from "@/components/FormCard";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { OFFICIAL_CONTACTS_QUERY } from "@/lib/queries/officialContacts";
-import { submitContactAction } from "./actions";
 
 type OfficialContactsData = {
   officialContacts: { id: string; type: "EMAIL" | "PHONE"; value: string }[];
 };
 
-export default async function ContactsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ sent?: string }>;
-}) {
-  const { sent } = await searchParams;
+export default async function ContactsPage() {
   const contactsData =
     await executeGraphQL<OfficialContactsData>(OFFICIAL_CONTACTS_QUERY);
   const emails = contactsData.officialContacts.filter((c) => c.type === "EMAIL");
@@ -37,7 +26,7 @@ export default async function ContactsPage({
         Gostaria de ver o Rancho Folclórico das Lavradeiras de Gondar no seu evento? Pode contactar-nos
       </Typography>
 
-      {(emails.length > 0 || phones.length > 0) && (
+      {emails.length > 0 || phones.length > 0 ? (
         <Paper variant="outlined" sx={{ p: { xs: 3, sm: 4 } }}>
           <Stack spacing={1.5}>
             {emails.map((email) => (
@@ -68,28 +57,11 @@ export default async function ContactsPage({
             ))}
           </Stack>
         </Paper>
+      ) : (
+        <Typography color="text.secondary">
+          Ainda não há contactos disponíveis.
+        </Typography>
       )}
-
-      <FormCard>
-        {sent ? (
-          <Alert severity="success">Obrigado, a sua mensagem foi enviada.</Alert>
-        ) : (
-          <Stack component="form" action={submitContactAction} spacing={2}>
-            <Box sx={{ display: "none" }} aria-hidden="true">
-              <label>
-                Company
-                <input type="text" name="company" tabIndex={-1} autoComplete="off" />
-              </label>
-            </Box>
-            <TextField label="Nome" name="name" required />
-            <TextField label="Email" name="email" type="email" required />
-            <TextField label="Mensagem" name="message" required multiline rows={5} />
-            <Button type="submit" variant="contained" sx={{ alignSelf: "flex-start" }}>
-              Enviar
-            </Button>
-          </Stack>
-        )}
-      </FormCard>
     </PageContainer>
   );
 }
