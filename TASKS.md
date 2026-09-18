@@ -464,6 +464,32 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
   a video the user had, in parallel, fixed themselves with a proper
   YouTube embed URL) was left untouched throughout.
 
+## Fix: YouTube video showing "An error occurred. Please try again later."
+
+- Reported: a real YouTube video on the live event page failed to play,
+  showing YouTube's generic player error with a Playback ID (screenshot
+  provided). Confirmed the video itself is fine (public, embeddable per
+  YouTube's oEmbed API) and the stored URL was already a correctly-formed
+  `youtube.com/embed/...` link, so this wasn't a URL-normalization issue.
+- Root cause: fetched the live production HTML directly and found the
+  video/Facebook `<iframe>` had **no `allow` attribute at all** (just
+  `allowFullScreen`). Without an explicit `allow="...encrypted-media..."`,
+  browsers deny that permission to a cross-origin iframe by default, and
+  many YouTube videos require it for DRM-protected playback - failing with
+  exactly this generic error instead of a clearer one.
+- [x] Fixed in `GalleryItemCard.tsx`: the iframe's `allow` attribute now
+      matches YouTube's own recommended embed permissions list
+      (`accelerometer; autoplay; clipboard-write; encrypted-media;
+      gyroscope; picture-in-picture; web-share`), taken directly from the
+      iframe snippet YouTube's oEmbed API itself returns.
+- Not yet deployed: this fix (and everything else committed since the
+  user said "don't push" - Official Contacts, the events year filter,
+  removing the Contacts form, carousel autoplay, and YouTube/Facebook
+  link normalization) is local-only. Asked the user whether to push now
+  since this directly fixes their reported bug; they chose to keep
+  holding, so production still has the broken (no-`allow`) iframe until
+  a future push.
+
 ## Open Question (blocking Phase 8 decision)
 
 - [ ] Confirm: are all admin accounts fully equal, or should one be a "primary" owner
