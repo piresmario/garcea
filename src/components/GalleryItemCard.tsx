@@ -58,6 +58,7 @@ export function GalleryItemCard({
           src={autoPlay ? withAutoplay(item.url) : item.url}
           title={item.caption ?? "Vídeo"}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerPolicy="strict-origin-when-cross-origin"
           allowFullScreen
           sx={{ aspectRatio: "16 / 9", width: "100%", border: 0, display: "block" }}
         />
