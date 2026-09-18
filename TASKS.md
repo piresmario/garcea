@@ -308,6 +308,41 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
   in the wrapped forms, `MuiCard-root` rows, the new manage landing page's
   card grid).
 
+## Official Contacts (emails and phone numbers shown on the public Contacts page)
+
+- [x] New `OfficialContact` model (`id`, `type: OfficialContactType` enum
+      `EMAIL | PHONE`, `value`, `createdAt`) - a flat list rather than a
+      singleton row, so any number of emails and phone numbers can be added
+      independently, matching how `GalleryItem.type` already discriminates
+      photo vs. video with one table.
+- [x] GraphQL: public `officialContacts` query, gated
+      `createOfficialContact`/`deleteOfficialContact` mutations.
+- [x] `/manage/official-contacts`: add form (`OfficialContactForm`, a
+      type-select + value field that switches between an `email` and `tel`
+      input depending on the selected type, mirroring `GalleryItemForm`'s
+      type-dependent field) plus a list of existing contacts with delete
+      buttons, added to the `/manage` dashboard's card grid.
+- [x] Public `/contacts` page: shows all official emails (as `mailto:`
+      links) and phone numbers (as `tel:` links) in a card above the
+      message form, hidden entirely when there are none yet.
+- Verified end-to-end against the live dev server and Supabase: created one
+  email and one phone via a direct GraphQL mutation call (see below for why),
+  confirmed both render correctly on `/contacts` (as working `mailto:`/`tel:`
+  links) and on `/manage/official-contacts` (with working delete buttons),
+  confirmed an unauthenticated mutation attempt is rejected
+  (`UNAUTHENTICATED`), deleted both, and confirmed both pages return to
+  their empty states.
+- While testing, found that curl-replicated calls to *any* Server Action
+  that ends in `redirect()` (not just this feature's - reproduced the same
+  way against the pre-existing `updateHistorialSectionAction`) currently
+  fail with a deterministic `Error: Connection closed.` on this dev
+  server, matching the same pre-existing, unrelated issue already noted
+  above for `authenticate`. Worked around it by exercising the same
+  resolver code directly via `/api/graphql` (with the session cookie
+  attached), which is a faithful test of the actual create/delete/gating
+  logic even though it doesn't exercise the Server Action's `redirect()`
+  wrapper itself.
+
 ## Open Question (blocking Phase 8 decision)
 
 - [ ] Confirm: are all admin accounts fully equal, or should one be a "primary" owner

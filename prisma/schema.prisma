@@ -86,3 +86,15 @@ model ContactMessage {
   message     String
   submittedAt DateTime @default(now())
 }
+
+enum OfficialContactType {
+  EMAIL
+  PHONE
+}
+
+model OfficialContact {
+  id        String              @id @default(cuid())
+  type      OfficialContactType
+  value     String
+  createdAt DateTime            @default(now())
+}

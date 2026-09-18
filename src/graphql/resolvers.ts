@@ -29,6 +29,11 @@ type ContactMessageInput = {
   message: string;
 };
 
+type OfficialContactInput = {
+  type: "EMAIL" | "PHONE";
+  value: string;
+};
+
 const RANCHO_SECTION_ID = "rancho";
 const HISTORIAL_SECTION_ID = "historial";
 
@@ -63,6 +68,8 @@ export const resolvers = {
     },
     historialSection: () =>
       prisma.historialSection.findUnique({ where: { id: HISTORIAL_SECTION_ID } }),
+    officialContacts: () =>
+      prisma.officialContact.findMany({ orderBy: { createdAt: "asc" } }),
   },
 
   Mutation: {
@@ -207,6 +214,24 @@ export const resolvers = {
         create: { id: HISTORIAL_SECTION_ID, description: args.description },
       });
     },
+
+    createOfficialContact: (
+      _: unknown,
+      args: { input: OfficialContactInput },
+      context: GraphQLContext,
+    ) => {
+      requireUserId(context);
+      return prisma.officialContact.create({ data: args.input });
+    },
+    deleteOfficialContact: async (
+      _: unknown,
+      args: { id: string },
+      context: GraphQLContext,
+    ) => {
+      requireUserId(context);
+      await prisma.officialContact.delete({ where: { id: args.id } });
+      return true;
+    },
   },
 
   Event: {
@@ -245,5 +270,9 @@ export const resolvers = {
 
   HistorialSection: {
     updatedAt: (parent: { updatedAt: Date }) => toISOString(parent.updatedAt),
+  },
+
+  OfficialContact: {
+    createdAt: (parent: { createdAt: Date }) => toISOString(parent.createdAt),
   },
 };

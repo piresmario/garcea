@@ -4,6 +4,11 @@ export const typeDefs = /* GraphQL */ `
     VIDEO
   }
 
+  enum OfficialContactType {
+    EMAIL
+    PHONE
+  }
+
   type User {
     id: ID!
     name: String!
@@ -52,6 +57,13 @@ export const typeDefs = /* GraphQL */ `
     updatedAt: String!
   }
 
+  type OfficialContact {
+    id: ID!
+    type: OfficialContactType!
+    value: String!
+    createdAt: String!
+  }
+
   input EventInput {
     title: String!
     description: String!
@@ -79,6 +91,11 @@ export const typeDefs = /* GraphQL */ `
     message: String!
   }
 
+  input OfficialContactInput {
+    type: OfficialContactType!
+    value: String!
+  }
+
   type Query {
     events: [Event!]!
     event(id: ID!): Event
@@ -88,6 +105,7 @@ export const typeDefs = /* GraphQL */ `
     ranchoSection: RanchoSection
     ranchoPhotos: [GalleryItem!]!
     historialSection: HistorialSection
+    officialContacts: [OfficialContact!]!
   }
 
   type Mutation {
@@ -106,5 +124,8 @@ export const typeDefs = /* GraphQL */ `
     unfeatureRanchoPhoto(galleryItemId: ID!): Boolean!
 
     updateHistorialSection(description: String!): HistorialSection!
+
+    createOfficialContact(input: OfficialContactInput!): OfficialContact!
+    deleteOfficialContact(id: ID!): Boolean!
   }
 `;
