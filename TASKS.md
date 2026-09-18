@@ -235,6 +235,40 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
   error, which was diagnosed here in one shot once the actual log line was
   visible.
 
+## Event gallery carousel + home page visual refresh
+
+- [x] Replaced the static photo grid on the event detail page
+      (`/events/[id]`) with a swipeable carousel (`embla-carousel-react`,
+      `src/components/GalleryCarousel.tsx`): prev/next `IconButton`s, dot
+      navigation, responsive slide widths (1 per view on mobile, up to
+      2.5 on desktop so the next slide peeks in). Hit the same "GraphQL
+      results aren't plain objects" RSC boundary issue documented earlier
+      for `GalleryItemForm` — fixed the same way, by rebuilding
+      `event.galleryItems` as plain object literals before passing them to
+      the client carousel.
+- [x] Added `@mui/icons-material` (matching the installed MUI v9 version)
+      for the carousel's arrow icons.
+- [x] Home page refresh: full-bleed gradient hero (blue, sampled from the
+      real logo colour `#0340d8`) with title, subtitle, and two CTA buttons
+      ("Ver Eventos", "Conhecer a Nossa História"); the Rancho section is
+      now wrapped in an outlined `Paper` card instead of sitting directly
+      on the page background.
+- [x] Theme (`src/theme.ts`): added a real `palette` (primary blue sampled
+      from the logo, warm amber secondary), `shape.borderRadius: 12`,
+      bolder heading weights, and `MuiButton` defaults (no shadow,
+      no-uppercase text) for a more modern look site-wide.
+- [x] Small polish: `GalleryItemCard` now lifts with a shadow on hover
+      (used by the carousel, the gallery grid, and the Rancho photo grid).
+- Verified against a live dev server: `tsc --noEmit`, `eslint`, and
+  `next build` all clean; confirmed via real data (a live event with 7
+  gallery items) that the carousel renders all 7 dots and images, all
+  referenced JS chunks return 200 (no broken client bundle), and the home
+  page hero/CTA markup renders. Could not visually screenshot — the
+  sandboxed headless Chromium is missing system libraries
+  (`libnspr4.so`) and there's no root access to install them - verified
+  structurally via curl + rendered HTML instead, consistent with this
+  project's established no-browser testing approach.
+
 ## Open Question (blocking Phase 8 decision)
 
 - [ ] Confirm: are all admin accounts fully equal, or should one be a "primary" owner

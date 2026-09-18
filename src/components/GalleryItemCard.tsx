@@ -13,7 +13,13 @@ type GalleryItem = {
 
 export function GalleryItemCard({ item }: { item: GalleryItem }) {
   return (
-    <Card variant="outlined">
+    <Card
+      variant="outlined"
+      sx={{
+        transition: "transform 0.2s ease, box-shadow 0.2s ease",
+        "&:hover": { transform: "translateY(-4px)", boxShadow: 4 },
+      }}
+    >
       {item.type === "PHOTO" ? (
         <CardMedia
           component="img"

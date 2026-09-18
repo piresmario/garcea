@@ -5,7 +5,7 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { EVENT_QUERY } from "@/lib/queries/events";
-import { GalleryItemCard } from "@/components/GalleryItemCard";
+import { GalleryCarousel } from "@/components/GalleryCarousel";
 import { PageContainer } from "@/components/PageContainer";
 import { isPdfUrl } from "@/lib/supabase-storage";
 
@@ -74,17 +74,15 @@ export default async function EventDetailPage({
           <Typography variant="h5" component="h2">
             Galeria
           </Typography>
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: { xs: "repeat(2, 1fr)", sm: "repeat(3, 1fr)" },
-              gap: 2,
-            }}
-          >
-            {event.galleryItems.map((item) => (
-              <GalleryItemCard key={item.id} item={item} />
-            ))}
-          </Box>
+          <GalleryCarousel
+            items={event.galleryItems.map((item) => ({
+              id: item.id,
+              type: item.type,
+              url: item.url,
+              thumbnailUrl: item.thumbnailUrl,
+              caption: item.caption,
+            }))}
+          />
         </Stack>
       )}
     </PageContainer>
