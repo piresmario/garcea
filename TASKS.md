@@ -601,6 +601,18 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
   dots, both images load from Supabase Storage, and prev/next controls
   are present - no test data needed since real content already existed.
 
+## Remove the "Galeria" nav tab
+
+- [x] Per explicit clarification ("only the tab"), removed just the
+      `/gallery` entry from `Nav.tsx`'s link list. The public `/gallery`
+      page itself, `/manage/gallery` (admin upload/edit), and every
+      feature built on gallery items (event carousels, the home page's
+      Rancho photos) are all untouched - `GalleryItemCard`/
+      `GalleryCarousel` are used well beyond this one page.
+- Verified: nav no longer renders a "Galeria" link, `/gallery` still
+  returns 200 when visited directly, `next build` still lists both
+  `/gallery` and `/manage/gallery` as real routes.
+
 ## Open Question (blocking Phase 8 decision)
 
 - [ ] Confirm: are all admin accounts fully equal, or should one be a "primary" owner
