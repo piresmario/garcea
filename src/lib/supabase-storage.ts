@@ -3,15 +3,9 @@ const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const BUCKET = process.env.SUPABASE_STORAGE_BUCKET ?? "gallery-photos";
 
 const MAX_PHOTO_BYTES = 8 * 1024 * 1024;
+const MAX_POSTER_BYTES = 15 * 1024 * 1024;
 
-export async function uploadPhoto(file: File): Promise<string> {
-  if (!file.type.startsWith("image/")) {
-    throw new Error("Só são permitidos ficheiros de imagem como fotos.");
-  }
-  if (file.size > MAX_PHOTO_BYTES) {
-    throw new Error("A foto é demasiado grande (máx. 8MB).");
-  }
-
+async function uploadToStorage(file: File): Promise<string> {
   const arrayBuffer = await file.arrayBuffer();
   const extension = file.name.split(".").pop() || "jpg";
   const path = `${crypto.randomUUID()}.${extension}`;
@@ -28,10 +22,37 @@ export async function uploadPhoto(file: File): Promise<string> {
 
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`Failed to upload photo: ${res.status} ${text}`);
+    throw new Error(`Failed to upload file: ${res.status} ${text}`);
   }
 
   return `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${path}`;
+}
+
+export async function uploadPhoto(file: File): Promise<string> {
+  if (!file.type.startsWith("image/")) {
+    throw new Error("Só são permitidos ficheiros de imagem como fotos.");
+  }
+  if (file.size > MAX_PHOTO_BYTES) {
+    throw new Error("A foto é demasiado grande (máx. 8MB).");
+  }
+  return uploadToStorage(file);
+}
+
+/** Cartaz uploads: images or PDF (many event posters/flyers are designed as PDFs). */
+export async function uploadPoster(file: File): Promise<string> {
+  const isImage = file.type.startsWith("image/");
+  const isPdf = file.type === "application/pdf";
+  if (!isImage && !isPdf) {
+    throw new Error("Só são permitidos ficheiros de imagem ou PDF para o cartaz.");
+  }
+  if (file.size > MAX_POSTER_BYTES) {
+    throw new Error("O ficheiro é demasiado grande (máx. 15MB).");
+  }
+  return uploadToStorage(file);
+}
+
+export function isPdfUrl(url: string): boolean {
+  return url.toLowerCase().endsWith(".pdf");
 }
 
 export async function deletePhoto(url: string): Promise<void> {
@@ -55,6 +76,6 @@ export async function deletePhoto(url: string): Promise<void> {
 
   if (!res.ok && res.status !== 404) {
     const text = await res.text();
-    throw new Error(`Failed to delete photo: ${res.status} ${text}`);
+    throw new Error(`Failed to delete file: ${res.status} ${text}`);
   }
 }

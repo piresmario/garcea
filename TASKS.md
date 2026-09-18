@@ -71,6 +71,22 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
       Verified end-to-end: create with poster, replace (old file actually
       gone from the Storage bucket listing, not just the DB), remove
       (Storage confirmed empty), delete event (no orphaned file).
+- [x] Cartaz: accept PDF in addition to images (many real event posters are
+      designed as PDFs). Added `uploadPoster()` (separate from `uploadPhoto`,
+      which stays image-only for the Gallery feature) allowing `image/*` or
+      `application/pdf`, raised to a 15MB limit, and `isPdfUrl()` to detect
+      PDF posters by extension so they render as a "Ver cartaz (PDF)" link
+      instead of a broken `<img>` tag - applied on the event detail page, the
+      edit form's current-poster preview, and skipped entirely in the two
+      list-page thumbnails (public `/events` and `/manage/events`).
+      Investigated a user-reported "error" uploading a JPEG poster: could not
+      reproduce with a real JPEG file end-to-end, so it wasn't type-specific;
+      raised the poster size limit (8MB -> 15MB) as the most likely fix since
+      real camera/phone photos can exceed 8MB, pending confirmation from the
+      user with the exact error text if it recurs.
+      Verified end-to-end: JPEG, PNG, and PDF posters all upload and display
+      correctly (PDF as a working link, confirmed the file itself is
+      fetchable from Storage, not just present in the bucket listing).
 
 ## Phase 6 — Gallery feature
 

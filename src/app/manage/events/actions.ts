@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { executeGraphQL, runGatedMutation } from "@/lib/graphql-server";
-import { uploadPhoto, deletePhoto } from "@/lib/supabase-storage";
+import { uploadPoster, deletePhoto } from "@/lib/supabase-storage";
 import {
   CREATE_EVENT_MUTATION,
   UPDATE_EVENT_MUTATION,
@@ -34,7 +34,7 @@ export async function createEventAction(formData: FormData) {
 
   let posterUrl: string | undefined;
   if (posterFile) {
-    posterUrl = await uploadPhoto(posterFile);
+    posterUrl = await uploadPoster(posterFile);
   }
 
   const input = posterUrl ? { ...base, posterUrl } : base;
@@ -60,7 +60,7 @@ export async function updateEventAction(id: string, formData: FormData) {
   const input: Record<string, unknown> = { ...base };
 
   if (posterFile) {
-    newPosterUrl = await uploadPhoto(posterFile);
+    newPosterUrl = await uploadPoster(posterFile);
     input.posterUrl = newPosterUrl;
   } else if (removePoster) {
     input.posterUrl = null;

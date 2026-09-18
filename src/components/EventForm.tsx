@@ -3,6 +3,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import { isPdfUrl } from "@/lib/supabase-storage";
 
 type EventFormValues = {
   title: string;
@@ -58,15 +59,22 @@ export function EventForm({
         <Typography variant="body2" color="text.secondary">
           Cartaz (opcional)
         </Typography>
-        {defaultValues?.posterUrl && (
-          <Box
-            component="img"
-            src={defaultValues.posterUrl}
-            alt=""
-            sx={{ maxWidth: 200, borderRadius: 1 }}
-          />
-        )}
-        <input type="file" name="cartaz" accept="image/*" />
+        {defaultValues?.posterUrl &&
+          (isPdfUrl(defaultValues.posterUrl) ? (
+            <Typography variant="body2">
+              <a href={defaultValues.posterUrl} target="_blank" rel="noreferrer">
+                Ver cartaz atual (PDF)
+              </a>
+            </Typography>
+          ) : (
+            <Box
+              component="img"
+              src={defaultValues.posterUrl}
+              alt=""
+              sx={{ maxWidth: 200, borderRadius: 1 }}
+            />
+          ))}
+        <input type="file" name="cartaz" accept="image/*,application/pdf" />
         {defaultValues?.posterUrl && (
           <label style={{ fontSize: "0.875rem" }}>
             <input type="checkbox" name="removePoster" /> Remover cartaz atual

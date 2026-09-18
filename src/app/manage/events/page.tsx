@@ -5,6 +5,7 @@ import Stack from "@mui/material/Stack";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { EVENTS_QUERY } from "@/lib/queries/events";
 import { PageContainer } from "@/components/PageContainer";
+import { isPdfUrl } from "@/lib/supabase-storage";
 
 type EventsData = {
   events: {
@@ -53,7 +54,7 @@ export default async function ManageEventsPage() {
               }}
             >
               <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                {event.posterUrl && (
+                {event.posterUrl && !isPdfUrl(event.posterUrl) && (
                   <Box
                     component="img"
                     src={event.posterUrl}

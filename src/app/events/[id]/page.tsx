@@ -2,10 +2,12 @@ import { notFound } from "next/navigation";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { EVENT_QUERY } from "@/lib/queries/events";
 import { GalleryItemCard } from "@/components/GalleryItemCard";
 import { PageContainer } from "@/components/PageContainer";
+import { isPdfUrl } from "@/lib/supabase-storage";
 
 type EventData = {
   event: {
@@ -46,14 +48,25 @@ export default async function EventDetailPage({
       <Typography variant="body2" color="text.secondary">
         {new Date(event.date).toLocaleDateString("pt-PT")} · {event.location}
       </Typography>
-      {event.posterUrl && (
-        <Box
-          component="img"
-          src={event.posterUrl}
-          alt={`Cartaz: ${event.title}`}
-          sx={{ maxWidth: 400, width: "100%", borderRadius: 1 }}
-        />
-      )}
+      {event.posterUrl &&
+        (isPdfUrl(event.posterUrl) ? (
+          <Button
+            href={event.posterUrl}
+            target="_blank"
+            rel="noreferrer"
+            variant="outlined"
+            sx={{ alignSelf: "flex-start" }}
+          >
+            Ver cartaz (PDF)
+          </Button>
+        ) : (
+          <Box
+            component="img"
+            src={event.posterUrl}
+            alt={`Cartaz: ${event.title}`}
+            sx={{ maxWidth: 400, width: "100%", borderRadius: 1 }}
+          />
+        ))}
       <Typography>{event.description}</Typography>
 
       {event.galleryItems.length > 0 && (

@@ -7,6 +7,7 @@ import Stack from "@mui/material/Stack";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { EVENTS_QUERY } from "@/lib/queries/events";
 import { PageContainer } from "@/components/PageContainer";
+import { isPdfUrl } from "@/lib/supabase-storage";
 
 type EventsData = {
   events: {
@@ -36,7 +37,7 @@ export default async function EventsPage() {
                 href={`/events/${event.id}`}
                 sx={{ display: "flex", justifyContent: "flex-start" }}
               >
-                {event.posterUrl && (
+                {event.posterUrl && !isPdfUrl(event.posterUrl) && (
                   <CardMedia
                     component="img"
                     image={event.posterUrl}
