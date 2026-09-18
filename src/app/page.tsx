@@ -32,14 +32,14 @@ export default async function Home() {
         sx={{
           background: "linear-gradient(135deg, #0340d8 0%, #062a8f 100%)",
           color: "common.white",
-          py: { xs: 8, sm: 12 },
+          py: { xs: 4, sm: 6 },
         }}
       >
         <Container maxWidth="md" sx={{ textAlign: "center" }}>
           <Typography
             variant="h6"
             component="h1"
-            sx={{ mt: 2, mb: 4, opacity: 0.9, fontWeight: 400 }}
+            sx={{ mb: 3, opacity: 0.9, fontWeight: 400 }}
           >
             Bem-vindo ao site oficial da Associação GARCEA. Aqui pode encontrar
             informação sobre os nossos eventos, uma galeria de fotos e vídeos, e

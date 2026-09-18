@@ -744,6 +744,18 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
   that the standalone title is gone and the page still has exactly one
   `<h1>` element.
 
+## Reduce excess whitespace in the home hero after removing the title
+
+- Reported (with screenshot): removing the hero title left a lot of
+  empty vertical space above/below the remaining content, since the
+  hero's padding was originally sized to fit a title too.
+- [x] Reduced the hero `Box`'s `py` from `{ xs: 8, sm: 12 }` (64px/96px)
+      to `{ xs: 4, sm: 6 }` (32px/48px), and dropped the subtitle's
+      `mt: 2` (was spacing it away from the now-removed title above it).
+- Verified: confirmed in the generated CSS that padding-top/bottom is
+  now `32px`/`48px` at the two breakpoints (not just changed in source);
+  `tsc --noEmit`, `eslint`, `next build` clean; every page still 200.
+
 ## Open Question (blocking Phase 8 decision)
 
 - [ ] Confirm: are all admin accounts fully equal, or should one be a "primary" owner
