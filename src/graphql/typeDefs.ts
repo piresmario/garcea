@@ -16,6 +16,7 @@ export const typeDefs = /* GraphQL */ `
     description: String!
     date: String!
     location: String!
+    posterUrl: String
     createdAt: String!
     createdBy: User!
     galleryItems: [GalleryItem!]!
@@ -56,6 +57,7 @@ export const typeDefs = /* GraphQL */ `
     description: String!
     date: String!
     location: String!
+    posterUrl: String
   }
 
   input GalleryItemInput {

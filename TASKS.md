@@ -55,6 +55,22 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
 - [x] Manage: events list (`/manage/events`) + create event form (`/manage/events/new`)
 - [x] Manage: edit event form (`/manage/events/[id]/edit`)
 - [x] Manage: delete event action with confirmation page (`/manage/events/[id]/delete`)
+- [x] `Cartaz` (poster image) field on Event: optional upload via the same
+      `uploadPhoto`/`deletePhoto` helpers as the Gallery feature. Create:
+      upload sets `posterUrl`. Edit: upload a new file replaces it (old file
+      cleaned up from Storage by the `updateEvent` resolver, which diffs
+      old vs. new `posterUrl`), or check "Remove current poster" to clear it
+      (also cleaned up). Delete: `deleteEvent` resolver cleans up the poster
+      too, mirroring `deleteGalleryItem`. Shown on the event detail page,
+      and as a thumbnail on both the public and manage events lists.
+      Hit and fixed a real MUI v9 bug along the way: `Checkbox` +
+      `FormControlLabel` threw `Cannot read properties of undefined
+      (reading 'disabled')` when server-rendered in this form; replaced
+      with a plain native `<input type="checkbox">` (same pattern already
+      used for the Contacts honeypot field).
+      Verified end-to-end: create with poster, replace (old file actually
+      gone from the Storage bucket listing, not just the DB), remove
+      (Storage confirmed empty), delete event (no orphaned file).
 
 ## Phase 6 — Gallery feature
 

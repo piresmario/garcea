@@ -7,6 +7,7 @@ type EventInput = {
   description: string;
   date: string;
   location: string;
+  posterUrl?: string | null;
 };
 
 type GalleryItemInput = {
@@ -79,16 +80,29 @@ export const resolvers = {
         },
       });
     },
-    updateEvent: (
+    updateEvent: async (
       _: unknown,
       args: { id: string; input: EventInput },
       context: GraphQLContext,
     ) => {
       requireUserId(context);
-      return prisma.event.update({
+      const previous = await prisma.event.findUnique({ where: { id: args.id } });
+      const updated = await prisma.event.update({
         where: { id: args.id },
         data: { ...args.input, date: new Date(args.input.date) },
       });
+      // "posterUrl" in args.input distinguishes "left unchanged" (key omitted)
+      // from "cleared" (explicit null) or "replaced" (a new URL).
+      if (
+        previous?.posterUrl &&
+        "posterUrl" in args.input &&
+        args.input.posterUrl !== previous.posterUrl
+      ) {
+        await deletePhoto(previous.posterUrl).catch((error) => {
+          console.error("Failed to delete old event poster from storage:", error);
+        });
+      }
+      return updated;
     },
     deleteEvent: async (
       _: unknown,
@@ -96,7 +110,12 @@ export const resolvers = {
       context: GraphQLContext,
     ) => {
       requireUserId(context);
-      await prisma.event.delete({ where: { id: args.id } });
+      const event = await prisma.event.delete({ where: { id: args.id } });
+      if (event.posterUrl) {
+        await deletePhoto(event.posterUrl).catch((error) => {
+          console.error("Failed to delete event poster from storage:", error);
+        });
+      }
       return true;
     },
 

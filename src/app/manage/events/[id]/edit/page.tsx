@@ -12,6 +12,7 @@ type EventData = {
     description: string;
     date: string;
     location: string;
+    posterUrl: string | null;
   } | null;
 };
 

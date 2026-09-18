@@ -12,6 +12,7 @@ type EventsData = {
     title: string;
     date: string;
     location: string;
+    posterUrl: string | null;
   }[];
 };
 
@@ -51,12 +52,22 @@ export default async function ManageEventsPage() {
                 p: 2,
               }}
             >
-              <Box>
-                <Typography sx={{ fontWeight: 500 }}>{event.title}</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {new Date(event.date).toLocaleDateString("pt-PT")} ·{" "}
-                  {event.location}
-                </Typography>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                {event.posterUrl && (
+                  <Box
+                    component="img"
+                    src={event.posterUrl}
+                    alt=""
+                    sx={{ width: 48, height: 48, objectFit: "cover", borderRadius: 1 }}
+                  />
+                )}
+                <Box>
+                  <Typography sx={{ fontWeight: 500 }}>{event.title}</Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {new Date(event.date).toLocaleDateString("pt-PT")} ·{" "}
+                    {event.location}
+                  </Typography>
+                </Box>
               </Box>
               <Stack direction="row" spacing={2}>
                 <Button href={`/manage/events/${event.id}/edit`}>Edit</Button>

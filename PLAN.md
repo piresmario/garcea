@@ -42,7 +42,8 @@ session).
 
 - **User** — id, name, email, passwordHash, createdAt
   (no role/permission fields — any authenticated user has full admin rights)
-- **Event** — id, title, description, date, location, createdById, createdAt
+- **Event** — id, title, description, date, location, posterUrl (nullable,
+  "Cartaz" - an optional poster image in Supabase Storage), createdById, createdAt
 - **GalleryItem** — id, eventId (FK -> Event), type (`photo` | `video`), url,
   thumbnailUrl (nullable), caption, uploadedById, createdAt
   - `photo`: `url` points to a file in Supabase Storage

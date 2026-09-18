@@ -14,6 +14,7 @@ type EventData = {
     description: string;
     date: string;
     location: string;
+    posterUrl: string | null;
     createdBy: { name: string };
     galleryItems: {
       id: string;
@@ -45,6 +46,14 @@ export default async function EventDetailPage({
       <Typography variant="body2" color="text.secondary">
         {new Date(event.date).toLocaleDateString("pt-PT")} · {event.location}
       </Typography>
+      {event.posterUrl && (
+        <Box
+          component="img"
+          src={event.posterUrl}
+          alt={`Cartaz: ${event.title}`}
+          sx={{ maxWidth: 400, width: "100%", borderRadius: 1 }}
+        />
+      )}
       <Typography>{event.description}</Typography>
 
       {event.galleryItems.length > 0 && (
