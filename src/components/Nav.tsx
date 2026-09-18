@@ -18,7 +18,7 @@ export async function Nav() {
   const session = await auth();
 
   return (
-    <AppBar position="static" color="default" elevation={1}>
+    <AppBar position="sticky" color="default" elevation={1} sx={{ top: 0 }}>
       <Toolbar sx={{ maxWidth: "lg", width: "100%", mx: "auto" }}>
         <MuiLink
           href="/"

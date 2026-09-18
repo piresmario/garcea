@@ -32,7 +32,14 @@ export default async function EventsPage() {
       ) : (
         <Stack spacing={2}>
           {data.events.map((event) => (
-            <Card key={event.id} variant="outlined">
+            <Card
+              key={event.id}
+              variant="outlined"
+              sx={{
+                transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                "&:hover": { transform: "translateY(-2px)", boxShadow: 3 },
+              }}
+            >
               <CardActionArea
                 href={`/events/${event.id}`}
                 sx={{ display: "flex", justifyContent: "flex-start" }}

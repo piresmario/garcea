@@ -1,5 +1,5 @@
 import Typography from "@mui/material/Typography";
-import Stack from "@mui/material/Stack";
+import Paper from "@mui/material/Paper";
 import { PageContainer } from "@/components/PageContainer";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { HISTORIAL_SECTION_QUERY } from "@/lib/queries/historial";
@@ -11,10 +11,10 @@ export default async function HistorialPage() {
 
   return (
     <PageContainer maxWidth="md">
-      <Stack component="section" spacing={2}>
-        <Typography variant="h4" component="h1">
-          Historial
-        </Typography>
+      <Typography variant="h4" component="h1">
+        Historial
+      </Typography>
+      <Paper variant="outlined" component="section" sx={{ p: { xs: 3, sm: 5 } }}>
         {data.historialSection ? (
           <Typography sx={{ whiteSpace: "pre-wrap" }}>
             {data.historialSection.description}
@@ -22,7 +22,7 @@ export default async function HistorialPage() {
         ) : (
           <Typography color="text.secondary">Sem conteúdo por enquanto.</Typography>
         )}
-      </Stack>
+      </Paper>
     </PageContainer>
   );
 }

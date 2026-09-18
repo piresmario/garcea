@@ -6,6 +6,7 @@ import Stack from "@mui/material/Stack";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { GALLERY_ITEM_QUERY } from "@/lib/queries/gallery";
 import { PageContainer } from "@/components/PageContainer";
+import { FormCard } from "@/components/FormCard";
 import { updateGalleryItemAction } from "../../actions";
 
 type GalleryItemData = { galleryItem: { caption: string | null } | null };
@@ -27,16 +28,18 @@ export default async function EditGalleryItemPage({
       <Typography variant="h4" component="h1">
         Editar Legenda
       </Typography>
-      <Stack component="form" action={updateWithId} spacing={2}>
-        <TextField
-          label="Legenda"
-          name="caption"
-          defaultValue={data.galleryItem.caption ?? ""}
-        />
-        <Button type="submit" variant="contained" sx={{ alignSelf: "flex-start" }}>
-          Guardar
-        </Button>
-      </Stack>
+      <FormCard>
+        <Stack component="form" action={updateWithId} spacing={2}>
+          <TextField
+            label="Legenda"
+            name="caption"
+            defaultValue={data.galleryItem.caption ?? ""}
+          />
+          <Button type="submit" variant="contained" sx={{ alignSelf: "flex-start" }}>
+            Guardar
+          </Button>
+        </Stack>
+      </FormCard>
     </PageContainer>
   );
 }

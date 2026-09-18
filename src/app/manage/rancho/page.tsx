@@ -6,6 +6,7 @@ import Box from "@mui/material/Box";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { RANCHO_SECTION_QUERY, RANCHO_PHOTOS_QUERY } from "@/lib/queries/rancho";
 import { PageContainer } from "@/components/PageContainer";
+import { FormCard } from "@/components/FormCard";
 import { GalleryItemCard } from "@/components/GalleryItemCard";
 import { updateRanchoSectionAction, unfeatureRanchoPhotoAction } from "./actions";
 
@@ -32,19 +33,21 @@ export default async function ManageRanchoPage() {
         Gerir Secção do Rancho
       </Typography>
 
-      <Stack component="form" action={updateRanchoSectionAction} spacing={2}>
-        <TextField
-          label="Descrição"
-          name="description"
-          required
-          multiline
-          rows={6}
-          defaultValue={sectionData.ranchoSection?.description ?? ""}
-        />
-        <Button type="submit" variant="contained" sx={{ alignSelf: "flex-start" }}>
-          Guardar
-        </Button>
-      </Stack>
+      <FormCard>
+        <Stack component="form" action={updateRanchoSectionAction} spacing={2}>
+          <TextField
+            label="Descrição"
+            name="description"
+            required
+            multiline
+            rows={6}
+            defaultValue={sectionData.ranchoSection?.description ?? ""}
+          />
+          <Button type="submit" variant="contained" sx={{ alignSelf: "flex-start" }}>
+            Guardar
+          </Button>
+        </Stack>
+      </FormCard>
 
       <Box
         sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}

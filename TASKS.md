@@ -269,6 +269,45 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
   structurally via curl + rendered HTML instead, consistent with this
   project's established no-browser testing approach.
 
+## Sticky header + site-wide modern styling pass
+
+- [x] `Nav`'s `AppBar` changed from `position="static"` to `position="sticky"`
+      (`top: 0`) so it stays visible while scrolling instead of scrolling
+      out of view. Tried setting `zIndex` explicitly via an `sx` callback
+      first - hit the RSC "functions can't cross the Server/Client boundary"
+      issue documented earlier (`Nav` is a Server Component, `AppBar` a
+      Client Component) - removed it since `MuiAppBar` already applies
+      `theme.zIndex.appBar` by default, no override needed.
+- [x] New `src/components/FormCard.tsx` (a small `Paper` wrapper) applied
+      everywhere a bare form previously sat directly on the page background:
+      Login, Contacts, `EventForm`, `GalleryItemForm`, the gallery caption
+      edit form, and the Rancho/Historial description forms - one consistent
+      "modern form" look across every page that has one.
+- [x] `/manage` landing page: replaced the plain `List`/`ListItemButton`
+      links with a responsive grid of hoverable `Card`s.
+- [x] `/manage/events` list: replaced the plain bordered `Box` rows with
+      `Card`s (hover shadow), matching `/events`' public list styling.
+- [x] `/events` public list: added the same hover-lift treatment already
+      used by `GalleryItemCard`/`GalleryCarousel` and the home page's
+      Rancho photo grid, so every clickable card site-wide behaves the same.
+- [x] `/historial` public page: wrapped the description in an outlined
+      `Paper`, matching the Rancho section's card on the home page.
+- Verified end-to-end: `tsc --noEmit`, `eslint`, `next build` all clean.
+  All public pages return 200 via curl. For the authenticated `/manage/*`
+  pages, curl-replicated logins to this dev server return a deterministic
+  `Error: Connection closed.` from the `authenticate` Server Action -
+  confirmed via `git stash` that this reproduces identically on the
+  previous commit too, so it predates and is unrelated to this pass (not
+  investigated further, out of scope for this task; the user has
+  successfully logged in through a real browser both locally and on
+  production, so this looks like a curl/wire-protocol replication
+  limitation rather than an app bug). Verified the styled `/manage/*`
+  pages directly instead by minting a valid Auth.js session JWT with
+  `next-auth/jwt`'s `encode()` and passing it as a cookie - confirmed all
+  of them return 200 and contain the expected new markup (`MuiPaper-root`
+  in the wrapped forms, `MuiCard-root` rows, the new manage landing page's
+  card grid).
+
 ## Open Question (blocking Phase 8 decision)
 
 - [ ] Confirm: are all admin accounts fully equal, or should one be a "primary" owner

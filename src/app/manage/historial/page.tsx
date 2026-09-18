@@ -5,6 +5,7 @@ import Stack from "@mui/material/Stack";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { HISTORIAL_SECTION_QUERY } from "@/lib/queries/historial";
 import { PageContainer } from "@/components/PageContainer";
+import { FormCard } from "@/components/FormCard";
 import { updateHistorialSectionAction } from "./actions";
 
 type HistorialSectionData = { historialSection: { description: string } | null };
@@ -18,19 +19,21 @@ export default async function ManageHistorialPage() {
         Gerir Historial
       </Typography>
 
-      <Stack component="form" action={updateHistorialSectionAction} spacing={2}>
-        <TextField
-          label="Descrição"
-          name="description"
-          required
-          multiline
-          rows={10}
-          defaultValue={data.historialSection?.description ?? ""}
-        />
-        <Button type="submit" variant="contained" sx={{ alignSelf: "flex-start" }}>
-          Guardar
-        </Button>
-      </Stack>
+      <FormCard>
+        <Stack component="form" action={updateHistorialSectionAction} spacing={2}>
+          <TextField
+            label="Descrição"
+            name="description"
+            required
+            multiline
+            rows={10}
+            defaultValue={data.historialSection?.description ?? ""}
+          />
+          <Button type="submit" variant="contained" sx={{ alignSelf: "flex-start" }}>
+            Guardar
+          </Button>
+        </Stack>
+      </FormCard>
     </PageContainer>
   );
 }

@@ -1,8 +1,8 @@
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import List from "@mui/material/List";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardActionArea from "@mui/material/CardActionArea";
 import { PageContainer } from "@/components/PageContainer";
 import { auth, signOut } from "@/auth";
 
@@ -25,13 +25,28 @@ export default async function ManagePage() {
       <Typography color="text.secondary">
         Sessão iniciada como {session?.user?.email}.
       </Typography>
-      <List disablePadding>
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)" },
+          gap: 2,
+        }}
+      >
         {links.map((link) => (
-          <ListItemButton key={link.href} href={link.href}>
-            <ListItemText primary={link.label} />
-          </ListItemButton>
+          <Card
+            key={link.href}
+            variant="outlined"
+            sx={{
+              transition: "transform 0.2s ease, box-shadow 0.2s ease",
+              "&:hover": { transform: "translateY(-2px)", boxShadow: 3 },
+            }}
+          >
+            <CardActionArea href={link.href} sx={{ p: 2.5 }}>
+              <Typography sx={{ fontWeight: 600 }}>{link.label}</Typography>
+            </CardActionArea>
+          </Card>
         ))}
-      </List>
+      </Box>
       <form
         action={async () => {
           "use server";

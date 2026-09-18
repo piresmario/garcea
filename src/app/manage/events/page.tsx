@@ -1,6 +1,7 @@
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { EVENTS_QUERY } from "@/lib/queries/events";
@@ -41,16 +42,16 @@ export default async function ManageEventsPage() {
       ) : (
         <Stack spacing={2}>
           {data.events.map((event) => (
-            <Box
+            <Card
               key={event.id}
+              variant="outlined"
               sx={{
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                border: 1,
-                borderColor: "divider",
-                borderRadius: 1,
                 p: 2,
+                transition: "box-shadow 0.2s ease",
+                "&:hover": { boxShadow: 3 },
               }}
             >
               <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
@@ -79,7 +80,7 @@ export default async function ManageEventsPage() {
                   Eliminar
                 </Button>
               </Stack>
-            </Box>
+            </Card>
           ))}
         </Stack>
       )}
