@@ -553,6 +553,40 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
   form card's colored top border are all really present in the rendered
   page, not just written in the source.
 
+## Site footer: social media links (manageable) + reserved rights
+
+- [x] New `SocialLink` model (`id`, `platform: SocialPlatform` enum
+      `FACEBOOK | INSTAGRAM | YOUTUBE | TWITTER | WHATSAPP | OTHER`,
+      `url`, `createdAt`) - a flat list like `OfficialContact`, so any
+      number of links can be added/removed independently.
+- [x] GraphQL: public `socialLinks` query, gated
+      `createSocialLink`/`deleteSocialLink` mutations.
+- [x] `src/components/SocialIcon.tsx`: maps each platform to its
+      `@mui/icons-material` icon (Facebook/Instagram/YouTube/Twitter/
+      WhatsApp, `Language` as a generic fallback for "Outro") plus the
+      Portuguese label shown in the manage form's `Select` - shared
+      between the footer and the manage page so they can't drift.
+- [x] `src/components/Footer.tsx` (new, added to the root layout after
+      `{children}`, so it sits at the bottom on every page via the
+      existing `flex column` + `flex: 1` main-content layout): shows
+      "© {current year} Associação GARCEA. Todos os direitos
+      reservados." plus one icon button per social link (opens in a new
+      tab), and simply omits the icon row entirely when there are none
+      yet.
+- [x] `/manage/social-links`: add form (platform `Select` + URL field)
+      and a list of existing links with delete buttons, mirroring
+      Official Contacts' structure exactly. Added to the `/manage`
+      dashboard's card grid.
+- Verified end-to-end against the live dev server and Supabase: created
+  a Facebook and an Instagram link via a direct GraphQL mutation call,
+  confirmed both render correctly in the footer (correct `href`,
+  `target="_blank"`, `aria-label`, and the right icon's SVG - checked by
+  its `data-testid`) on more than one page, and in the manage list;
+  confirmed an unauthenticated mutation attempt is rejected
+  (`UNAUTHENTICATED`); deleted both and confirmed the footer's icon row
+  disappears entirely (not just empty) and the manage page shows its
+  empty state.
+
 ## Open Question (blocking Phase 8 decision)
 
 - [ ] Confirm: are all admin accounts fully equal, or should one be a "primary" owner

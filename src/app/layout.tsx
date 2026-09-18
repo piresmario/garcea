@@ -4,6 +4,7 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import Box from "@mui/material/Box";
 import { ThemeRegistry } from "@/components/ThemeRegistry";
 import { Nav } from "@/components/Nav";
+import { Footer } from "@/components/Footer";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -34,6 +35,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <Box sx={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
               <Nav />
               {children}
+              <Footer />
             </Box>
           </ThemeRegistry>
         </AppRouterCacheProvider>

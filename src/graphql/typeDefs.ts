@@ -9,6 +9,15 @@ export const typeDefs = /* GraphQL */ `
     PHONE
   }
 
+  enum SocialPlatform {
+    FACEBOOK
+    INSTAGRAM
+    YOUTUBE
+    TWITTER
+    WHATSAPP
+    OTHER
+  }
+
   type User {
     id: ID!
     name: String!
@@ -56,6 +65,13 @@ export const typeDefs = /* GraphQL */ `
     createdAt: String!
   }
 
+  type SocialLink {
+    id: ID!
+    platform: SocialPlatform!
+    url: String!
+    createdAt: String!
+  }
+
   input EventInput {
     title: String!
     description: String!
@@ -82,6 +98,11 @@ export const typeDefs = /* GraphQL */ `
     value: String!
   }
 
+  input SocialLinkInput {
+    platform: SocialPlatform!
+    url: String!
+  }
+
   type Query {
     events: [Event!]!
     event(id: ID!): Event
@@ -91,6 +112,7 @@ export const typeDefs = /* GraphQL */ `
     ranchoPhotos: [GalleryItem!]!
     historialSection: HistorialSection
     officialContacts: [OfficialContact!]!
+    socialLinks: [SocialLink!]!
   }
 
   type Mutation {
@@ -110,5 +132,8 @@ export const typeDefs = /* GraphQL */ `
 
     createOfficialContact(input: OfficialContactInput!): OfficialContact!
     deleteOfficialContact(id: ID!): Boolean!
+
+    createSocialLink(input: SocialLinkInput!): SocialLink!
+    deleteSocialLink(id: ID!): Boolean!
   }
 `;

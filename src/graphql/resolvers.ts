@@ -28,6 +28,11 @@ type OfficialContactInput = {
   value: string;
 };
 
+type SocialLinkInput = {
+  platform: "FACEBOOK" | "INSTAGRAM" | "YOUTUBE" | "TWITTER" | "WHATSAPP" | "OTHER";
+  url: string;
+};
+
 const RANCHO_SECTION_ID = "rancho";
 const HISTORIAL_SECTION_ID = "historial";
 
@@ -60,6 +65,7 @@ export const resolvers = {
       prisma.historialSection.findUnique({ where: { id: HISTORIAL_SECTION_ID } }),
     officialContacts: () =>
       prisma.officialContact.findMany({ orderBy: { createdAt: "asc" } }),
+    socialLinks: () => prisma.socialLink.findMany({ orderBy: { createdAt: "asc" } }),
   },
 
   Mutation: {
@@ -219,6 +225,24 @@ export const resolvers = {
       await prisma.officialContact.delete({ where: { id: args.id } });
       return true;
     },
+
+    createSocialLink: (
+      _: unknown,
+      args: { input: SocialLinkInput },
+      context: GraphQLContext,
+    ) => {
+      requireUserId(context);
+      return prisma.socialLink.create({ data: args.input });
+    },
+    deleteSocialLink: async (
+      _: unknown,
+      args: { id: string },
+      context: GraphQLContext,
+    ) => {
+      requireUserId(context);
+      await prisma.socialLink.delete({ where: { id: args.id } });
+      return true;
+    },
   },
 
   Event: {
@@ -256,6 +280,10 @@ export const resolvers = {
   },
 
   OfficialContact: {
+    createdAt: (parent: { createdAt: Date }) => toISOString(parent.createdAt),
+  },
+
+  SocialLink: {
     createdAt: (parent: { createdAt: Date }) => toISOString(parent.createdAt),
   },
 };

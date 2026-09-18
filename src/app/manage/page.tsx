@@ -10,6 +10,7 @@ import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
+import ShareIcon from "@mui/icons-material/Share";
 import type { ReactNode } from "react";
 import { PageContainer } from "@/components/PageContainer";
 import { PageTitle } from "@/components/PageTitle";
@@ -45,6 +46,12 @@ const links: {
     label: "Gerir Contactos Oficiais",
     icon: <ContactPhoneIcon />,
     color: "primary",
+  },
+  {
+    href: "/manage/social-links",
+    label: "Gerir Redes Sociais",
+    icon: <ShareIcon />,
+    color: "secondary",
   },
 ];
 

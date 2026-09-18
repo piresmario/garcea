@@ -90,3 +90,19 @@ model OfficialContact {
   value     String
   createdAt DateTime            @default(now())
 }
+
+enum SocialPlatform {
+  FACEBOOK
+  INSTAGRAM
+  YOUTUBE
+  TWITTER
+  WHATSAPP
+  OTHER
+}
+
+model SocialLink {
+  id        String         @id @default(cuid())
+  platform  SocialPlatform
+  url       String
+  createdAt DateTime       @default(now())
+}
