@@ -4,9 +4,11 @@ import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { EVENTS_QUERY } from "@/lib/queries/events";
 import { PageContainer } from "@/components/PageContainer";
+import { EventYearFilter } from "@/components/EventYearFilter";
 import { isPdfUrl } from "@/lib/supabase-storage";
 
 type EventsData = {
@@ -19,19 +21,51 @@ type EventsData = {
   }[];
 };
 
-export default async function EventsPage() {
+export default async function EventsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ year?: string }>;
+}) {
+  const { year } = await searchParams;
   const data = await executeGraphQL<EventsData>(EVENTS_QUERY);
+
+  const currentYear = new Date().getFullYear();
+  const eventYears = data.events.map((event) => new Date(event.date).getFullYear());
+  const availableYears = Array.from(new Set([...eventYears, currentYear])).sort(
+    (a, b) => b - a,
+  );
+
+  const requestedYear = year ? Number(year) : undefined;
+  const selectedYear =
+    requestedYear !== undefined && availableYears.includes(requestedYear)
+      ? requestedYear
+      : currentYear;
+
+  const events = data.events.filter(
+    (event) => new Date(event.date).getFullYear() === selectedYear,
+  );
 
   return (
     <PageContainer maxWidth="md">
-      <Typography variant="h4" component="h1">
-        Eventos
-      </Typography>
-      {data.events.length === 0 ? (
-        <Typography>Ainda não há eventos.</Typography>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: 2,
+        }}
+      >
+        <Typography variant="h4" component="h1">
+          Eventos
+        </Typography>
+        <EventYearFilter years={availableYears} selectedYear={selectedYear} />
+      </Box>
+      {events.length === 0 ? (
+        <Typography>Não há eventos em {selectedYear}.</Typography>
       ) : (
         <Stack spacing={2}>
-          {data.events.map((event) => (
+          {events.map((event) => (
             <Card
               key={event.id}
               variant="outlined"

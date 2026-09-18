@@ -343,6 +343,33 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
   logic even though it doesn't exercise the Server Action's `redirect()`
   wrapper itself.
 
+## Events page: filter by year
+
+- [x] `/events` reads a `?year=` search param, with a `EventYearFilter`
+      client component (a `Select` that navigates via `router.push` on
+      change) next to the page title. Defaults to the current year when
+      no param is present, or when the param is missing/invalid/not one
+      of the actual available years (any year that has at least one
+      event, plus the current year even if it has none yet) - falls back
+      to the current year rather than showing a blank page for an
+      arbitrary or typo'd year in the URL.
+- [x] Filtering itself is done in memory after fetching all events (no
+      GraphQL query changes) - the dataset is small enough for a single
+      community association that this is simpler than adding server-side
+      filtering, consistent with this project's existing "don't
+      over-engineer for this site's size" calls.
+- [x] Empty state updated to name the selected year ("Não há eventos em
+      2027.") instead of the generic "Ainda não há eventos.".
+- Verified end-to-end against the live dev server and Supabase: with only
+  the one real 2026 event, confirmed the default (no param) and an
+  explicit `?year=2026` both show it, and an arbitrary out-of-range
+  `?year=2020` correctly falls back to 2026 rather than showing blank.
+  Then created a temporary second event dated in 2025 to properly
+  exercise the filter: confirmed the default view shows only the 2026
+  event (not 2025), and `?year=2025` shows only the 2025 one (not 2026) -
+  then deleted the temporary event and confirmed the events list is back
+  to just the one real event.
+
 ## Open Question (blocking Phase 8 decision)
 
 - [ ] Confirm: are all admin accounts fully equal, or should one be a "primary" owner
