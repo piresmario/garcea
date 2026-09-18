@@ -5,7 +5,7 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import { PageContainer } from "@/components/PageContainer";
-import { GalleryItemCard } from "@/components/GalleryItemCard";
+import { GalleryCarousel } from "@/components/GalleryCarousel";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { RANCHO_SECTION_QUERY, RANCHO_PHOTOS_QUERY } from "@/lib/queries/rancho";
 
@@ -93,17 +93,15 @@ export default async function Home() {
               Galeria de Fotos
             </Typography>
             {photosData.ranchoPhotos.length > 0 ? (
-              <Box
-                sx={{
-                  display: "grid",
-                  gridTemplateColumns: { xs: "repeat(2, 1fr)", sm: "repeat(3, 1fr)" },
-                  gap: 2,
-                }}
-              >
-                {photosData.ranchoPhotos.map((photo) => (
-                  <GalleryItemCard key={photo.id} item={photo} />
-                ))}
-              </Box>
+              <GalleryCarousel
+                items={photosData.ranchoPhotos.map((photo) => ({
+                  id: photo.id,
+                  type: photo.type,
+                  url: photo.url,
+                  thumbnailUrl: photo.thumbnailUrl,
+                  caption: photo.caption,
+                }))}
+              />
             ) : (
               <Typography color="text.secondary">Sem fotos por enquanto.</Typography>
             )}

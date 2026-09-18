@@ -587,6 +587,20 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
   disappears entirely (not just empty) and the manage page shows its
   empty state.
 
+## Home page: carousel for the Rancho "Galeria de Fotos" section
+
+- [x] Replaced the static photo grid under "Galeria de Fotos" on the home
+      page with the same `GalleryCarousel` already used on the event
+      detail page - same prev/next arrows, dot navigation, and fixed-
+      height fill for photos/videos. Rebuilt the featured photos as plain
+      object literals before passing them in, same as the event page fix
+      (GraphQL execution results aren't guaranteed to be plain objects,
+      which breaks passing them into a Client Component).
+- Verified against the live dev server with the real featured Rancho
+  photos already in the database (2 of them): the carousel renders both
+  dots, both images load from Supabase Storage, and prev/next controls
+  are present - no test data needed since real content already existed.
+
 ## Open Question (blocking Phase 8 decision)
 
 - [ ] Confirm: are all admin accounts fully equal, or should one be a "primary" owner
