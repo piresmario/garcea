@@ -209,6 +209,32 @@ Derived from [PLAN.md](./PLAN.md). Check items off as they're completed.
   state, login + description update persists and shows on both the public
   page and the manage form, test data cleaned up afterward
 
+## Production bug: Cartaz/Gallery uploads failing on Vercel only
+
+- Reported: uploading a Cartaz worked on `localhost` but threw a 500 on
+  `https://garcea.vercel.app`. Vercel's function logs (pulled via `vercel
+  logs --follow`, since the browser only showed a generic error) showed the
+  real cause: `TypeError: Cannot convert argument to a ByteString because
+  the character at index 165 has a value of 9474 which is greater than
+  255.` — thrown from the `fetch()` call in `uploadToStorage()`
+  (`src/lib/supabase-storage.ts`).
+- Character code 9474 is `│` (box-drawing vertical bar). `fetch()` headers
+  must be Latin-1, so a stray `│` inside the `SUPABASE_SERVICE_ROLE_KEY`
+  env var (used in the `Authorization`/`apikey` headers) broke every
+  Storage upload on Vercel — Gallery photos too, since they share the same
+  helper, not just Cartaz. Root cause: the key's value on Vercel had
+  gotten corrupted, most likely from being copy-pasted out of a
+  terminal/table view that wraps long lines with a `│` border character.
+  `.env.local` had a clean copy, so it never reproduced locally.
+- Fixed by the user: re-copied the `service_role` key directly from the
+  Supabase dashboard and reset it in Vercel's Production + Preview
+  environment variables, then redeployed. Confirmed working.
+- Takeaway for any future "works locally, breaks on Vercel" report: check
+  Vercel's function logs (`vercel logs --follow <url>` or the dashboard's
+  Functions/Logs tab) first — the browser's generic 500 hides the real
+  error, which was diagnosed here in one shot once the actual log line was
+  visible.
+
 ## Open Question (blocking Phase 8 decision)
 
 - [ ] Confirm: are all admin accounts fully equal, or should one be a "primary" owner
