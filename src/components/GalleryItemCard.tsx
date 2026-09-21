@@ -34,17 +34,19 @@ export function GalleryItemCard({
   item,
   autoPlay = false,
   fillHeight = false,
+  hoverLift = true,
 }: {
   item: GalleryItem;
   autoPlay?: boolean;
   fillHeight?: boolean;
+  hoverLift?: boolean;
 }) {
   return (
     <Card
       variant="outlined"
       sx={{
         transition: "transform 0.2s ease, box-shadow 0.2s ease",
-        "&:hover": { transform: "translateY(-4px)", boxShadow: 4 },
+        ...(hoverLift && { "&:hover": { transform: "translateY(-4px)", boxShadow: 4 } }),
         ...(fillHeight && {
           height: "100%",
           display: "flex",

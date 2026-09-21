@@ -46,7 +46,7 @@ export function GalleryCarousel({ items }: { items: GalleryItem[] }) {
         <Box
           sx={{
             display: "flex",
-            gap: 2,
+            mx: -1,
             height: { xs: "17.5rem", sm: "20rem", md: "22.5rem" },
           }}
         >
@@ -56,6 +56,7 @@ export function GalleryCarousel({ items }: { items: GalleryItem[] }) {
               sx={{
                 flex: "0 0 100%",
                 minWidth: 0,
+                px: 1,
                 "@media (min-width: 600px)": { flex: "0 0 60%" },
                 "@media (min-width: 900px)": { flex: "0 0 40%" },
               }}
@@ -64,6 +65,7 @@ export function GalleryCarousel({ items }: { items: GalleryItem[] }) {
                 item={item}
                 autoPlay={index === selectedIndex}
                 fillHeight
+                hoverLift={false}
               />
             </Box>
           ))}
@@ -83,7 +85,7 @@ export function GalleryCarousel({ items }: { items: GalleryItem[] }) {
               transform: "translateY(-50%)",
               bgcolor: "background.paper",
               boxShadow: 2,
-              "&:hover": { bgcolor: "background.paper" },
+              "&:hover": { bgcolor: "background.paper", transform: "translateY(-50%) scale(1.08)" },
             }}
           >
             <ArrowBackIosNewIcon fontSize="small" />
@@ -99,7 +101,7 @@ export function GalleryCarousel({ items }: { items: GalleryItem[] }) {
               transform: "translateY(-50%)",
               bgcolor: "background.paper",
               boxShadow: 2,
-              "&:hover": { bgcolor: "background.paper" },
+              "&:hover": { bgcolor: "background.paper", transform: "translateY(-50%) scale(1.08)" },
             }}
           >
             <ArrowForwardIosIcon fontSize="small" />
