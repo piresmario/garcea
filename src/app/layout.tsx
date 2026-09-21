@@ -32,7 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <head>
-        <InitColorSchemeScript />
+        <InitColorSchemeScript defaultMode="light" />
       </head>
       <body style={{ height: "100%" }}>
         <AppRouterCacheProvider options={{ key: "mui" }}>
