@@ -1,12 +1,17 @@
+import { notFound } from "next/navigation";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import { executeGraphQL } from "@/lib/graphql-server";
-import { GALLERY_ITEMS_FOR_PICKER_QUERY } from "@/lib/queries/rancho";
+import { HOME_SECTION_QUERY, GALLERY_ITEMS_FOR_PICKER_QUERY } from "@/lib/queries/homeSections";
 import { PageContainer } from "@/components/PageContainer";
 import { GalleryItemCard } from "@/components/GalleryItemCard";
-import { featureRanchoPhotoAction } from "../actions";
+import { SubmitButton } from "@/components/SubmitButton";
+import { featureHomeSectionPhotoAction } from "../../actions";
+
+type HomeSectionData = {
+  homeSection: { id: string; title: string; featuredPhotos: { id: string }[] } | null;
+};
 
 type GalleryItemsData = {
   galleryItems: {
@@ -15,18 +20,29 @@ type GalleryItemsData = {
     url: string;
     thumbnailUrl: string | null;
     caption: string | null;
-    isFeaturedInRancho: boolean;
   }[];
 };
 
-export default async function AddRanchoPhotoPage() {
-  const data = await executeGraphQL<GalleryItemsData>(GALLERY_ITEMS_FOR_PICKER_QUERY);
-  const available = data.galleryItems.filter((item) => !item.isFeaturedInRancho);
+export default async function AddHomeSectionPhotoPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const [sectionData, galleryData] = await Promise.all([
+    executeGraphQL<HomeSectionData>(HOME_SECTION_QUERY, { id }),
+    executeGraphQL<GalleryItemsData>(GALLERY_ITEMS_FOR_PICKER_QUERY),
+  ]);
+
+  if (!sectionData.homeSection) notFound();
+
+  const featuredIds = new Set(sectionData.homeSection.featuredPhotos.map((photo) => photo.id));
+  const available = galleryData.galleryItems.filter((item) => !featuredIds.has(item.id));
 
   return (
     <PageContainer maxWidth="md">
       <Typography variant="h4" component="h1">
-        Adicionar Foto à Secção do Rancho
+        Adicionar Foto à Secção &quot;{sectionData.homeSection.title}&quot;
       </Typography>
       {available.length === 0 ? (
         <Typography>
@@ -42,14 +58,14 @@ export default async function AddRanchoPhotoPage() {
           }}
         >
           {available.map((item) => {
-            const feature = featureRanchoPhotoAction.bind(null, item.id);
+            const feature = featureHomeSectionPhotoAction.bind(null, id, item.id);
             return (
               <Stack key={item.id} spacing={1}>
                 <GalleryItemCard item={item} />
                 <form action={feature}>
-                  <Button type="submit" size="small" variant="contained">
+                  <SubmitButton size="small" variant="contained">
                     Destacar na Página Inicial
-                  </Button>
+                  </SubmitButton>
                 </form>
               </Stack>
             );

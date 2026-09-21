@@ -3,13 +3,13 @@
 import { useState } from "react";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select, { type SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { FormCard } from "@/components/FormCard";
+import { SubmitButton } from "@/components/SubmitButton";
 
 type EventOption = { id: string; title: string };
 
@@ -84,9 +84,9 @@ export function GalleryItemForm({
           }
         />
 
-        <Button type="submit" variant="contained" sx={{ alignSelf: "flex-start" }}>
+        <SubmitButton variant="contained" sx={{ alignSelf: "flex-start" }}>
           Enviar
-        </Button>
+        </SubmitButton>
       </Stack>
     </FormCard>
   );

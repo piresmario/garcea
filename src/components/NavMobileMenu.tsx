@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useFormStatus } from "react-dom";
 import IconButton from "@mui/material/IconButton";
 import Drawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
@@ -11,6 +12,21 @@ import Divider from "@mui/material/Divider";
 import MenuIcon from "@mui/icons-material/Menu";
 
 type NavLink = { href: string; label: string };
+
+function SignOutListItem() {
+  const { pending } = useFormStatus();
+
+  return (
+    <ListItemButton
+      component="button"
+      type="submit"
+      disabled={pending}
+      sx={{ width: "100%", textAlign: "left" }}
+    >
+      <ListItemText primary={pending ? "A sair..." : "Sair"} />
+    </ListItemButton>
+  );
+}
 
 export function NavMobileMenu({
   links,
@@ -54,13 +70,7 @@ export function NavMobileMenu({
                   <ListItemText primary="Gestão" />
                 </ListItemButton>
                 <Box component="form" action={signOutAction}>
-                  <ListItemButton
-                    component="button"
-                    type="submit"
-                    sx={{ width: "100%", textAlign: "left" }}
-                  >
-                    <ListItemText primary="Sair" />
-                  </ListItemButton>
+                  <SignOutListItem />
                 </Box>
               </>
             ) : (

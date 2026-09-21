@@ -5,6 +5,7 @@ import Stack from "@mui/material/Stack";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { EVENT_QUERY } from "@/lib/queries/events";
 import { PageContainer } from "@/components/PageContainer";
+import { SubmitButton } from "@/components/SubmitButton";
 import { deleteEventAction } from "../../actions";
 
 type EventData = { event: { title: string } | null };
@@ -31,9 +32,9 @@ export default async function DeleteEventPage({
         ação não pode ser desfeita.
       </Typography>
       <Stack component="form" action={deleteWithId} direction="row" spacing={2}>
-        <Button type="submit" variant="contained" color="error">
+        <SubmitButton variant="contained" color="error">
           Eliminar
-        </Button>
+        </SubmitButton>
         <Button href="/manage/events" variant="outlined">
           Cancelar
         </Button>

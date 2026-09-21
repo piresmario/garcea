@@ -1,10 +1,10 @@
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { isPdfUrl } from "@/lib/supabase-storage";
 import { FormCard } from "@/components/FormCard";
+import { SubmitButton } from "@/components/SubmitButton";
 
 type EventFormValues = {
   title: string;
@@ -84,9 +84,9 @@ export function EventForm({
           )}
         </Stack>
 
-        <Button type="submit" variant="contained" sx={{ alignSelf: "flex-start" }}>
+        <SubmitButton variant="contained" sx={{ alignSelf: "flex-start" }}>
           {submitLabel}
-        </Button>
+        </SubmitButton>
       </Stack>
     </FormCard>
   );

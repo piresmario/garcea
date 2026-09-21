@@ -57,20 +57,29 @@ model GalleryItem {
   uploadedById String
   uploadedBy   User   @relation(fields: [uploadedById], references: [id])
 
-  ranchoFeature RanchoFeaturedPhoto?
+  homeSectionFeatures HomeSectionFeaturedPhoto[]
 }
 
-model RanchoSection {
-  id          String   @id
+model HomeSection {
+  id          String   @id @default(cuid())
+  title       String
   description String
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  featuredPhotos HomeSectionFeaturedPhoto[]
 }
 
-model RanchoFeaturedPhoto {
+model HomeSectionFeaturedPhoto {
   id            String      @id @default(cuid())
-  galleryItemId String      @unique
+  homeSectionId String
+  homeSection   HomeSection @relation(fields: [homeSectionId], references: [id], onDelete: Cascade)
+  galleryItemId String
   galleryItem   GalleryItem @relation(fields: [galleryItemId], references: [id], onDelete: Cascade)
   createdAt     DateTime    @default(now())
+
+  @@unique([homeSectionId, galleryItemId])
 }
 
 model HistorialSection {
@@ -82,11 +91,13 @@ model HistorialSection {
 enum OfficialContactType {
   EMAIL
   PHONE
+  FACEBOOK
 }
 
 model OfficialContact {
   id        String              @id @default(cuid())
   type      OfficialContactType
+  label     String?
   value     String
   createdAt DateTime            @default(now())
 }

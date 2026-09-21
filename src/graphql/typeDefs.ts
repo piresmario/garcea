@@ -7,6 +7,7 @@ export const typeDefs = /* GraphQL */ `
   enum OfficialContactType {
     EMAIL
     PHONE
+    FACEBOOK
   }
 
   enum SocialPlatform {
@@ -16,6 +17,11 @@ export const typeDefs = /* GraphQL */ `
     TWITTER
     WHATSAPP
     OTHER
+  }
+
+  enum MoveDirection {
+    UP
+    DOWN
   }
 
   type User {
@@ -45,12 +51,16 @@ export const typeDefs = /* GraphQL */ `
     createdAt: String!
     event: Event
     uploadedBy: User!
-    isFeaturedInRancho: Boolean!
   }
 
-  type RanchoSection {
+  type HomeSection {
+    id: ID!
+    title: String!
     description: String!
+    order: Int!
+    createdAt: String!
     updatedAt: String!
+    featuredPhotos: [GalleryItem!]!
   }
 
   type HistorialSection {
@@ -61,6 +71,7 @@ export const typeDefs = /* GraphQL */ `
   type OfficialContact {
     id: ID!
     type: OfficialContactType!
+    label: String
     value: String!
     createdAt: String!
   }
@@ -93,8 +104,14 @@ export const typeDefs = /* GraphQL */ `
     thumbnailUrl: String
   }
 
+  input HomeSectionInput {
+    title: String!
+    description: String!
+  }
+
   input OfficialContactInput {
     type: OfficialContactType!
+    label: String
     value: String!
   }
 
@@ -108,8 +125,8 @@ export const typeDefs = /* GraphQL */ `
     event(id: ID!): Event
     galleryItems(eventId: ID): [GalleryItem!]!
     galleryItem(id: ID!): GalleryItem
-    ranchoSection: RanchoSection
-    ranchoPhotos: [GalleryItem!]!
+    homeSections: [HomeSection!]!
+    homeSection(id: ID!): HomeSection
     historialSection: HistorialSection
     officialContacts: [OfficialContact!]!
     socialLinks: [SocialLink!]!
@@ -124,9 +141,12 @@ export const typeDefs = /* GraphQL */ `
     updateGalleryItem(id: ID!, input: GalleryItemUpdateInput!): GalleryItem!
     deleteGalleryItem(id: ID!): Boolean!
 
-    updateRanchoSection(description: String!): RanchoSection!
-    featureRanchoPhoto(galleryItemId: ID!): GalleryItem!
-    unfeatureRanchoPhoto(galleryItemId: ID!): Boolean!
+    createHomeSection(input: HomeSectionInput!): HomeSection!
+    updateHomeSection(id: ID!, input: HomeSectionInput!): HomeSection!
+    deleteHomeSection(id: ID!): Boolean!
+    moveHomeSection(id: ID!, direction: MoveDirection!): Boolean!
+    featureHomeSectionPhoto(homeSectionId: ID!, galleryItemId: ID!): GalleryItem!
+    unfeatureHomeSectionPhoto(homeSectionId: ID!, galleryItemId: ID!): Boolean!
 
     updateHistorialSection(description: String!): HistorialSection!
 

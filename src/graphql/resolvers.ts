@@ -24,7 +24,8 @@ type GalleryItemUpdateInput = {
 };
 
 type OfficialContactInput = {
-  type: "EMAIL" | "PHONE";
+  type: "EMAIL" | "PHONE" | "FACEBOOK";
+  label?: string | null;
   value: string;
 };
 
@@ -33,7 +34,11 @@ type SocialLinkInput = {
   url: string;
 };
 
-const RANCHO_SECTION_ID = "rancho";
+type HomeSectionInput = {
+  title: string;
+  description: string;
+};
+
 const HISTORIAL_SECTION_ID = "historial";
 
 function toISOString(value: Date): string {
@@ -52,15 +57,9 @@ export const resolvers = {
       }),
     galleryItem: (_: unknown, args: { id: string }) =>
       prisma.galleryItem.findUnique({ where: { id: args.id } }),
-    ranchoSection: () =>
-      prisma.ranchoSection.findUnique({ where: { id: RANCHO_SECTION_ID } }),
-    ranchoPhotos: async () => {
-      const featured = await prisma.ranchoFeaturedPhoto.findMany({
-        orderBy: { createdAt: "asc" },
-        include: { galleryItem: true },
-      });
-      return featured.map((f) => f.galleryItem);
-    },
+    homeSections: () => prisma.homeSection.findMany({ orderBy: { order: "asc" } }),
+    homeSection: (_: unknown, args: { id: string }) =>
+      prisma.homeSection.findUnique({ where: { id: args.id } }),
     historialSection: () =>
       prisma.historialSection.findUnique({ where: { id: HISTORIAL_SECTION_ID } }),
     officialContacts: () =>
@@ -158,39 +157,80 @@ export const resolvers = {
       return true;
     },
 
-    updateRanchoSection: (
+    createHomeSection: async (
       _: unknown,
-      args: { description: string },
+      args: { input: HomeSectionInput },
       context: GraphQLContext,
     ) => {
       requireUserId(context);
-      return prisma.ranchoSection.upsert({
-        where: { id: RANCHO_SECTION_ID },
-        update: { description: args.description },
-        create: { id: RANCHO_SECTION_ID, description: args.description },
+      const highest = await prisma.homeSection.aggregate({ _max: { order: true } });
+      return prisma.homeSection.create({
+        data: { ...args.input, order: (highest._max.order ?? -1) + 1 },
       });
     },
-    featureRanchoPhoto: (
+    updateHomeSection: (
       _: unknown,
-      args: { galleryItemId: string },
+      args: { id: string; input: HomeSectionInput },
       context: GraphQLContext,
     ) => {
       requireUserId(context);
-      return prisma.ranchoFeaturedPhoto
+      return prisma.homeSection.update({ where: { id: args.id }, data: args.input });
+    },
+    deleteHomeSection: async (
+      _: unknown,
+      args: { id: string },
+      context: GraphQLContext,
+    ) => {
+      requireUserId(context);
+      await prisma.homeSection.delete({ where: { id: args.id } });
+      return true;
+    },
+    moveHomeSection: async (
+      _: unknown,
+      args: { id: string; direction: "UP" | "DOWN" },
+      context: GraphQLContext,
+    ) => {
+      requireUserId(context);
+      const sections = await prisma.homeSection.findMany({ orderBy: { order: "asc" } });
+      const index = sections.findIndex((section) => section.id === args.id);
+      const swapIndex = args.direction === "UP" ? index - 1 : index + 1;
+      if (index === -1 || swapIndex < 0 || swapIndex >= sections.length) {
+        return false;
+      }
+      const current = sections[index];
+      const swap = sections[swapIndex];
+      await prisma.$transaction([
+        prisma.homeSection.update({ where: { id: current.id }, data: { order: swap.order } }),
+        prisma.homeSection.update({ where: { id: swap.id }, data: { order: current.order } }),
+      ]);
+      return true;
+    },
+    featureHomeSectionPhoto: (
+      _: unknown,
+      args: { homeSectionId: string; galleryItemId: string },
+      context: GraphQLContext,
+    ) => {
+      requireUserId(context);
+      return prisma.homeSectionFeaturedPhoto
         .create({
-          data: { galleryItemId: args.galleryItemId },
+          data: { homeSectionId: args.homeSectionId, galleryItemId: args.galleryItemId },
           include: { galleryItem: true },
         })
         .then((f) => f.galleryItem);
     },
-    unfeatureRanchoPhoto: async (
+    unfeatureHomeSectionPhoto: async (
       _: unknown,
-      args: { galleryItemId: string },
+      args: { homeSectionId: string; galleryItemId: string },
       context: GraphQLContext,
     ) => {
       requireUserId(context);
-      await prisma.ranchoFeaturedPhoto.delete({
-        where: { galleryItemId: args.galleryItemId },
+      await prisma.homeSectionFeaturedPhoto.delete({
+        where: {
+          homeSectionId_galleryItemId: {
+            homeSectionId: args.homeSectionId,
+            galleryItemId: args.galleryItemId,
+          },
+        },
       });
       return true;
     },
@@ -263,16 +303,19 @@ export const resolvers = {
       parent.eventId ? prisma.event.findUnique({ where: { id: parent.eventId } }) : null,
     uploadedBy: (parent: { uploadedById: string }) =>
       prisma.user.findUniqueOrThrow({ where: { id: parent.uploadedById } }),
-    isFeaturedInRancho: async (parent: { id: string }) => {
-      const featured = await prisma.ranchoFeaturedPhoto.findUnique({
-        where: { galleryItemId: parent.id },
-      });
-      return featured !== null;
-    },
   },
 
-  RanchoSection: {
+  HomeSection: {
+    createdAt: (parent: { createdAt: Date }) => toISOString(parent.createdAt),
     updatedAt: (parent: { updatedAt: Date }) => toISOString(parent.updatedAt),
+    featuredPhotos: async (parent: { id: string }) => {
+      const featured = await prisma.homeSectionFeaturedPhoto.findMany({
+        where: { homeSectionId: parent.id },
+        orderBy: { createdAt: "asc" },
+        include: { galleryItem: true },
+      });
+      return featured.map((f) => f.galleryItem);
+    },
   },
 
   HistorialSection: {

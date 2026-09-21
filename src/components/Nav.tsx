@@ -7,6 +7,7 @@ import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import { auth, signOut } from "@/auth";
 import { NavMobileMenu } from "@/components/NavMobileMenu";
+import { SubmitButton } from "@/components/SubmitButton";
 
 const links = [
   { href: "/", label: "Início" },
@@ -67,9 +68,7 @@ export async function Nav() {
                 Gestão
               </Button>
               <form action={signOutAction}>
-                <Button type="submit" color="inherit">
-                  Sair
-                </Button>
+                <SubmitButton color="inherit">Sair</SubmitButton>
               </form>
             </>
           ) : (

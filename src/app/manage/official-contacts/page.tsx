@@ -1,5 +1,4 @@
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
@@ -8,10 +7,20 @@ import { OFFICIAL_CONTACTS_QUERY } from "@/lib/queries/officialContacts";
 import { PageContainer } from "@/components/PageContainer";
 import { PageTitle } from "@/components/PageTitle";
 import { OfficialContactForm } from "@/components/OfficialContactForm";
+import { SubmitButton } from "@/components/SubmitButton";
+import {
+  OfficialContactIcon,
+  OFFICIAL_CONTACT_TYPE_LABELS,
+} from "@/components/OfficialContactIcon";
 import { createOfficialContactAction, deleteOfficialContactAction } from "./actions";
 
 type OfficialContactsData = {
-  officialContacts: { id: string; type: "EMAIL" | "PHONE"; value: string }[];
+  officialContacts: {
+    id: string;
+    type: "EMAIL" | "PHONE" | "FACEBOOK";
+    label: string | null;
+    value: string;
+  }[];
 };
 
 export default async function ManageOfficialContactsPage() {
@@ -48,16 +57,20 @@ export default async function ManageOfficialContactsPage() {
                   "&:hover": { boxShadow: 3 },
                 }}
               >
-                <Stack>
-                  <Typography variant="caption" color="text.secondary">
-                    {contact.type === "EMAIL" ? "Email" : "Número de Telefone"}
-                  </Typography>
-                  <Typography sx={{ fontWeight: 500 }}>{contact.value}</Typography>
+                <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
+                  <OfficialContactIcon type={contact.type} color="primary" />
+                  <Stack>
+                    <Typography variant="caption" color="text.secondary">
+                      {OFFICIAL_CONTACT_TYPE_LABELS[contact.type]}
+                      {contact.label ? ` · ${contact.label}` : ""}
+                    </Typography>
+                    <Typography sx={{ fontWeight: 500, wordBreak: "break-all" }}>
+                      {contact.value}
+                    </Typography>
+                  </Stack>
                 </Stack>
                 <form action={deleteContact}>
-                  <Button type="submit" color="error">
-                    Eliminar
-                  </Button>
+                  <SubmitButton color="error">Eliminar</SubmitButton>
                 </form>
               </Card>
             );

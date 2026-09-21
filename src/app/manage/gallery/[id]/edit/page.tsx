@@ -1,12 +1,12 @@
 import { notFound } from "next/navigation";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { GALLERY_ITEM_QUERY } from "@/lib/queries/gallery";
 import { PageContainer } from "@/components/PageContainer";
 import { FormCard } from "@/components/FormCard";
+import { SubmitButton } from "@/components/SubmitButton";
 import { updateGalleryItemAction } from "../../actions";
 
 type GalleryItemData = { galleryItem: { caption: string | null } | null };
@@ -35,9 +35,9 @@ export default async function EditGalleryItemPage({
             name="caption"
             defaultValue={data.galleryItem.caption ?? ""}
           />
-          <Button type="submit" variant="contained" sx={{ alignSelf: "flex-start" }}>
+          <SubmitButton variant="contained" sx={{ alignSelf: "flex-start" }}>
             Guardar
-          </Button>
+          </SubmitButton>
         </Stack>
       </FormCard>
     </PageContainer>

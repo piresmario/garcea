@@ -5,6 +5,7 @@ import Stack from "@mui/material/Stack";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { GALLERY_ITEM_QUERY } from "@/lib/queries/gallery";
 import { PageContainer } from "@/components/PageContainer";
+import { SubmitButton } from "@/components/SubmitButton";
 import { deleteGalleryItemAction } from "../../actions";
 
 type GalleryItemData = { galleryItem: { id: string } | null };
@@ -31,9 +32,9 @@ export default async function DeleteGalleryItemPage({
         desfeita.
       </Typography>
       <Stack component="form" action={deleteWithId} direction="row" spacing={2}>
-        <Button type="submit" variant="contained" color="error">
+        <SubmitButton variant="contained" color="error">
           Eliminar
-        </Button>
+        </SubmitButton>
         <Button href="/manage/gallery" variant="outlined">
           Cancelar
         </Button>

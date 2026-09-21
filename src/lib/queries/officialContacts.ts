@@ -3,6 +3,7 @@ export const OFFICIAL_CONTACTS_QUERY = /* GraphQL */ `
     officialContacts {
       id
       type
+      label
       value
     }
   }

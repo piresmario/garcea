@@ -1,5 +1,4 @@
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import ShareIcon from "@mui/icons-material/Share";
@@ -8,6 +7,7 @@ import { SOCIAL_LINKS_QUERY } from "@/lib/queries/socialLinks";
 import { PageContainer } from "@/components/PageContainer";
 import { PageTitle } from "@/components/PageTitle";
 import { SocialLinkForm } from "@/components/SocialLinkForm";
+import { SubmitButton } from "@/components/SubmitButton";
 import { SocialIcon, SOCIAL_PLATFORM_LABELS } from "@/components/SocialIcon";
 import { createSocialLinkAction, deleteSocialLinkAction } from "./actions";
 
@@ -62,9 +62,7 @@ export default async function ManageSocialLinksPage() {
                   </Stack>
                 </Stack>
                 <form action={deleteLink}>
-                  <Button type="submit" color="error">
-                    Eliminar
-                  </Button>
+                  <SubmitButton color="error">Eliminar</SubmitButton>
                 </form>
               </Card>
             );

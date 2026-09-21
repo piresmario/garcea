@@ -3,19 +3,29 @@
 import { useState } from "react";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select, { type SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { FormCard } from "@/components/FormCard";
+import { SubmitButton } from "@/components/SubmitButton";
+import { OFFICIAL_CONTACT_TYPE_LABELS } from "@/components/OfficialContactIcon";
+
+type ContactType = keyof typeof OFFICIAL_CONTACT_TYPE_LABELS;
+
+const VALUE_FIELD: Record<ContactType, { label: string; type: string; placeholder?: string }> = {
+  EMAIL: { label: "Email", type: "email" },
+  PHONE: { label: "Número de Telefone", type: "tel" },
+  FACEBOOK: { label: "Link do Facebook", type: "url", placeholder: "https://..." },
+};
 
 export function OfficialContactForm({
   action,
 }: {
   action: (formData: FormData) => void | Promise<void>;
 }) {
-  const [type, setType] = useState<"EMAIL" | "PHONE">("EMAIL");
+  const [type, setType] = useState<ContactType>("EMAIL");
+  const valueField = VALUE_FIELD[type];
 
   return (
     <FormCard>
@@ -28,23 +38,34 @@ export function OfficialContactForm({
             name="type"
             value={type}
             onChange={(event: SelectChangeEvent) =>
-              setType(event.target.value as "EMAIL" | "PHONE")
+              setType(event.target.value as ContactType)
             }
           >
-            <MenuItem value="EMAIL">Email</MenuItem>
-            <MenuItem value="PHONE">Número de Telefone</MenuItem>
+            {Object.entries(OFFICIAL_CONTACT_TYPE_LABELS).map(([value, label]) => (
+              <MenuItem key={value} value={value}>
+                {label}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
 
-        {type === "EMAIL" ? (
-          <TextField label="Email" name="value" type="email" required />
-        ) : (
-          <TextField label="Número de Telefone" name="value" type="tel" required />
-        )}
+        <TextField
+          label="Etiqueta (opcional)"
+          name="label"
+          placeholder="Ex.: Associação GARCEA"
+        />
 
-        <Button type="submit" variant="contained" sx={{ alignSelf: "flex-start" }}>
+        <TextField
+          label={valueField.label}
+          name="value"
+          type={valueField.type}
+          placeholder={valueField.placeholder}
+          required
+        />
+
+        <SubmitButton variant="contained" sx={{ alignSelf: "flex-start" }}>
           Adicionar
-        </Button>
+        </SubmitButton>
       </Stack>
     </FormCard>
   );

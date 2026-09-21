@@ -1,12 +1,12 @@
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import LoginIcon from "@mui/icons-material/Login";
 import { PageContainer } from "@/components/PageContainer";
 import { FormCard } from "@/components/FormCard";
+import { SubmitButton } from "@/components/SubmitButton";
 import { authenticate } from "./actions";
 
 export default async function LoginPage({
@@ -54,9 +54,7 @@ export default async function LoginPage({
             required
             autoComplete="current-password"
           />
-          <Button type="submit" variant="contained">
-            Entrar
-          </Button>
+          <SubmitButton variant="contained">Entrar</SubmitButton>
         </Stack>
       </FormCard>
     </PageContainer>

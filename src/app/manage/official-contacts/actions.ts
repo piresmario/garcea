@@ -8,11 +8,14 @@ import {
   DELETE_OFFICIAL_CONTACT_MUTATION,
 } from "@/lib/queries/officialContacts";
 
+const VALID_TYPES = ["EMAIL", "PHONE", "FACEBOOK"];
+
 export async function createOfficialContactAction(formData: FormData) {
   const type = String(formData.get("type") ?? "");
+  const label = String(formData.get("label") ?? "").trim();
   const value = String(formData.get("value") ?? "").trim();
 
-  if (type !== "EMAIL" && type !== "PHONE") {
+  if (!VALID_TYPES.includes(type)) {
     throw new Error("Tipo de contacto inválido.");
   }
   if (!value) {
@@ -20,7 +23,9 @@ export async function createOfficialContactAction(formData: FormData) {
   }
 
   await runGatedMutation(() =>
-    executeGraphQL(CREATE_OFFICIAL_CONTACT_MUTATION, { input: { type, value } }),
+    executeGraphQL(CREATE_OFFICIAL_CONTACT_MUTATION, {
+      input: { type, label: label || null, value },
+    }),
   );
 
   revalidatePath("/contacts");

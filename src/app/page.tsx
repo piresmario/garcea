@@ -7,24 +7,25 @@ import Paper from "@mui/material/Paper";
 import { PageContainer } from "@/components/PageContainer";
 import { GalleryCarousel } from "@/components/GalleryCarousel";
 import { executeGraphQL } from "@/lib/graphql-server";
-import { RANCHO_SECTION_QUERY, RANCHO_PHOTOS_QUERY } from "@/lib/queries/rancho";
+import { HOME_SECTIONS_QUERY } from "@/lib/queries/homeSections";
 
-type RanchoSectionData = { ranchoSection: { description: string } | null };
-type RanchoPhotosData = {
-  ranchoPhotos: {
+type HomeSectionsData = {
+  homeSections: {
     id: string;
-    type: "PHOTO" | "VIDEO";
-    url: string;
-    thumbnailUrl: string | null;
-    caption: string | null;
+    title: string;
+    description: string;
+    featuredPhotos: {
+      id: string;
+      type: "PHOTO" | "VIDEO";
+      url: string;
+      thumbnailUrl: string | null;
+      caption: string | null;
+    }[];
   }[];
 };
 
 export default async function Home() {
-  const [sectionData, photosData] = await Promise.all([
-    executeGraphQL<RanchoSectionData>(RANCHO_SECTION_QUERY),
-    executeGraphQL<RanchoPhotosData>(RANCHO_PHOTOS_QUERY),
-  ]);
+  const { homeSections } = await executeGraphQL<HomeSectionsData>(HOME_SECTIONS_QUERY);
 
   return (
     <>
@@ -70,40 +71,37 @@ export default async function Home() {
       </Box>
 
       <PageContainer maxWidth="md">
-        <Paper
-          component="section"
-          variant="outlined"
-          sx={{ p: { xs: 3, sm: 5 }, display: "flex", flexDirection: "column", gap: 3 }}
-        >
-          <Typography variant="h4" component="h2">
-            Rancho Folclórico das Lavradeiras de Gondar
-          </Typography>
-
-          {sectionData.ranchoSection && (
-            <Typography sx={{ whiteSpace: "pre-wrap" }}>
-              {sectionData.ranchoSection.description}
+        {homeSections.map((section) => (
+          <Paper
+            key={section.id}
+            component="section"
+            variant="outlined"
+            sx={{ p: { xs: 3, sm: 5 }, display: "flex", flexDirection: "column", gap: 3 }}
+          >
+            <Typography variant="h4" component="h2">
+              {section.title}
             </Typography>
-          )}
 
-          <Stack spacing={2}>
-            <Typography variant="h5" component="h3">
-              Galeria de Fotos
-            </Typography>
-            {photosData.ranchoPhotos.length > 0 ? (
-              <GalleryCarousel
-                items={photosData.ranchoPhotos.map((photo) => ({
-                  id: photo.id,
-                  type: photo.type,
-                  url: photo.url,
-                  thumbnailUrl: photo.thumbnailUrl,
-                  caption: photo.caption,
-                }))}
-              />
-            ) : (
-              <Typography color="text.secondary">Sem fotos por enquanto.</Typography>
+            <Typography sx={{ whiteSpace: "pre-wrap" }}>{section.description}</Typography>
+
+            {section.featuredPhotos.length > 0 && (
+              <Stack spacing={2}>
+                <Typography variant="h5" component="h3">
+                  Galeria de Fotos
+                </Typography>
+                <GalleryCarousel
+                  items={section.featuredPhotos.map((photo) => ({
+                    id: photo.id,
+                    type: photo.type,
+                    url: photo.url,
+                    thumbnailUrl: photo.thumbnailUrl,
+                    caption: photo.caption,
+                  }))}
+                />
+              </Stack>
             )}
-          </Stack>
-        </Paper>
+          </Paper>
+        ))}
       </PageContainer>
     </>
   );

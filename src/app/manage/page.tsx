@@ -1,5 +1,4 @@
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
@@ -7,13 +6,14 @@ import Stack from "@mui/material/Stack";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import EventIcon from "@mui/icons-material/Event";
 import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
-import MusicNoteIcon from "@mui/icons-material/MusicNote";
+import ViewAgendaIcon from "@mui/icons-material/ViewAgenda";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import ShareIcon from "@mui/icons-material/Share";
 import type { ReactNode } from "react";
 import { PageContainer } from "@/components/PageContainer";
 import { PageTitle } from "@/components/PageTitle";
+import { SubmitButton } from "@/components/SubmitButton";
 import { auth, signOut } from "@/auth";
 
 const links: {
@@ -30,9 +30,9 @@ const links: {
     color: "primary",
   },
   {
-    href: "/manage/rancho",
-    label: "Gerir Secção do Rancho",
-    icon: <MusicNoteIcon />,
+    href: "/manage/home-sections",
+    label: "Gerir Secções da Página Inicial",
+    icon: <ViewAgendaIcon />,
     color: "secondary",
   },
   {
@@ -109,9 +109,7 @@ export default async function ManagePage() {
           await signOut({ redirectTo: "/" });
         }}
       >
-        <Button type="submit" variant="outlined">
-          Sair
-        </Button>
+        <SubmitButton variant="outlined">Sair</SubmitButton>
       </form>
     </PageContainer>
   );
