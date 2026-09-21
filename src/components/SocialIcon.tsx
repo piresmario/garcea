@@ -5,6 +5,7 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import LanguageIcon from "@mui/icons-material/Language";
 import type { SvgIconProps } from "@mui/material/SvgIcon";
+import { SpotifyIcon } from "@/components/SpotifyIcon";
 
 const ICONS = {
   FACEBOOK: FacebookIcon,
@@ -12,6 +13,7 @@ const ICONS = {
   YOUTUBE: YouTubeIcon,
   TWITTER: TwitterIcon,
   WHATSAPP: WhatsAppIcon,
+  SPOTIFY: SpotifyIcon,
   OTHER: LanguageIcon,
 } as const;
 
@@ -21,6 +23,7 @@ export const SOCIAL_PLATFORM_LABELS: Record<keyof typeof ICONS, string> = {
   YOUTUBE: "YouTube",
   TWITTER: "X (Twitter)",
   WHATSAPP: "WhatsApp",
+  SPOTIFY: "Spotify",
   OTHER: "Outro",
 };
 

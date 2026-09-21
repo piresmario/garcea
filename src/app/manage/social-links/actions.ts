@@ -8,7 +8,15 @@ import {
   DELETE_SOCIAL_LINK_MUTATION,
 } from "@/lib/queries/socialLinks";
 
-const VALID_PLATFORMS = ["FACEBOOK", "INSTAGRAM", "YOUTUBE", "TWITTER", "WHATSAPP", "OTHER"];
+const VALID_PLATFORMS = [
+  "FACEBOOK",
+  "INSTAGRAM",
+  "YOUTUBE",
+  "TWITTER",
+  "WHATSAPP",
+  "SPOTIFY",
+  "OTHER",
+];
 
 export async function createSocialLinkAction(formData: FormData) {
   const platform = String(formData.get("platform") ?? "");

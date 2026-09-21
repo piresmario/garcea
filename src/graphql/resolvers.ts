@@ -31,7 +31,7 @@ type OfficialContactInput = {
 };
 
 type SocialLinkInput = {
-  platform: "FACEBOOK" | "INSTAGRAM" | "YOUTUBE" | "TWITTER" | "WHATSAPP" | "OTHER";
+  platform: "FACEBOOK" | "INSTAGRAM" | "YOUTUBE" | "TWITTER" | "WHATSAPP" | "SPOTIFY" | "OTHER";
   url: string;
 };
 

@@ -114,6 +114,7 @@ enum SocialPlatform {
   YOUTUBE
   TWITTER
   WHATSAPP
+  SPOTIFY
   OTHER
 }
 
