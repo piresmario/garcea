@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
+import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
 import Box from "@mui/material/Box";
 import { ThemeRegistry } from "@/components/ThemeRegistry";
 import { Nav } from "@/components/Nav";
@@ -28,7 +29,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="pt"
       className={`${geistSans.variable} ${geistMono.variable}`}
       style={{ height: "100%" }}
+      suppressHydrationWarning
     >
+      <head>
+        <InitColorSchemeScript />
+      </head>
       <body style={{ height: "100%" }}>
         <AppRouterCacheProvider options={{ key: "mui" }}>
           <ThemeRegistry>

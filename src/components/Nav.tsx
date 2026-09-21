@@ -8,6 +8,7 @@ import Box from "@mui/material/Box";
 import { auth, signOut } from "@/auth";
 import { NavMobileMenu } from "@/components/NavMobileMenu";
 import { SubmitButton } from "@/components/SubmitButton";
+import { ColorModeToggle } from "@/components/ColorModeToggle";
 
 const links = [
   { href: "/", label: "Início" },
@@ -77,6 +78,8 @@ export async function Nav() {
             </Button>
           )}
         </Stack>
+
+        <ColorModeToggle />
 
         <NavMobileMenu
           links={links}

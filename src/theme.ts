@@ -2,10 +2,27 @@ import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 import { LinkBehavior } from "@/components/LinkBehavior";
 
 const baseTheme = createTheme({
-  palette: {
-    primary: { main: "#0340d8" },
-    secondary: { main: "#e0a52c" },
-    background: { default: "#f7f8fb" },
+  cssVariables: {
+    // Must match @mui/material/InitColorSchemeScript's default `attribute`
+    // (rendered in layout.tsx) so toggling `setMode` actually swaps the
+    // generated CSS variables instead of only following the OS preference.
+    colorSchemeSelector: '[data-mui-color-scheme="%s"]',
+  },
+  colorSchemes: {
+    light: {
+      palette: {
+        primary: { main: "#0340d8" },
+        secondary: { main: "#e0a52c" },
+        background: { default: "#f7f8fb", paper: "#ffffff" },
+      },
+    },
+    dark: {
+      palette: {
+        primary: { main: "#8ea6ff" },
+        secondary: { main: "#e6b84f" },
+        background: { default: "#0c0f16", paper: "#151a24" },
+      },
+    },
   },
   shape: {
     borderRadius: 12,
@@ -34,12 +51,43 @@ const baseTheme = createTheme({
         disableElevation: true,
       },
       styleOverrides: {
-        root: { textTransform: "none", fontWeight: 600 },
+        root: {
+          textTransform: "none",
+          fontWeight: 600,
+          transition: "transform 0.15s ease, box-shadow 0.15s ease",
+          "&:hover": {
+            transform: "translateY(-1px)",
+          },
+        },
+        contained: {
+          "&:hover": {
+            boxShadow: "0 8px 20px rgba(0,0,0,0.18)",
+          },
+        },
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          transition: "transform 0.15s ease, background-color 0.15s ease",
+          "&:hover": {
+            transform: "scale(1.08)",
+          },
+        },
       },
     },
     MuiAppBar: {
       styleOverrides: {
-        root: { backgroundColor: "#ffffff" },
+        root: ({ theme }) => ({
+          backgroundColor: (theme.vars ?? theme).palette.background.paper,
+        }),
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        outlined: ({ theme }) => ({
+          boxShadow: (theme.vars ?? theme).shadows[1],
+        }),
       },
     },
   },

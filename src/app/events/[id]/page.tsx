@@ -81,20 +81,15 @@ export default async function EventDetailPage({
       <Typography>{event.description}</Typography>
 
       {event.galleryItems.length > 0 && (
-        <Stack spacing={2}>
-          <Typography variant="h5" component="h2">
-            Galeria
-          </Typography>
-          <GalleryCarousel
-            items={event.galleryItems.map((item) => ({
-              id: item.id,
-              type: item.type,
-              url: item.url,
-              thumbnailUrl: item.thumbnailUrl,
-              caption: item.caption,
-            }))}
-          />
-        </Stack>
+        <GalleryCarousel
+          items={event.galleryItems.map((item) => ({
+            id: item.id,
+            type: item.type,
+            url: item.url,
+            thumbnailUrl: item.thumbnailUrl,
+            caption: item.caption,
+          }))}
+        />
       )}
     </PageContainer>
   );

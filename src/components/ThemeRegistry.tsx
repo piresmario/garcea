@@ -8,7 +8,7 @@ import { theme } from "@/theme";
 export function ThemeRegistry({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
+      <CssBaseline enableColorScheme />
       {children}
     </ThemeProvider>
   );
