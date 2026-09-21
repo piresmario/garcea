@@ -23,14 +23,20 @@ model User {
   galleryItems GalleryItem[]
 }
 
+enum EventType {
+  FOLCLORE
+  OUTROS
+}
+
 model Event {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   title       String
   description String
   date        DateTime
   location    String
   posterUrl   String?
-  createdAt   DateTime @default(now())
+  type        EventType @default(FOLCLORE)
+  createdAt   DateTime  @default(now())
 
   createdById String
   createdBy   User   @relation(fields: [createdById], references: [id])

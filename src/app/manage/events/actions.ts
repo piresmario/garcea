@@ -10,16 +10,23 @@ import {
   DELETE_EVENT_MUTATION,
 } from "@/lib/queries/events";
 
+const VALID_EVENT_TYPES = ["FOLCLORE", "OUTROS"];
+
 function readEventBaseInput(formData: FormData) {
   const date = formData.get("date");
   if (typeof date !== "string" || !date) {
     throw new Error("A data é obrigatória.");
+  }
+  const type = String(formData.get("type") ?? "");
+  if (!VALID_EVENT_TYPES.includes(type)) {
+    throw new Error("Tipo de evento inválido.");
   }
   return {
     title: String(formData.get("title") ?? ""),
     description: String(formData.get("description") ?? ""),
     date: new Date(date).toISOString(),
     location: String(formData.get("location") ?? ""),
+    type,
   };
 }
 

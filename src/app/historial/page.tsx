@@ -5,6 +5,7 @@ import { PageContainer } from "@/components/PageContainer";
 import { PageTitle } from "@/components/PageTitle";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { HISTORIAL_SECTION_QUERY } from "@/lib/queries/historial";
+import { ScrollReveal } from "@/components/ScrollReveal";
 
 type HistorialSectionData = { historialSection: { description: string } | null };
 
@@ -16,19 +17,21 @@ export default async function HistorialPage() {
       <PageTitle icon={<AutoStoriesIcon />} color="secondary">
         Historial
       </PageTitle>
-      <Paper
-        variant="outlined"
-        component="section"
-        sx={{ p: { xs: 3, sm: 5 }, borderTop: 3, borderTopColor: "secondary.main" }}
-      >
-        {data.historialSection ? (
-          <Typography sx={{ whiteSpace: "pre-wrap" }}>
-            {data.historialSection.description}
-          </Typography>
-        ) : (
-          <Typography color="text.secondary">Sem conteúdo por enquanto.</Typography>
-        )}
-      </Paper>
+      <ScrollReveal>
+        <Paper
+          variant="outlined"
+          component="section"
+          sx={{ p: { xs: 3, sm: 5 }, borderTop: 3, borderTopColor: "secondary.main" }}
+        >
+          {data.historialSection ? (
+            <Typography sx={{ whiteSpace: "pre-wrap" }}>
+              {data.historialSection.description}
+            </Typography>
+          ) : (
+            <Typography color="text.secondary">Sem conteúdo por enquanto.</Typography>
+          )}
+        </Paper>
+      </ScrollReveal>
     </PageContainer>
   );
 }

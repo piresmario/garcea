@@ -8,6 +8,7 @@ import { GALLERY_ITEMS_QUERY } from "@/lib/queries/gallery";
 import { GalleryItemCard } from "@/components/GalleryItemCard";
 import { PageContainer } from "@/components/PageContainer";
 import { PageTitle } from "@/components/PageTitle";
+import { ScrollReveal } from "@/components/ScrollReveal";
 
 type GalleryData = {
   galleryItems: {
@@ -47,25 +48,27 @@ export default async function GalleryPage() {
     <PageContainer maxWidth="md">
       <PageTitle icon={<PhotoLibraryIcon />}>Galeria</PageTitle>
       {Array.from(groups.values()).map((group) => (
-        <Stack key={group.title} spacing={2}>
-          <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
-            <Typography variant="h5" component="h2">
-              {group.title}
-            </Typography>
-            <Chip size="small" color="primary" label={group.items.length} />
+        <ScrollReveal key={group.title}>
+          <Stack spacing={2}>
+            <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+              <Typography variant="h5" component="h2">
+                {group.title}
+              </Typography>
+              <Chip size="small" color="primary" label={group.items.length} />
+            </Stack>
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: { xs: "repeat(2, 1fr)", sm: "repeat(3, 1fr)" },
+                gap: 2,
+              }}
+            >
+              {group.items.map((item) => (
+                <GalleryItemCard key={item.id} item={item} />
+              ))}
+            </Box>
           </Stack>
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: { xs: "repeat(2, 1fr)", sm: "repeat(3, 1fr)" },
-              gap: 2,
-            }}
-          >
-            {group.items.map((item) => (
-              <GalleryItemCard key={item.id} item={item} />
-            ))}
-          </Box>
-        </Stack>
+        </ScrollReveal>
       ))}
     </PageContainer>
   );

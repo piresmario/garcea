@@ -11,6 +11,7 @@ import { GalleryCarousel } from "@/components/GalleryCarousel";
 import { PageContainer } from "@/components/PageContainer";
 import { PageTitle } from "@/components/PageTitle";
 import { isPdfUrl } from "@/lib/supabase-storage";
+import { EVENT_TYPE_LABELS } from "@/lib/eventTypes";
 
 type EventData = {
   event: {
@@ -20,6 +21,7 @@ type EventData = {
     date: string;
     location: string;
     posterUrl: string | null;
+    type: "FOLCLORE" | "OUTROS";
     createdBy: { name: string };
     galleryItems: {
       id: string;
@@ -52,6 +54,7 @@ export default async function EventDetailPage({
           color="secondary"
           label={new Date(event.date).toLocaleDateString("pt-PT")}
         />
+        <Chip size="small" variant="outlined" label={EVENT_TYPE_LABELS[event.type]} />
         <Typography variant="body2" color="text.secondary">
           {event.location}
         </Typography>

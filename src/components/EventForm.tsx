@@ -2,6 +2,10 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 import { isPdfUrl } from "@/lib/supabase-storage";
 import { FormCard } from "@/components/FormCard";
 import { SubmitButton } from "@/components/SubmitButton";
@@ -12,6 +16,7 @@ type EventFormValues = {
   date: string;
   location: string;
   posterUrl?: string | null;
+  type?: "FOLCLORE" | "OUTROS";
 };
 
 function toDateInputValue(iso?: string) {
@@ -56,6 +61,19 @@ export function EventForm({
           required
           defaultValue={defaultValues?.location}
         />
+
+        <FormControl fullWidth>
+          <InputLabel id="event-type-label">Tipo</InputLabel>
+          <Select
+            labelId="event-type-label"
+            label="Tipo"
+            name="type"
+            defaultValue={defaultValues?.type ?? "FOLCLORE"}
+          >
+            <MenuItem value="FOLCLORE">Folclore</MenuItem>
+            <MenuItem value="OUTROS">Outros</MenuItem>
+          </Select>
+        </FormControl>
 
         <Stack spacing={0.5}>
           <Typography variant="body2" color="text.secondary">

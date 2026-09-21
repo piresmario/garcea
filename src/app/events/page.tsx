@@ -11,8 +11,10 @@ import { executeGraphQL } from "@/lib/graphql-server";
 import { EVENTS_QUERY } from "@/lib/queries/events";
 import { PageContainer } from "@/components/PageContainer";
 import { PageTitle } from "@/components/PageTitle";
-import { EventYearFilter } from "@/components/EventYearFilter";
+import { EventFilters } from "@/components/EventFilters";
+import { ScrollReveal } from "@/components/ScrollReveal";
 import { isPdfUrl } from "@/lib/supabase-storage";
+import { EVENT_TYPE_LABELS } from "@/lib/eventTypes";
 
 type EventsData = {
   events: {
@@ -21,15 +23,16 @@ type EventsData = {
     date: string;
     location: string;
     posterUrl: string | null;
+    type: "FOLCLORE" | "OUTROS";
   }[];
 };
 
 export default async function EventsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ year?: string }>;
+  searchParams: Promise<{ year?: string; type?: string }>;
 }) {
-  const { year } = await searchParams;
+  const { year, type } = await searchParams;
   const data = await executeGraphQL<EventsData>(EVENTS_QUERY);
 
   const currentYear = new Date().getFullYear();
@@ -44,8 +47,12 @@ export default async function EventsPage({
       ? requestedYear
       : currentYear;
 
+  const selectedType =
+    type && type in EVENT_TYPE_LABELS ? (type as keyof typeof EVENT_TYPE_LABELS) : "FOLCLORE";
+
   const events = data.events.filter(
-    (event) => new Date(event.date).getFullYear() === selectedYear,
+    (event) =>
+      new Date(event.date).getFullYear() === selectedYear && event.type === selectedType,
   );
 
   return (
@@ -60,48 +67,55 @@ export default async function EventsPage({
         }}
       >
         <PageTitle icon={<EventIcon />}>Eventos</PageTitle>
-        <EventYearFilter years={availableYears} selectedYear={selectedYear} />
+        <EventFilters
+          years={availableYears}
+          selectedYear={selectedYear}
+          selectedType={selectedType}
+        />
       </Box>
       {events.length === 0 ? (
-        <Typography>Não há eventos em {selectedYear}.</Typography>
+        <Typography>
+          Não há eventos de {EVENT_TYPE_LABELS[selectedType]} em {selectedYear}.
+        </Typography>
       ) : (
         <Stack spacing={2}>
-          {events.map((event) => (
-            <Card
-              key={event.id}
-              variant="outlined"
-              sx={{
-                transition: "transform 0.2s ease, box-shadow 0.2s ease",
-                "&:hover": { transform: "translateY(-2px)", boxShadow: 3 },
-              }}
-            >
-              <CardActionArea
-                href={`/events/${event.id}`}
-                sx={{ display: "flex", justifyContent: "flex-start" }}
+          {events.map((event, index) => (
+            <ScrollReveal key={event.id} delay={Math.min(index, 5) * 60}>
+              <Card
+                variant="outlined"
+                sx={{
+                  transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                  "&:hover": { transform: "translateY(-2px)", boxShadow: 3 },
+                }}
               >
-                {event.posterUrl && !isPdfUrl(event.posterUrl) && (
-                  <CardMedia
-                    component="img"
-                    image={event.posterUrl}
-                    alt=""
-                    sx={{ width: "5rem", height: "5rem", objectFit: "cover", flexShrink: 0 }}
-                  />
-                )}
-                <CardContent>
-                  <Typography variant="h6">{event.title}</Typography>
-                  <Stack direction="row" spacing={1} sx={{ alignItems: "center", flexWrap: "wrap", mt: 0.5 }}>
-                    <Chip
-                      size="small"
-                      color="secondary"
-                      label={new Date(event.date).toLocaleDateString("pt-PT")}
+                <CardActionArea
+                  href={`/events/${event.id}`}
+                  sx={{ display: "flex", justifyContent: "flex-start" }}
+                >
+                  {event.posterUrl && !isPdfUrl(event.posterUrl) && (
+                    <CardMedia
+                      component="img"
+                      image={event.posterUrl}
+                      alt=""
+                      sx={{ width: "5rem", height: "5rem", objectFit: "cover", flexShrink: 0 }}
                     />
-                    <Typography variant="body2" color="text.secondary">
-                      {event.location}
-                    </Typography>
-                  </Stack>
-                </CardContent>
-              </CardActionArea>
-            </Card>
+                  )}
+                  <CardContent>
+                    <Typography variant="h6">{event.title}</Typography>
+                    <Stack direction="row" spacing={1} sx={{ alignItems: "center", flexWrap: "wrap", mt: 0.5 }}>
+                      <Chip
+                        size="small"
+                        color="secondary"
+                        label={new Date(event.date).toLocaleDateString("pt-PT")}
+                      />
+                      <Typography variant="body2" color="text.secondary">
+                        {event.location}
+                      </Typography>
+                    </Stack>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </ScrollReveal>
           ))}
         </Stack>
       )}

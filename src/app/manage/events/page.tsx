@@ -10,6 +10,7 @@ import { EVENTS_QUERY } from "@/lib/queries/events";
 import { PageContainer } from "@/components/PageContainer";
 import { PageTitle } from "@/components/PageTitle";
 import { isPdfUrl } from "@/lib/supabase-storage";
+import { EVENT_TYPE_LABELS } from "@/lib/eventTypes";
 
 type EventsData = {
   events: {
@@ -18,6 +19,7 @@ type EventsData = {
     date: string;
     location: string;
     posterUrl: string | null;
+    type: "FOLCLORE" | "OUTROS";
   }[];
 };
 
@@ -76,6 +78,7 @@ export default async function ManageEventsPage() {
                       color="secondary"
                       label={new Date(event.date).toLocaleDateString("pt-PT")}
                     />
+                    <Chip size="small" variant="outlined" label={EVENT_TYPE_LABELS[event.type]} />
                     <Typography variant="body2" color="text.secondary">
                       {event.location}
                     </Typography>

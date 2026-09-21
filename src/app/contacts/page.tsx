@@ -8,6 +8,7 @@ import { PageContainer } from "@/components/PageContainer";
 import { PageTitle } from "@/components/PageTitle";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { OFFICIAL_CONTACTS_QUERY } from "@/lib/queries/officialContacts";
+import { ScrollReveal } from "@/components/ScrollReveal";
 
 type OfficialContactsData = {
   officialContacts: {
@@ -35,58 +36,60 @@ export default async function ContactsPage() {
       </Typography>
 
       {emails.length > 0 || phones.length > 0 || facebooks.length > 0 ? (
-        <Paper
-          variant="outlined"
-          sx={{ p: { xs: 3, sm: 4 }, borderTop: 3, borderTopColor: "secondary.main" }}
-        >
-          <Stack spacing={1.5}>
-            {facebooks.map((facebook) => (
-              <Stack
-                key={facebook.id}
-                direction="row"
-                spacing={1.5}
-                sx={{ alignItems: "center" }}
-              >
-                <FacebookIcon color="primary" fontSize="small" />
-                <Typography
-                  component="a"
-                  href={facebook.value}
-                  target="_blank"
-                  rel="noreferrer"
-                  sx={{ color: "inherit" }}
+        <ScrollReveal>
+          <Paper
+            variant="outlined"
+            sx={{ p: { xs: 3, sm: 4 }, borderTop: 3, borderTopColor: "secondary.main" }}
+          >
+            <Stack spacing={1.5}>
+              {facebooks.map((facebook) => (
+                <Stack
+                  key={facebook.id}
+                  direction="row"
+                  spacing={1.5}
+                  sx={{ alignItems: "center" }}
                 >
-                  {facebook.label || facebook.value}
-                </Typography>
-              </Stack>
-            ))}
-            {phones.map((phone) => (
-              <Stack
-                key={phone.id}
-                direction="row"
-                spacing={1.5}
-                sx={{ alignItems: "center" }}
-              >
-                <PhoneIcon color="primary" fontSize="small" />
-                <Typography component="a" href={`tel:${phone.value}`} sx={{ color: "inherit" }}>
-                  {phone.value}
-                </Typography>
-              </Stack>
-            ))}
-            {emails.map((email) => (
-              <Stack
-                key={email.id}
-                direction="row"
-                spacing={1.5}
-                sx={{ alignItems: "center" }}
-              >
-                <EmailIcon color="primary" fontSize="small" />
-                <Typography component="a" href={`mailto:${email.value}`} sx={{ color: "inherit" }}>
-                  {email.value}
-                </Typography>
-              </Stack>
-            ))}
-          </Stack>
-        </Paper>
+                  <FacebookIcon color="primary" fontSize="small" />
+                  <Typography
+                    component="a"
+                    href={facebook.value}
+                    target="_blank"
+                    rel="noreferrer"
+                    sx={{ color: "inherit" }}
+                  >
+                    {facebook.label || facebook.value}
+                  </Typography>
+                </Stack>
+              ))}
+              {phones.map((phone) => (
+                <Stack
+                  key={phone.id}
+                  direction="row"
+                  spacing={1.5}
+                  sx={{ alignItems: "center" }}
+                >
+                  <PhoneIcon color="primary" fontSize="small" />
+                  <Typography component="a" href={`tel:${phone.value}`} sx={{ color: "inherit" }}>
+                    {phone.value}
+                  </Typography>
+                </Stack>
+              ))}
+              {emails.map((email) => (
+                <Stack
+                  key={email.id}
+                  direction="row"
+                  spacing={1.5}
+                  sx={{ alignItems: "center" }}
+                >
+                  <EmailIcon color="primary" fontSize="small" />
+                  <Typography component="a" href={`mailto:${email.value}`} sx={{ color: "inherit" }}>
+                    {email.value}
+                  </Typography>
+                </Stack>
+              ))}
+            </Stack>
+          </Paper>
+        </ScrollReveal>
       ) : (
         <Typography color="text.secondary">
           Ainda não há contactos disponíveis.

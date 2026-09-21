@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import { PageContainer } from "@/components/PageContainer";
 import { GalleryCarousel } from "@/components/GalleryCarousel";
+import { ScrollReveal } from "@/components/ScrollReveal";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { HOME_SECTIONS_QUERY } from "@/lib/queries/homeSections";
 
@@ -72,23 +73,19 @@ export default async function Home() {
 
       <PageContainer maxWidth="md">
         {homeSections.map((section) => (
-          <Paper
-            key={section.id}
-            component="section"
-            variant="outlined"
-            sx={{ p: { xs: 3, sm: 5 }, display: "flex", flexDirection: "column", gap: 3 }}
-          >
-            <Typography variant="h4" component="h2">
-              {section.title}
-            </Typography>
+          <ScrollReveal key={section.id}>
+            <Paper
+              component="section"
+              variant="outlined"
+              sx={{ p: { xs: 3, sm: 5 }, display: "flex", flexDirection: "column", gap: 3 }}
+            >
+              <Typography variant="h4" component="h2">
+                {section.title}
+              </Typography>
 
-            <Typography sx={{ whiteSpace: "pre-wrap" }}>{section.description}</Typography>
+              <Typography sx={{ whiteSpace: "pre-wrap" }}>{section.description}</Typography>
 
-            {section.featuredPhotos.length > 0 && (
-              <Stack spacing={2}>
-                <Typography variant="h5" component="h3">
-                  Galeria de Fotos
-                </Typography>
+              {section.featuredPhotos.length > 0 && (
                 <GalleryCarousel
                   items={section.featuredPhotos.map((photo) => ({
                     id: photo.id,
@@ -98,9 +95,9 @@ export default async function Home() {
                     caption: photo.caption,
                   }))}
                 />
-              </Stack>
-            )}
-          </Paper>
+              )}
+            </Paper>
+          </ScrollReveal>
         ))}
       </PageContainer>
     </>

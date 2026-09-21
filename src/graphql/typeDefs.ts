@@ -4,6 +4,11 @@ export const typeDefs = /* GraphQL */ `
     VIDEO
   }
 
+  enum EventType {
+    FOLCLORE
+    OUTROS
+  }
+
   enum OfficialContactType {
     EMAIL
     PHONE
@@ -37,6 +42,7 @@ export const typeDefs = /* GraphQL */ `
     date: String!
     location: String!
     posterUrl: String
+    type: EventType!
     createdAt: String!
     createdBy: User!
     galleryItems: [GalleryItem!]!
@@ -89,6 +95,7 @@ export const typeDefs = /* GraphQL */ `
     date: String!
     location: String!
     posterUrl: String
+    type: EventType!
   }
 
   input GalleryItemInput {

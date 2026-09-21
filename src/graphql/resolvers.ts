@@ -8,6 +8,7 @@ type EventInput = {
   date: string;
   location: string;
   posterUrl?: string | null;
+  type: "FOLCLORE" | "OUTROS";
 };
 
 type GalleryItemInput = {

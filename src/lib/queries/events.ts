@@ -7,6 +7,7 @@ export const EVENTS_QUERY = /* GraphQL */ `
       date
       location
       posterUrl
+      type
     }
   }
 `;
@@ -29,6 +30,7 @@ export const EVENT_QUERY = /* GraphQL */ `
       date
       location
       posterUrl
+      type
       createdBy {
         name
       }
