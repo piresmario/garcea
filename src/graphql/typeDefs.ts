@@ -87,6 +87,7 @@ export const typeDefs = /* GraphQL */ `
     id: ID!
     platform: SocialPlatform!
     url: String!
+    order: Int!
     createdAt: String!
   }
 
@@ -163,5 +164,6 @@ export const typeDefs = /* GraphQL */ `
 
     createSocialLink(input: SocialLinkInput!): SocialLink!
     deleteSocialLink(id: ID!): Boolean!
+    moveSocialLink(id: ID!, direction: MoveDirection!): Boolean!
   }
 `;

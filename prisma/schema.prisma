@@ -122,5 +122,6 @@ model SocialLink {
   id        String         @id @default(cuid())
   platform  SocialPlatform
   url       String
+  order     Int            @default(0)
   createdAt DateTime       @default(now())
 }

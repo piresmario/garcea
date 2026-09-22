@@ -2,14 +2,21 @@ import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import ShareIcon from "@mui/icons-material/Share";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { SOCIAL_LINKS_QUERY } from "@/lib/queries/socialLinks";
 import { PageContainer } from "@/components/PageContainer";
 import { PageTitle } from "@/components/PageTitle";
 import { SocialLinkForm } from "@/components/SocialLinkForm";
 import { SubmitButton } from "@/components/SubmitButton";
+import { SubmitIconButton } from "@/components/SubmitIconButton";
 import { SocialIcon, SOCIAL_PLATFORM_LABELS } from "@/components/SocialIcon";
-import { createSocialLinkAction, deleteSocialLinkAction } from "./actions";
+import {
+  createSocialLinkAction,
+  deleteSocialLinkAction,
+  moveSocialLinkAction,
+} from "./actions";
 
 type SocialLinksData = {
   socialLinks: { id: string; platform: string; url: string }[];
@@ -17,22 +24,26 @@ type SocialLinksData = {
 
 export default async function ManageSocialLinksPage() {
   const data = await executeGraphQL<SocialLinksData>(SOCIAL_LINKS_QUERY);
+  const links = data.socialLinks;
 
   return (
     <PageContainer maxWidth="sm">
       <PageTitle icon={<ShareIcon />}>Gerir Redes Sociais</PageTitle>
       <Typography color="text.secondary">
-        Estes links são mostrados no rodapé de todas as páginas.
+        Estes links são mostrados no rodapé de todas as páginas, pela ordem
+        apresentada abaixo.
       </Typography>
 
       <SocialLinkForm action={createSocialLinkAction} />
 
-      {data.socialLinks.length === 0 ? (
+      {links.length === 0 ? (
         <Typography>Ainda não há links de redes sociais.</Typography>
       ) : (
         <Stack spacing={2}>
-          {data.socialLinks.map((link) => {
+          {links.map((link, index) => {
             const deleteLink = deleteSocialLinkAction.bind(null, link.id);
+            const moveUp = moveSocialLinkAction.bind(null, link.id, "UP");
+            const moveDown = moveSocialLinkAction.bind(null, link.id, "DOWN");
             return (
               <Card
                 key={link.id}
@@ -49,6 +60,21 @@ export default async function ManageSocialLinksPage() {
                 }}
               >
                 <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
+                  <Stack>
+                    <form action={moveUp}>
+                      <SubmitIconButton size="small" disabled={index === 0}>
+                        <ArrowUpwardIcon fontSize="small" />
+                      </SubmitIconButton>
+                    </form>
+                    <form action={moveDown}>
+                      <SubmitIconButton
+                        size="small"
+                        disabled={index === links.length - 1}
+                      >
+                        <ArrowDownwardIcon fontSize="small" />
+                      </SubmitIconButton>
+                    </form>
+                  </Stack>
                   <SocialIcon platform={link.platform} color="primary" />
                   <Stack>
                     <Typography variant="caption" color="text.secondary">

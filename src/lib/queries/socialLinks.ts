@@ -21,3 +21,9 @@ export const DELETE_SOCIAL_LINK_MUTATION = /* GraphQL */ `
     deleteSocialLink(id: $id)
   }
 `;
+
+export const MOVE_SOCIAL_LINK_MUTATION = /* GraphQL */ `
+  mutation MoveSocialLink($id: ID!, $direction: MoveDirection!) {
+    moveSocialLink(id: $id, direction: $direction)
+  }
+`;

@@ -65,7 +65,7 @@ export const resolvers = {
       prisma.historialSection.findUnique({ where: { id: HISTORIAL_SECTION_ID } }),
     officialContacts: () =>
       prisma.officialContact.findMany({ orderBy: { createdAt: "asc" } }),
-    socialLinks: () => prisma.socialLink.findMany({ orderBy: { createdAt: "asc" } }),
+    socialLinks: () => prisma.socialLink.findMany({ orderBy: { order: "asc" } }),
   },
 
   Mutation: {
@@ -267,13 +267,16 @@ export const resolvers = {
       return true;
     },
 
-    createSocialLink: (
+    createSocialLink: async (
       _: unknown,
       args: { input: SocialLinkInput },
       context: GraphQLContext,
     ) => {
       requireUserId(context);
-      return prisma.socialLink.create({ data: args.input });
+      const highest = await prisma.socialLink.aggregate({ _max: { order: true } });
+      return prisma.socialLink.create({
+        data: { ...args.input, order: (highest._max.order ?? -1) + 1 },
+      });
     },
     deleteSocialLink: async (
       _: unknown,
@@ -282,6 +285,26 @@ export const resolvers = {
     ) => {
       requireUserId(context);
       await prisma.socialLink.delete({ where: { id: args.id } });
+      return true;
+    },
+    moveSocialLink: async (
+      _: unknown,
+      args: { id: string; direction: "UP" | "DOWN" },
+      context: GraphQLContext,
+    ) => {
+      requireUserId(context);
+      const links = await prisma.socialLink.findMany({ orderBy: { order: "asc" } });
+      const index = links.findIndex((link) => link.id === args.id);
+      const swapIndex = args.direction === "UP" ? index - 1 : index + 1;
+      if (index === -1 || swapIndex < 0 || swapIndex >= links.length) {
+        return false;
+      }
+      const current = links[index];
+      const swap = links[swapIndex];
+      await prisma.$transaction([
+        prisma.socialLink.update({ where: { id: current.id }, data: { order: swap.order } }),
+        prisma.socialLink.update({ where: { id: swap.id }, data: { order: current.order } }),
+      ]);
       return true;
     },
   },
