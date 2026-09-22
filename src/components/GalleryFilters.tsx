@@ -58,7 +58,7 @@ export function GalleryFilters({
           ))}
         </Select>
       </FormControl>
-      <FormControl size="small" sx={{ minWidth: 220 }}>
+      <FormControl size="small" fullWidth sx={{ flex: 1, minWidth: 220 }}>
         <InputLabel id="gallery-event-filter-label" shrink>
           Evento
         </InputLabel>
