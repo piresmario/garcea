@@ -5,7 +5,9 @@ import Stack from "@mui/material/Stack";
 import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
 import { executeGraphQL } from "@/lib/graphql-server";
 import { GALLERY_ITEMS_QUERY } from "@/lib/queries/gallery";
+import { EVENT_OPTIONS_QUERY } from "@/lib/queries/events";
 import { GalleryItemCard } from "@/components/GalleryItemCard";
+import { GalleryFilters } from "@/components/GalleryFilters";
 import { PageContainer } from "@/components/PageContainer";
 import { PageTitle } from "@/components/PageTitle";
 import { FlashMessage } from "@/components/FlashMessage";
@@ -21,13 +23,25 @@ type GalleryData = {
   }[];
 };
 
+type EventsData = { events: { id: string; title: string }[] };
+
 export default async function ManageGalleryPage({
   searchParams,
 }: {
-  searchParams: Promise<{ success?: string }>;
+  searchParams: Promise<{ success?: string; eventId?: string }>;
 }) {
-  const { success } = await searchParams;
-  const data = await executeGraphQL<GalleryData>(GALLERY_ITEMS_QUERY);
+  const { success, eventId } = await searchParams;
+  const [data, eventsData] = await Promise.all([
+    executeGraphQL<GalleryData>(GALLERY_ITEMS_QUERY, { eventId: eventId || null }),
+    executeGraphQL<EventsData>(EVENT_OPTIONS_QUERY),
+  ]);
+  // Rebuild as plain object literals: GraphQL execution results aren't
+  // guaranteed to be plain objects (Next.js rejects non-plain-object/
+  // null-prototype values passed as props into a Client Component).
+  const events = eventsData.events.map((event) => ({
+    id: event.id,
+    title: event.title,
+  }));
 
   return (
     <PageContainer maxWidth="md">
@@ -46,8 +60,15 @@ export default async function ManageGalleryPage({
           Adicionar Item
         </Button>
       </Box>
+
+      <GalleryFilters events={events} selectedEventId={eventId} />
+
       {data.galleryItems.length === 0 ? (
-        <Typography>Ainda não há itens na galeria.</Typography>
+        <Typography>
+          {eventId
+            ? "Não há itens na galeria para este evento."
+            : "Ainda não há itens na galeria."}
+        </Typography>
       ) : (
         <Box
           sx={{

@@ -1,6 +1,6 @@
 export const GALLERY_ITEMS_QUERY = /* GraphQL */ `
-  query GalleryItems {
-    galleryItems {
+  query GalleryItems($eventId: ID) {
+    galleryItems(eventId: $eventId) {
       id
       type
       url
