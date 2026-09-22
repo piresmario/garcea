@@ -51,9 +51,21 @@ export const resolvers = {
     events: () => prisma.event.findMany({ orderBy: { date: "desc" } }),
     event: (_: unknown, args: { id: string }) =>
       prisma.event.findUnique({ where: { id: args.id } }),
-    galleryItems: (_: unknown, args: { eventId?: string | null }) =>
+    galleryItems: (_: unknown, args: { eventId?: string | null; year?: number | null }) =>
       prisma.galleryItem.findMany({
-        where: args.eventId ? { eventId: args.eventId } : undefined,
+        where: {
+          ...(args.eventId ? { eventId: args.eventId } : {}),
+          ...(args.year
+            ? {
+                event: {
+                  date: {
+                    gte: new Date(`${args.year}-01-01T00:00:00.000Z`),
+                    lt: new Date(`${args.year + 1}-01-01T00:00:00.000Z`),
+                  },
+                },
+              }
+            : {}),
+        },
         orderBy: { createdAt: "desc" },
       }),
     galleryItem: (_: unknown, args: { id: string }) =>
