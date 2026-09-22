@@ -17,7 +17,6 @@ export const EVENT_OPTIONS_QUERY = /* GraphQL */ `
     events {
       id
       title
-      date
     }
   }
 `;
