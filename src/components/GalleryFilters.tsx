@@ -36,11 +36,15 @@ export function GalleryFilters({
 
   return (
     <Stack direction="row" spacing={2} sx={{ flexWrap: "wrap" }}>
-      <FormControl size="small" sx={{ minWidth: 120 }}>
-        <InputLabel id="gallery-year-filter-label">Ano</InputLabel>
+      <FormControl size="small" sx={{ minWidth: 140 }}>
+        <InputLabel id="gallery-year-filter-label" shrink>
+          Ano
+        </InputLabel>
         <Select
           labelId="gallery-year-filter-label"
           label="Ano"
+          displayEmpty
+          notched
           value={selectedYear !== undefined ? String(selectedYear) : ""}
           onChange={(event: SelectChangeEvent) =>
             navigate({ year: event.target.value ? Number(event.target.value) : undefined })
@@ -54,11 +58,15 @@ export function GalleryFilters({
           ))}
         </Select>
       </FormControl>
-      <FormControl size="small" sx={{ minWidth: 200 }}>
-        <InputLabel id="gallery-event-filter-label">Evento</InputLabel>
+      <FormControl size="small" sx={{ minWidth: 220 }}>
+        <InputLabel id="gallery-event-filter-label" shrink>
+          Evento
+        </InputLabel>
         <Select
           labelId="gallery-event-filter-label"
           label="Evento"
+          displayEmpty
+          notched
           value={selectedEventId ?? ""}
           onChange={(event: SelectChangeEvent) =>
             navigate({ year: selectedYear, eventId: event.target.value || undefined })
