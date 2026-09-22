@@ -8,6 +8,7 @@ import { GALLERY_ITEMS_QUERY } from "@/lib/queries/gallery";
 import { GalleryItemCard } from "@/components/GalleryItemCard";
 import { PageContainer } from "@/components/PageContainer";
 import { PageTitle } from "@/components/PageTitle";
+import { FlashMessage } from "@/components/FlashMessage";
 
 type GalleryData = {
   galleryItems: {
@@ -20,11 +21,17 @@ type GalleryData = {
   }[];
 };
 
-export default async function ManageGalleryPage() {
+export default async function ManageGalleryPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ success?: string }>;
+}) {
+  const { success } = await searchParams;
   const data = await executeGraphQL<GalleryData>(GALLERY_ITEMS_QUERY);
 
   return (
     <PageContainer maxWidth="md">
+      <FlashMessage message={success} />
       <Box
         sx={{
           display: "flex",

@@ -2,7 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { executeGraphQL, runGatedMutation } from "@/lib/graphql-server";
+import {
+  executeGraphQL,
+  runGatedMutation,
+  GraphQLRequestError,
+} from "@/lib/graphql-server";
+import { withFlash } from "@/lib/flash";
 import { uploadPoster, deletePhoto } from "@/lib/supabase-storage";
 import {
   CREATE_EVENT_MUTATION,
@@ -12,14 +17,25 @@ import {
 
 const VALID_EVENT_TYPES = ["FOLCLORE", "OUTROS"];
 
-function readEventBaseInput(formData: FormData) {
+type EventBaseInput =
+  | { error: string }
+  | {
+      error?: undefined;
+      title: string;
+      description: string;
+      date: string;
+      location: string;
+      type: string;
+    };
+
+function readEventBaseInput(formData: FormData): EventBaseInput {
   const date = formData.get("date");
   if (typeof date !== "string" || !date) {
-    throw new Error("A data é obrigatória.");
+    return { error: "A data é obrigatória." };
   }
   const type = String(formData.get("type") ?? "");
   if (!VALID_EVENT_TYPES.includes(type)) {
-    throw new Error("Tipo de evento inválido.");
+    return { error: "Tipo de evento inválido." };
   }
   return {
     title: String(formData.get("title") ?? ""),
@@ -37,6 +53,9 @@ function readPosterFile(formData: FormData): File | null {
 
 export async function createEventAction(formData: FormData) {
   const base = readEventBaseInput(formData);
+  if (base.error) {
+    redirect(withFlash("/manage/events/new", { error: base.error }));
+  }
   const posterFile = readPosterFile(formData);
 
   let posterUrl: string | undefined;
@@ -50,16 +69,24 @@ export async function createEventAction(formData: FormData) {
     await runGatedMutation(() => executeGraphQL(CREATE_EVENT_MUTATION, { input }));
   } catch (error) {
     if (posterUrl) await deletePhoto(posterUrl).catch(() => {});
+    if (error instanceof GraphQLRequestError) {
+      redirect(withFlash("/manage/events/new", { error: error.message }));
+    }
     throw error;
   }
 
   revalidatePath("/events");
   revalidatePath("/manage/events");
-  redirect("/manage/events");
+  redirect(withFlash("/manage/events", { success: "Evento criado com sucesso." }));
 }
 
 export async function updateEventAction(id: string, formData: FormData) {
+  const editPath = `/manage/events/${id}/edit`;
+
   const base = readEventBaseInput(formData);
+  if (base.error) {
+    redirect(withFlash(editPath, { error: base.error }));
+  }
   const posterFile = readPosterFile(formData);
   const removePoster = formData.get("removePoster") === "on";
 
@@ -81,18 +108,21 @@ export async function updateEventAction(id: string, formData: FormData) {
     // The resolver cleans up the *old* poster on success; on failure here,
     // clean up the *newly* uploaded one instead so it isn't orphaned.
     if (newPosterUrl) await deletePhoto(newPosterUrl).catch(() => {});
+    if (error instanceof GraphQLRequestError) {
+      redirect(withFlash(editPath, { error: error.message }));
+    }
     throw error;
   }
 
   revalidatePath("/events");
   revalidatePath(`/events/${id}`);
   revalidatePath("/manage/events");
-  redirect("/manage/events");
+  redirect(withFlash("/manage/events", { success: "Evento atualizado com sucesso." }));
 }
 
 export async function deleteEventAction(id: string) {
   await runGatedMutation(() => executeGraphQL(DELETE_EVENT_MUTATION, { id }));
   revalidatePath("/events");
   revalidatePath("/manage/events");
-  redirect("/manage/events");
+  redirect(withFlash("/manage/events", { success: "Evento eliminado com sucesso." }));
 }

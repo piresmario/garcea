@@ -2,7 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { executeGraphQL, runGatedMutation } from "@/lib/graphql-server";
+import {
+  executeGraphQL,
+  runGatedMutation,
+  GraphQLRequestError,
+} from "@/lib/graphql-server";
+import { withFlash } from "@/lib/flash";
 import {
   CREATE_OFFICIAL_CONTACT_MUTATION,
   DELETE_OFFICIAL_CONTACT_MUTATION,
@@ -16,21 +21,38 @@ export async function createOfficialContactAction(formData: FormData) {
   const value = String(formData.get("value") ?? "").trim();
 
   if (!VALID_TYPES.includes(type)) {
-    throw new Error("Tipo de contacto inválido.");
+    redirect(
+      withFlash("/manage/official-contacts", { error: "Tipo de contacto inválido." }),
+    );
   }
   if (!value) {
-    throw new Error("O valor do contacto é obrigatório.");
+    redirect(
+      withFlash("/manage/official-contacts", {
+        error: "O valor do contacto é obrigatório.",
+      }),
+    );
   }
 
-  await runGatedMutation(() =>
-    executeGraphQL(CREATE_OFFICIAL_CONTACT_MUTATION, {
-      input: { type, label: label || null, value },
-    }),
-  );
+  try {
+    await runGatedMutation(() =>
+      executeGraphQL(CREATE_OFFICIAL_CONTACT_MUTATION, {
+        input: { type, label: label || null, value },
+      }),
+    );
+  } catch (error) {
+    if (error instanceof GraphQLRequestError) {
+      redirect(withFlash("/manage/official-contacts", { error: error.message }));
+    }
+    throw error;
+  }
 
   revalidatePath("/contacts");
   revalidatePath("/manage/official-contacts");
-  redirect("/manage/official-contacts");
+  redirect(
+    withFlash("/manage/official-contacts", {
+      success: "Contacto adicionado com sucesso.",
+    }),
+  );
 }
 
 export async function deleteOfficialContactAction(id: string) {
@@ -40,5 +62,9 @@ export async function deleteOfficialContactAction(id: string) {
 
   revalidatePath("/contacts");
   revalidatePath("/manage/official-contacts");
-  redirect("/manage/official-contacts");
+  redirect(
+    withFlash("/manage/official-contacts", {
+      success: "Contacto eliminado com sucesso.",
+    }),
+  );
 }

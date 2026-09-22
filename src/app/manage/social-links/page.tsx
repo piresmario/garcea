@@ -1,4 +1,5 @@
 import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import ShareIcon from "@mui/icons-material/Share";
@@ -9,20 +10,21 @@ import { SOCIAL_LINKS_QUERY } from "@/lib/queries/socialLinks";
 import { PageContainer } from "@/components/PageContainer";
 import { PageTitle } from "@/components/PageTitle";
 import { SocialLinkForm } from "@/components/SocialLinkForm";
-import { SubmitButton } from "@/components/SubmitButton";
 import { SubmitIconButton } from "@/components/SubmitIconButton";
+import { FlashMessage } from "@/components/FlashMessage";
 import { SocialIcon, SOCIAL_PLATFORM_LABELS } from "@/components/SocialIcon";
-import {
-  createSocialLinkAction,
-  deleteSocialLinkAction,
-  moveSocialLinkAction,
-} from "./actions";
+import { createSocialLinkAction, moveSocialLinkAction } from "./actions";
 
 type SocialLinksData = {
   socialLinks: { id: string; platform: string; url: string }[];
 };
 
-export default async function ManageSocialLinksPage() {
+export default async function ManageSocialLinksPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string; success?: string }>;
+}) {
+  const { error, success } = await searchParams;
   const data = await executeGraphQL<SocialLinksData>(SOCIAL_LINKS_QUERY);
   const links = data.socialLinks;
 
@@ -34,14 +36,14 @@ export default async function ManageSocialLinksPage() {
         apresentada abaixo.
       </Typography>
 
-      <SocialLinkForm action={createSocialLinkAction} />
+      <SocialLinkForm action={createSocialLinkAction} error={error} />
+      <FlashMessage message={success} />
 
       {links.length === 0 ? (
         <Typography>Ainda não há links de redes sociais.</Typography>
       ) : (
         <Stack spacing={2}>
           {links.map((link, index) => {
-            const deleteLink = deleteSocialLinkAction.bind(null, link.id);
             const moveUp = moveSocialLinkAction.bind(null, link.id, "UP");
             const moveDown = moveSocialLinkAction.bind(null, link.id, "DOWN");
             return (
@@ -87,9 +89,9 @@ export default async function ManageSocialLinksPage() {
                     </Typography>
                   </Stack>
                 </Stack>
-                <form action={deleteLink}>
-                  <SubmitButton color="error">Eliminar</SubmitButton>
-                </form>
+                <Button href={`/manage/social-links/${link.id}/delete`} color="error">
+                  Eliminar
+                </Button>
               </Card>
             );
           })}

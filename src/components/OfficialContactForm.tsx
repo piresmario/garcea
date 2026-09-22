@@ -21,14 +21,16 @@ const VALUE_FIELD: Record<ContactType, { label: string; type: string; placeholde
 
 export function OfficialContactForm({
   action,
+  error,
 }: {
   action: (formData: FormData) => void | Promise<void>;
+  error?: string;
 }) {
   const [type, setType] = useState<ContactType>("EMAIL");
   const valueField = VALUE_FIELD[type];
 
   return (
-    <FormCard>
+    <FormCard error={error}>
       <Stack component="form" action={action} spacing={2}>
         <FormControl fullWidth>
           <InputLabel id="official-contact-type-label">Tipo</InputLabel>

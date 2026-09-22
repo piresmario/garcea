@@ -16,14 +16,16 @@ type EventOption = { id: string; title: string };
 export function GalleryItemForm({
   action,
   events,
+  error,
 }: {
   action: (formData: FormData) => void | Promise<void>;
   events: EventOption[];
+  error?: string;
 }) {
   const [type, setType] = useState<"PHOTO" | "VIDEO">("PHOTO");
 
   return (
-    <FormCard>
+    <FormCard error={error}>
       <Stack component="form" action={action} spacing={2}>
         <FormControl fullWidth>
           <InputLabel id="type-label">Tipo</InputLabel>

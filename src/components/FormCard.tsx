@@ -1,7 +1,14 @@
 import Paper from "@mui/material/Paper";
+import Alert from "@mui/material/Alert";
 import type { ReactNode } from "react";
 
-export function FormCard({ children }: { children: ReactNode }) {
+export function FormCard({
+  children,
+  error,
+}: {
+  children: ReactNode;
+  error?: string;
+}) {
   return (
     <Paper
       variant="outlined"
@@ -14,6 +21,7 @@ export function FormCard({ children }: { children: ReactNode }) {
         borderTopColor: "primary.main",
       }}
     >
+      {error && <Alert severity="error">{error}</Alert>}
       {children}
     </Paper>
   );

@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { executeGraphQL, runGatedMutation } from "@/lib/graphql-server";
+import { withFlash } from "@/lib/flash";
 import {
   CREATE_HOME_SECTION_MUTATION,
   UPDATE_HOME_SECTION_MUTATION,
@@ -28,7 +29,9 @@ export async function createHomeSectionAction(formData: FormData) {
 
   revalidatePath("/");
   revalidatePath("/manage/home-sections");
-  redirect("/manage/home-sections");
+  redirect(
+    withFlash("/manage/home-sections", { success: "Secção criada com sucesso." }),
+  );
 }
 
 export async function updateHomeSectionAction(id: string, formData: FormData) {
@@ -40,7 +43,9 @@ export async function updateHomeSectionAction(id: string, formData: FormData) {
 
   revalidatePath("/");
   revalidatePath("/manage/home-sections");
-  redirect("/manage/home-sections");
+  redirect(
+    withFlash("/manage/home-sections", { success: "Secção atualizada com sucesso." }),
+  );
 }
 
 export async function deleteHomeSectionAction(id: string) {
@@ -48,7 +53,9 @@ export async function deleteHomeSectionAction(id: string) {
 
   revalidatePath("/");
   revalidatePath("/manage/home-sections");
-  redirect("/manage/home-sections");
+  redirect(
+    withFlash("/manage/home-sections", { success: "Secção eliminada com sucesso." }),
+  );
 }
 
 export async function moveHomeSectionAction(id: string, direction: "UP" | "DOWN") {

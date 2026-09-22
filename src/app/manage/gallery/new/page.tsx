@@ -7,7 +7,12 @@ import { createGalleryItemAction } from "../actions";
 
 type EventsData = { events: { id: string; title: string }[] };
 
-export default async function NewGalleryItemPage() {
+export default async function NewGalleryItemPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
+  const { error } = await searchParams;
   const data = await executeGraphQL<EventsData>(EVENT_OPTIONS_QUERY);
   // Rebuild as plain object literals: GraphQL execution results aren't
   // guaranteed to be plain objects (Next.js rejects non-plain-object/
@@ -19,7 +24,7 @@ export default async function NewGalleryItemPage() {
       <Typography variant="h4" component="h1">
         Adicionar Item à Galeria
       </Typography>
-      <GalleryItemForm action={createGalleryItemAction} events={events} />
+      <GalleryItemForm action={createGalleryItemAction} events={events} error={error} />
     </PageContainer>
   );
 }

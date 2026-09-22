@@ -9,6 +9,7 @@ import { executeGraphQL } from "@/lib/graphql-server";
 import { EVENTS_QUERY } from "@/lib/queries/events";
 import { PageContainer } from "@/components/PageContainer";
 import { PageTitle } from "@/components/PageTitle";
+import { FlashMessage } from "@/components/FlashMessage";
 import { isPdfUrl } from "@/lib/supabase-storage";
 import { EVENT_TYPE_LABELS } from "@/lib/eventTypes";
 
@@ -23,11 +24,17 @@ type EventsData = {
   }[];
 };
 
-export default async function ManageEventsPage() {
+export default async function ManageEventsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ success?: string }>;
+}) {
+  const { success } = await searchParams;
   const data = await executeGraphQL<EventsData>(EVENTS_QUERY);
 
   return (
     <PageContainer maxWidth="md">
+      <FlashMessage message={success} />
       <Box
         sx={{
           display: "flex",

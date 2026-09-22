@@ -2,7 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { executeGraphQL, runGatedMutation } from "@/lib/graphql-server";
+import {
+  executeGraphQL,
+  runGatedMutation,
+  GraphQLRequestError,
+} from "@/lib/graphql-server";
+import { withFlash } from "@/lib/flash";
 import { uploadPhoto, deletePhoto } from "@/lib/supabase-storage";
 import { normalizeVideoUrl } from "@/lib/video";
 import {
@@ -46,28 +51,51 @@ export async function createGalleryItemAction(formData: FormData) {
       .getAll("photo")
       .filter((entry): entry is File => entry instanceof File && entry.size > 0);
     if (files.length === 0) {
-      throw new Error("Escolha pelo menos uma foto para enviar.");
+      redirect(
+        withFlash("/manage/gallery/new", {
+          error: "Escolha pelo menos uma foto para enviar.",
+        }),
+      );
     }
 
-    // Sequential on purpose: fail fast and stop, rather than uploading many
-    // files in parallel and having to reconcile a partial-failure state.
-    for (const file of files) {
-      const url = await uploadPhoto(file);
-      await createOneGalleryItem({ type, url, caption, eventId });
+    try {
+      // Sequential on purpose: fail fast and stop, rather than uploading many
+      // files in parallel and having to reconcile a partial-failure state.
+      for (const file of files) {
+        const url = await uploadPhoto(file);
+        await createOneGalleryItem({ type, url, caption, eventId });
+      }
+    } catch (error) {
+      if (error instanceof GraphQLRequestError) {
+        redirect(withFlash("/manage/gallery/new", { error: error.message }));
+      }
+      throw error;
     }
   } else {
     const videoUrl = formData.get("videoUrl");
     if (typeof videoUrl !== "string" || !videoUrl) {
-      throw new Error("Indique o link do vídeo.");
+      redirect(
+        withFlash("/manage/gallery/new", { error: "Indique o link do vídeo." }),
+      );
     }
-    const url = normalizeVideoUrl(videoUrl);
-    await createOneGalleryItem({ type, url, caption, eventId });
+
+    try {
+      const url = normalizeVideoUrl(videoUrl);
+      await createOneGalleryItem({ type, url, caption, eventId });
+    } catch (error) {
+      if (error instanceof GraphQLRequestError) {
+        redirect(withFlash("/manage/gallery/new", { error: error.message }));
+      }
+      throw error;
+    }
   }
 
   revalidatePath("/gallery");
   if (eventId) revalidatePath(`/events/${eventId}`);
   revalidatePath("/manage/gallery");
-  redirect("/manage/gallery");
+  redirect(
+    withFlash("/manage/gallery", { success: "Item adicionado à galeria com sucesso." }),
+  );
 }
 
 export async function updateGalleryItemAction(id: string, formData: FormData) {
@@ -79,7 +107,9 @@ export async function updateGalleryItemAction(id: string, formData: FormData) {
 
   revalidatePath("/gallery");
   revalidatePath("/manage/gallery");
-  redirect("/manage/gallery");
+  redirect(
+    withFlash("/manage/gallery", { success: "Legenda atualizada com sucesso." }),
+  );
 }
 
 export async function deleteGalleryItemAction(id: string) {
@@ -89,5 +119,7 @@ export async function deleteGalleryItemAction(id: string) {
 
   revalidatePath("/gallery");
   revalidatePath("/manage/gallery");
-  redirect("/manage/gallery");
+  redirect(
+    withFlash("/manage/gallery", { success: "Item eliminado com sucesso." }),
+  );
 }

@@ -3,13 +3,19 @@ import { PageContainer } from "@/components/PageContainer";
 import { EventForm } from "@/components/EventForm";
 import { createEventAction } from "../actions";
 
-export default function NewEventPage() {
+export default async function NewEventPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
+  const { error } = await searchParams;
+
   return (
     <PageContainer maxWidth="sm">
       <Typography variant="h4" component="h1">
         Novo Evento
       </Typography>
-      <EventForm action={createEventAction} submitLabel="Criar" />
+      <EventForm action={createEventAction} submitLabel="Criar" error={error} />
     </PageContainer>
   );
 }

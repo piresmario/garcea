@@ -18,10 +18,13 @@ type EventData = {
 
 export default async function EditEventPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ error?: string }>;
 }) {
   const { id } = await params;
+  const { error } = await searchParams;
   const data = await executeGraphQL<EventData>(EVENT_QUERY, { id });
 
   if (!data.event) notFound();
@@ -33,7 +36,12 @@ export default async function EditEventPage({
       <Typography variant="h4" component="h1">
         Editar Evento
       </Typography>
-      <EventForm action={updateWithId} defaultValues={data.event} submitLabel="Guardar" />
+      <EventForm
+        action={updateWithId}
+        defaultValues={data.event}
+        submitLabel="Guardar"
+        error={error}
+      />
     </PageContainer>
   );
 }

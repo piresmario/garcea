@@ -15,13 +15,15 @@ type Platform = keyof typeof SOCIAL_PLATFORM_LABELS;
 
 export function SocialLinkForm({
   action,
+  error,
 }: {
   action: (formData: FormData) => void | Promise<void>;
+  error?: string;
 }) {
   const [platform, setPlatform] = useState<Platform>("FACEBOOK");
 
   return (
-    <FormCard>
+    <FormCard error={error}>
       <Stack component="form" action={action} spacing={2}>
         <FormControl fullWidth>
           <InputLabel id="social-link-platform-label">Plataforma</InputLabel>

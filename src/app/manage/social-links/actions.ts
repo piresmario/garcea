@@ -2,7 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { executeGraphQL, runGatedMutation } from "@/lib/graphql-server";
+import {
+  executeGraphQL,
+  runGatedMutation,
+  GraphQLRequestError,
+} from "@/lib/graphql-server";
+import { withFlash } from "@/lib/flash";
 import {
   CREATE_SOCIAL_LINK_MUTATION,
   DELETE_SOCIAL_LINK_MUTATION,
@@ -24,19 +29,28 @@ export async function createSocialLinkAction(formData: FormData) {
   const url = String(formData.get("url") ?? "").trim();
 
   if (!VALID_PLATFORMS.includes(platform)) {
-    throw new Error("Plataforma inválida.");
+    redirect(withFlash("/manage/social-links", { error: "Plataforma inválida." }));
   }
   if (!url) {
-    throw new Error("O link é obrigatório.");
+    redirect(withFlash("/manage/social-links", { error: "O link é obrigatório." }));
   }
 
-  await runGatedMutation(() =>
-    executeGraphQL(CREATE_SOCIAL_LINK_MUTATION, { input: { platform, url } }),
-  );
+  try {
+    await runGatedMutation(() =>
+      executeGraphQL(CREATE_SOCIAL_LINK_MUTATION, { input: { platform, url } }),
+    );
+  } catch (error) {
+    if (error instanceof GraphQLRequestError) {
+      redirect(withFlash("/manage/social-links", { error: error.message }));
+    }
+    throw error;
+  }
 
   revalidatePath("/");
   revalidatePath("/manage/social-links");
-  redirect("/manage/social-links");
+  redirect(
+    withFlash("/manage/social-links", { success: "Link adicionado com sucesso." }),
+  );
 }
 
 export async function deleteSocialLinkAction(id: string) {
@@ -44,7 +58,9 @@ export async function deleteSocialLinkAction(id: string) {
 
   revalidatePath("/");
   revalidatePath("/manage/social-links");
-  redirect("/manage/social-links");
+  redirect(
+    withFlash("/manage/social-links", { success: "Link eliminado com sucesso." }),
+  );
 }
 
 export async function moveSocialLinkAction(id: string, direction: "UP" | "DOWN") {

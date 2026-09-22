@@ -10,13 +10,9 @@ import { HOME_SECTIONS_QUERY } from "@/lib/queries/homeSections";
 import { PageContainer } from "@/components/PageContainer";
 import { PageTitle } from "@/components/PageTitle";
 import { HomeSectionForm } from "@/components/HomeSectionForm";
-import { SubmitButton } from "@/components/SubmitButton";
 import { SubmitIconButton } from "@/components/SubmitIconButton";
-import {
-  createHomeSectionAction,
-  deleteHomeSectionAction,
-  moveHomeSectionAction,
-} from "./actions";
+import { FlashMessage } from "@/components/FlashMessage";
+import { createHomeSectionAction, moveHomeSectionAction } from "./actions";
 
 type HomeSectionsData = {
   homeSections: {
@@ -27,7 +23,12 @@ type HomeSectionsData = {
   }[];
 };
 
-export default async function ManageHomeSectionsPage() {
+export default async function ManageHomeSectionsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ success?: string }>;
+}) {
+  const { success } = await searchParams;
   const data = await executeGraphQL<HomeSectionsData>(HOME_SECTIONS_QUERY);
   const sections = data.homeSections;
 
@@ -42,13 +43,13 @@ export default async function ManageHomeSectionsPage() {
       </Typography>
 
       <HomeSectionForm action={createHomeSectionAction} submitLabel="Adicionar Secção" />
+      <FlashMessage message={success} />
 
       {sections.length === 0 ? (
         <Typography>Ainda não há secções.</Typography>
       ) : (
         <Stack spacing={2}>
           {sections.map((section, index) => {
-            const deleteSection = deleteHomeSectionAction.bind(null, section.id);
             const moveUp = moveHomeSectionAction.bind(null, section.id, "UP");
             const moveDown = moveHomeSectionAction.bind(null, section.id, "DOWN");
             return (
@@ -106,9 +107,12 @@ export default async function ManageHomeSectionsPage() {
                   <Button href={`/manage/home-sections/${section.id}`} variant="outlined">
                     Editar
                   </Button>
-                  <form action={deleteSection}>
-                    <SubmitButton color="error">Eliminar</SubmitButton>
-                  </form>
+                  <Button
+                    href={`/manage/home-sections/${section.id}/delete`}
+                    color="error"
+                  >
+                    Eliminar
+                  </Button>
                 </Stack>
               </Card>
             );

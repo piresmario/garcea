@@ -30,13 +30,15 @@ export function EventForm({
   action,
   defaultValues,
   submitLabel,
+  error,
 }: {
   action: (formData: FormData) => void | Promise<void>;
   defaultValues?: EventFormValues;
   submitLabel: string;
+  error?: string;
 }) {
   return (
-    <FormCard>
+    <FormCard error={error}>
       <Stack component="form" action={action} spacing={2}>
         <TextField label="Título" name="title" required defaultValue={defaultValues?.title} />
         <TextField
