@@ -23,25 +23,37 @@ type GalleryData = {
   }[];
 };
 
-type EventsData = { events: { id: string; title: string }[] };
+type EventsData = { events: { id: string; title: string; date: string }[] };
 
 export default async function ManageGalleryPage({
   searchParams,
 }: {
-  searchParams: Promise<{ success?: string; eventId?: string }>;
+  searchParams: Promise<{ success?: string; eventId?: string; year?: string }>;
 }) {
-  const { success, eventId } = await searchParams;
-  const [data, eventsData] = await Promise.all([
-    executeGraphQL<GalleryData>(GALLERY_ITEMS_QUERY, { eventId: eventId || null }),
-    executeGraphQL<EventsData>(EVENT_OPTIONS_QUERY),
-  ]);
+  const { success, eventId, year } = await searchParams;
+  const eventsData = await executeGraphQL<EventsData>(EVENT_OPTIONS_QUERY);
   // Rebuild as plain object literals: GraphQL execution results aren't
   // guaranteed to be plain objects (Next.js rejects non-plain-object/
   // null-prototype values passed as props into a Client Component).
   const events = eventsData.events.map((event) => ({
     id: event.id,
     title: event.title,
+    year: new Date(event.date).getFullYear(),
   }));
+  const years = Array.from(new Set(events.map((event) => event.year))).sort(
+    (a, b) => b - a,
+  );
+
+  const requestedYear = year ? Number(year) : undefined;
+  const selectedYear =
+    requestedYear !== undefined && years.includes(requestedYear)
+      ? requestedYear
+      : undefined;
+
+  const data = await executeGraphQL<GalleryData>(GALLERY_ITEMS_QUERY, {
+    eventId: eventId || null,
+    year: selectedYear ?? null,
+  });
 
   return (
     <PageContainer maxWidth="md">
@@ -61,13 +73,20 @@ export default async function ManageGalleryPage({
         </Button>
       </Box>
 
-      <GalleryFilters events={events} selectedEventId={eventId} />
+      <GalleryFilters
+        events={events}
+        years={years}
+        selectedYear={selectedYear}
+        selectedEventId={eventId}
+      />
 
       {data.galleryItems.length === 0 ? (
         <Typography>
           {eventId
             ? "Não há itens na galeria para este evento."
-            : "Ainda não há itens na galeria."}
+            : selectedYear
+              ? "Não há itens na galeria para este ano."
+              : "Ainda não há itens na galeria."}
         </Typography>
       ) : (
         <Box

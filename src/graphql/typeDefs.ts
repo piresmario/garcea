@@ -132,7 +132,7 @@ export const typeDefs = /* GraphQL */ `
   type Query {
     events: [Event!]!
     event(id: ID!): Event
-    galleryItems(eventId: ID): [GalleryItem!]!
+    galleryItems(eventId: ID, year: Int): [GalleryItem!]!
     galleryItem(id: ID!): GalleryItem
     homeSections: [HomeSection!]!
     homeSection(id: ID!): HomeSection
